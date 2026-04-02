@@ -51,7 +51,7 @@ function Features() {
   };
 
   return (
-    <div className="w-full bg-white rounded shadow">
+    <div className="w-full bg-white rounded-xl shadow">
       <div className="flex items-center justify-between py-3 px-5 border-b border-gray-300">
         <div>
           <h2 className="text-2xl uppercase tracking-wider font-semibold">
@@ -61,7 +61,7 @@ function Features() {
 
         <button
           onClick={() => setDrawer({ open: true, type: "add", data: null })}
-          className="flex gap-2 items-center px-4 py-2 text-sm bg-indigo-600 text-white rounded hover:bg-indigo-700"
+          className="flex gap-2 items-center px-4 py-2 text-sm bg-indigo-600 text-white rounded-xl hover:bg-indigo-700"
         >
           <PlusIcon className="w-4 h-4" />
           Add Feature
@@ -74,7 +74,7 @@ function Features() {
         <select
           value={selectedProduct}
           onChange={handleChangeProduct}
-          className="px-3 py-2 border border-gray-300 rounded text-sm"
+          className="px-3 py-2 border border-gray-300 rounded-xl text-sm"
         >
           {products.map((p) => (
             <option key={p.id} value={p.id}>
@@ -138,7 +138,7 @@ function Features() {
                           data: f,
                         })
                       }
-                      className="hover:bg-blue-100 p-2 rounded"
+                      className="hover:bg-blue-100 p-2 rounded-xl"
                     >
                       <PencilSquareIcon className="w-5 h-5 text-blue-600" />
                     </button>

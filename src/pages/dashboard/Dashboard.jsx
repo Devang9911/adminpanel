@@ -30,7 +30,7 @@ function Dashboard() {
   }
 
   return (
-    <div className="w-full rounded space-y-3 p-5">
+    <div className="w-full space-y-3">
       <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
         <StatsBox
           value={summary?.totalUsers || 0}

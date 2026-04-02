@@ -43,7 +43,7 @@ function Categories() {
   };
 
   return (
-    <div className="w-full bg-white rounded shadow">
+    <div className="w-full bg-white rounded-xl shadow">
       <div className="flex items-center justify-between py-3 px-5 border-b border-gray-300">
         <h2 className="text-2xl uppercase tracking-wider font-semibold">
           Categories
@@ -51,7 +51,7 @@ function Categories() {
 
         <button
           onClick={handleAdd}
-          className="px-4 py-2 text-sm bg-indigo-600 text-white rounded hover:bg-indigo-700"
+          className="px-4 py-2 text-sm bg-indigo-600 text-white rounded-xl hover:bg-indigo-700"
         >
           + Add Category
         </button>
@@ -103,17 +103,17 @@ function Categories() {
                     <div className="flex justify-center gap-3">
                       <button
                         onClick={() => handleEdit(cat)}
-                        className="group relative p-2 rounded hover:bg-blue-100"
+                        className="group relative p-2 rounded-xl hover:bg-blue-100"
                       >
                         <PencilIcon className="w-5 h-5 text-blue-600" />
-                        <span className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 bg-gray-700 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition whitespace-nowrap">
+                        <span className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 bg-gray-700 text-white text-xs px-2 py-1 rounded-xl opacity-0 group-hover:opacity-100 transition whitespace-nowrap">
                           Edit
                         </span>
                       </button>
 
-                      <button className="group relative p-2 rounded hover:bg-red-100 text-red-600 transition">
+                      <button className="group relative p-2 rounded-xl hover:bg-red-100 text-red-600 transition">
                         <TrashIcon className="w-5 h-5" />
-                        <span className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 bg-gray-700 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition whitespace-nowrap">
+                        <span className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 bg-gray-700 text-white text-xs px-2 py-1 rounded-xl opacity-0 group-hover:opacity-100 transition whitespace-nowrap">
                           Delete
                         </span>
                       </button>

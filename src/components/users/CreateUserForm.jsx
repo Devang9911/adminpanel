@@ -77,7 +77,7 @@ function CreateUserForm({ data = null, onClose }) {
             <input
               value={form.name}
               onChange={(e) => handleChange("name", e.target.value)}
-              className="w-full border border-gray-300 rounded px-3 py-2 focus:ring-2 focus:ring-indigo-500 outline-none"
+              className="w-full border border-gray-300 rounded-xl px-3 py-2 focus:ring-2 focus:ring-indigo-500 outline-none"
               required
             />
           </div>
@@ -87,7 +87,7 @@ function CreateUserForm({ data = null, onClose }) {
             <input
               value={form.phone}
               onChange={(e) => handleChange("phone", e.target.value)}
-              className="w-full border border-gray-300 rounded px-2 py-2 focus:ring-2 focus:ring-indigo-500 outline-none"
+              className="w-full border border-gray-300 rounded-xl px-2 py-2 focus:ring-2 focus:ring-indigo-500 outline-none"
             />
           </div>
         </div>
@@ -97,7 +97,7 @@ function CreateUserForm({ data = null, onClose }) {
           <input
             value={form.email}
             onChange={(e) => handleChange("email", e.target.value)}
-            className="w-full border border-gray-300 rounded px-3 py-2 focus:ring-2 focus:ring-indigo-500 outline-none"
+            className="w-full border border-gray-300 rounded-xl px-3 py-2 focus:ring-2 focus:ring-indigo-500 outline-none"
             required
           />
         </div>
@@ -110,7 +110,7 @@ function CreateUserForm({ data = null, onClose }) {
             <select
               value={form.category_id}
               onChange={(e) => handleChange("category_id", e.target.value)}
-              className="w-full border border-gray-300 rounded px-3 py-2 focus:ring-1 focus:ring-indigo-500 outline-none"
+              className="w-full border border-gray-300 rounded-xl px-3 py-2 focus:ring-1 focus:ring-indigo-500 outline-none"
             >
               {categories.map((c) => (
                 <option key={c.id} value={c.id}>
@@ -125,7 +125,7 @@ function CreateUserForm({ data = null, onClose }) {
             <select
               value={form.plan_id}
               onChange={(e) => handleChange("plan_id", e.target.value)}
-              className="w-full border border-gray-300 rounded px-3 py-2 focus:ring-2 focus:ring-indigo-500 outline-none"
+              className="w-full border border-gray-300 rounded-xl px-3 py-2 focus:ring-2 focus:ring-indigo-500 outline-none"
             >
               {plans.map((p) => (
                 <option key={p.planId} value={p.planId}>
@@ -147,7 +147,7 @@ function CreateUserForm({ data = null, onClose }) {
                 type="button"
                 key={m}
                 onClick={() => toggleModule(m)}
-                className={`px-3 py-1.5 rounded text-sm border border-gray-400 ${
+                className={`px-3 py-1.5 rounded-xl text-sm border border-gray-400 ${
                   form.modules.includes(m)
                     ? "bg-indigo-100 text-indigo-600 border-indigo-200"
                     : "bg-gray-50 text-gray-600"
@@ -164,7 +164,7 @@ function CreateUserForm({ data = null, onClose }) {
         <button
           type="submit"
           disabled={loading}
-          className="flex-1 bg-indigo-600 text-white py-2.5 rounded flex items-center justify-center gap-2 cursor-pointer"
+          className="flex-1 bg-indigo-600 text-white py-2.5 rounded-xl flex items-center justify-center gap-2 cursor-pointer"
         >
           {loading && <InlineLoader />}
           {data ? "Save changes" : "Create user"}
@@ -173,7 +173,7 @@ function CreateUserForm({ data = null, onClose }) {
         <button
           type="button"
           onClick={onClose}
-          className="px-4 py-2 border border-gray-300 rounded cursor-pointer"
+          className="px-4 py-2 border border-gray-300 rounded-xl cursor-pointer"
         >
           Cancel
         </button>

@@ -16,7 +16,7 @@ function ProductList() {
     data: null,
   });
   return (
-    <div className="bg-white rounded flex flex-col gap-5 ">
+    <div className="bg-white rounded-xl flex flex-col">
       <div className="flex items-center justify-between py-3 px-5 border-b border-gray-300">
         <h2 className="text-2xl uppercase tracking-wider font-semibold">
           Modules
@@ -25,22 +25,22 @@ function ProductList() {
         <div className="flex gap-2">
           <button
             onClick={() => setDrawer({ open: true, type: "add", data: null })}
-            className="px-4 py-2 text-sm bg-indigo-600 text-white rounded hover:bg-indigo-700"
+            className="px-4 py-2 text-sm bg-indigo-600 text-white rounded-xl hover:bg-indigo-700"
           >
             + Add Modules
           </button>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5 px-5">
+      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5 p-3">
         {loading
           ? [...Array(6)].map((_, i) => (
-              <div key={i} className="h-36 rounded bg-gray-200 animate-pulse" />
+              <div key={i} className="h-36 rounded-xl bg-gray-200 animate-pulse" />
             ))
           : products.map((p) => (
               <div
                 key={p.id}
-                className="bg-white border border-gray-200 rounded p-5 hover:shadow-lg transition group"
+                className="bg-white border border-gray-200 rounded-xl p-5 hover:shadow-lg transition group"
               >
                 <div className="flex justify-between items-start">
                   <div>
@@ -87,7 +87,7 @@ function ProductList() {
                     onClick={() =>
                       setDrawer({ open: true, type: "edit", data: p })
                     }
-                    className="flex items-center gap-1 px-3 py-1.5 rounded bg-blue-500/10 text-blue-600 hover:bg-blue-500/20 transition"
+                    className="flex items-center gap-1 px-3 py-1.5 rounded-xl bg-blue-500/10 text-blue-600 hover:bg-blue-500/20 transition"
                   >
                     <PencilIcon className="w-4 h-4" />
                     Edit

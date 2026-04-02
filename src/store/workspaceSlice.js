@@ -14,9 +14,15 @@ export const getAllWorkspace = createAsyncThunk(
   "workspace/getAll",
   async (filters, { rejectWithValue }) => {
     try {
-      const { page, pageSize } = filters;
+      const { page, pageSize, search, status } = filters;
+      const query = new URLSearchParams({
+        page,
+        pageSize,
+        search,
+        status,
+      });
       const res = await fetch(
-        `${BASE_URL}/api/admin/getAllWorkspaces?page=${page}&pageSize=${pageSize}`,
+        `${BASE_URL}/api/admin/getAllWorkspaces?${query.toString()}`,
         {
           headers: authHeader(),
         },
@@ -155,8 +161,11 @@ const workspaceSlice = createSlice({
         state.loadingList = false;
         state.list = action.payload.data;
         state.page = action.payload.page;
+        state.pageSize = action.payload.pageSize;
         state.total = action.payload.total;
-        state.totalPages = action.payload.totalPages;
+        state.totalPages = Math.ceil(
+          action.payload.total / action.payload.pageSize,
+        );
       })
 
       .addCase(getAllWorkspace.rejected, (state) => {

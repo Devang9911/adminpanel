@@ -7,9 +7,9 @@ import {
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllUsers } from "../../store/userSlice";
+import Drawer from "../common/Drawer";
 import Loader from "../common/Loader";
 import Pagination from "../common/Pagination";
-import Drawer from "../common/Drawer";
 import ViewUser from "../users/ViewUser";
 import CreateUserForm from "./CreateUserForm";
 import RenewModal from "./RenewModal";
@@ -65,9 +65,6 @@ function UserTable() {
   const [filters, setFilters] = useState({
     search: "",
     status: "all",
-    plan: "all",
-    category: "all",
-    module: "all",
     page: 1,
     pageSize: 10,
   });
@@ -114,7 +111,7 @@ function UserTable() {
   };
 
   return (
-    <div className="w-full bg-white rounded shadow">
+    <div className="w-full bg-white rounded-xl shadow">
       <div className="flex items-center justify-between py-3 px-5 border-b border-gray-300">
         <h2 className="text-2xl uppercase tracking-wider font-semibold">
           Users{" "}
@@ -124,7 +121,7 @@ function UserTable() {
         <div className="flex gap-2">
           <button
             onClick={() => setDrawer({ open: true, type: "add", data: null })}
-            className="px-4 py-2 text-sm bg-indigo-600 text-white rounded hover:bg-indigo-700"
+            className="px-4 py-2 text-sm bg-indigo-600 text-white rounded-xl hover:bg-indigo-700"
           >
             + Add User
           </button>
@@ -163,8 +160,33 @@ function UserTable() {
           onChange={handleSearch}
           type="text"
           placeholder="Search name, email..."
-          className="flex-1 min-w-62.5 px-4 py-2 border border-gray-300 rounded text-sm"
+          className="flex-1 min-w-62.5 px-4 py-2 border border-gray-300 rounded-xl text-sm"
         />
+        <select
+          value={filters.module}
+          onChange={(e) => handleFilterChange("module", e.target.value)}
+          className="border rounded-xl border-gray-300 px-3 py-2 text-sm"
+        >
+          <option value="all">All Products</option>
+          {/* {products.map((p) => (
+            <option key={p.id} value={p.product_name}>
+              {p.product_name}
+            </option>
+          ))} */}
+        </select>
+
+        <select
+          value={filters.plan}
+          onChange={(e) => handleFilterChange("plan", e.target.value)}
+          className="border rounded-xl border-gray-300 px-3 py-2 text-sm"
+        >
+          <option value="all">All Plans</option>
+          {/* {plans.map((p) => (
+            <option key={p.planId} value={p.planName}>
+              {p.planName}
+            </option>
+          ))} */}
+        </select>
       </div>
 
       <div className="overflow-x-auto">
@@ -233,7 +255,7 @@ function UserTable() {
                         u.modules.map((m, i) => (
                           <span
                             key={i}
-                            className="px-2 py-1 text-xs bg-blue-50 text-blue-600 rounded"
+                            className="px-2 py-1 text-xs bg-blue-50 text-blue-600 rounded-xl"
                           >
                             {m}
                           </span>
@@ -268,7 +290,7 @@ function UserTable() {
                         onClick={() =>
                           setDrawer({ type: "view", open: true, data: u })
                         }
-                        className="hover:bg-gray-300 p-2 rounded group relative"
+                        className="hover:bg-gray-300 p-2 rounded-xl group relative"
                       >
                         <EyeIcon className="w-5 h-5 text-gray-600 cursor-pointer " />
                         <span className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 bg-gray-700 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition whitespace-nowrap z-50">
@@ -280,7 +302,7 @@ function UserTable() {
                         onClick={() =>
                           setDrawer({ type: "edit", open: true, data: u })
                         }
-                        className="group relative hover:bg-blue-100 p-2 rounded"
+                        className="group relative hover:bg-blue-100 p-2 rounded-xl"
                       >
                         <PencilSquareIcon className="w-5 h-5 text-blue-600 cursor-pointer" />
                         <span className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 bg-gray-700 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition whitespace-nowrap z-50">
@@ -288,7 +310,7 @@ function UserTable() {
                         </span>
                       </button>
 
-                      <button className="group relative hover:bg-yellow-100 p-2 rounded">
+                      <button className="group relative hover:bg-yellow-100 p-2 rounded-xl">
                         <EnvelopeIcon className="w-5 h-5 text-yellow-600 cursor-pointer" />
                         <span className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 bg-gray-700 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition whitespace-nowrap z-50">
                           Mail
@@ -296,13 +318,13 @@ function UserTable() {
                       </button>
 
                       <button
-                        className="group relative hover:bg-green-100 p-2 rounded"
+                        className="group relative hover:bg-green-100 p-2 rounded-xl"
                         onClick={() =>
                           setDrawer({ type: "renew", open: true, data: u })
                         }
                       >
                         <ArrowPathIcon className="w-5 h-5 text-green-600 cursor-pointer" />
-                        <span className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 bg-gray-700 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition whitespace-nowrap z-50">
+                        <span className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 bg-gray-700 text-white text-xs px-2 py-1 rounded-xl opacity-0 group-hover:opacity-100 transition whitespace-nowrap z-50">
                           Renew
                         </span>
                       </button>
@@ -314,7 +336,7 @@ function UserTable() {
         </table>
       </div>
 
-      <div className="px-4 py-1.5 border-t bg-white flex flex-col md:flex-row md:items-center md:justify-between gap-3">
+      <div className="px-4 py-1.5 border-t bg-white flex flex-col md:flex-row md:items-center md:justify-between gap-3 rounded-b  -xl">
         <div className="text-sm text-gray-500">
           Showing{" "}
           <span className="font-medium text-gray-700">

@@ -64,7 +64,7 @@ function AddModules({ setToggleForm, mode, defaultData }) {
                 {...register("product_name")}
                 required
                 placeholder="e.g. SignalX"
-                className="w-full border border-gray-300 rounded px-3 py-2 focus:ring-2 focus:ring-indigo-500 outline-none"
+                className="w-full border border-gray-300 rounded-xl px-3 py-2 focus:ring-2 focus:ring-indigo-500 outline-none"
               />
             </div>
 
@@ -75,7 +75,7 @@ function AddModules({ setToggleForm, mode, defaultData }) {
               <textarea
                 {...register("product_description")}
                 placeholder="Short description about module..."
-                className="w-full border border-gray-300 rounded px-3 py-2 h-24 resize-none focus:ring-2 focus:ring-indigo-500 outline-none"
+                className="w-full border border-gray-300 rounded-xl px-3 py-2 h-24 resize-none focus:ring-2 focus:ring-indigo-500 outline-none"
               />
             </div>
           </div>
@@ -85,7 +85,7 @@ function AddModules({ setToggleForm, mode, defaultData }) {
               Settings
             </h3>
 
-            <div className="flex items-center justify-between border rounded px-4 py-3">
+            <div className="flex items-center justify-between border border-gray-300 rounded-xl px-4 py-3">
               <div>
                 <p className="font-medium text-sm">Active Module</p>
                 <p className="text-xs text-gray-500">
@@ -111,7 +111,7 @@ function AddModules({ setToggleForm, mode, defaultData }) {
         <div className="py-4 bg-white flex gap-3">
           <button
             type="submit"
-            className="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white py-2.5 rounded font-medium transition"
+            className="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white py-2.5 rounded-xl font-medium transition"
           >
             {mode === "edit" ? "Save Changes" : "Create Module"}
           </button>
@@ -119,7 +119,7 @@ function AddModules({ setToggleForm, mode, defaultData }) {
           <button
             type="button"
             onClick={() => setToggleForm(false)}
-            className="px-4 py-2 border rounded hover:bg-gray-50 transition"
+            className="px-4 py-2 border rounded-xl hover:bg-gray-50 transition"
           >
             Cancel
           </button>

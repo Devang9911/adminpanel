@@ -37,7 +37,7 @@ function WorkspaceList() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const { list, loadingList, page, totalPages, total } = useSelector(
+  const { list, loadingList, page, totalPages, total, pageSize } = useSelector(
     (state) => state.workspace,
   );
 
@@ -86,14 +86,14 @@ function WorkspaceList() {
   };
 
   return (
-    <div className="w-full bg-white rounded shadow">
+    <div className="w-full bg-white rounded-xl shadow">
       <div className="flex items-center justify-between py-3 px-5 border-b border-gray-300">
         <h2 className="text-2xl uppercase tracking-wider font-semibold">
-          Workspaces
+          Workspaces 
         </h2>
 
         <button
-          className="px-4 py-2 text-sm bg-indigo-600 text-white rounded hover:bg-indigo-700"
+          className="px-4 py-2 text-sm bg-indigo-600 text-white rounded-xl hover:bg-indigo-700"
           onClick={() => {
             setDrawer({ open: true, type: "add", data: null });
           }}
@@ -134,7 +134,7 @@ function WorkspaceList() {
           onChange={handleSearch}
           type="text"
           placeholder="Search workspace, owner..."
-          className="flex-1 px-4 py-2 border border-gray-300 rounded text-sm"
+          className="flex-1 px-4 py-2 border border-gray-300 rounded-xl text-sm"
         />
       </div>
 
@@ -206,10 +206,10 @@ function WorkspaceList() {
                     <div className="flex justify-center gap-3">
                       <button
                         onClick={() => openDetails(w.id)}
-                        className="group relative p-2 rounded hover:bg-gray-300"
+                        className="group relative p-2 rounded-xl hover:bg-gray-300"
                       >
                         <EyeIcon className="w-5 h-5 text-gray-600" />
-                        <span className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 bg-gray-700 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition whitespace-nowrap z-50">
+                        <span className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 bg-gray-700 text-white text-xs px-2 py-1 rounded-xl opacity-0 group-hover:opacity-100 transition whitespace-nowrap z-50">
                           Details
                         </span>
                       </button>
@@ -221,22 +221,22 @@ function WorkspaceList() {
         </table>
       </div>
 
-      <div className="px-4 py-1.5 border-t bg-white flex flex-col md:flex-row md:items-center md:justify-between gap-3">
+      <div className="px-4 py-1.5 border-t bg-white flex flex-col md:flex-row md:items-center md:justify-between gap-3 rounded-b-xl">
         <div className="text-sm text-gray-500">
           Showing{" "}
           <span className="font-medium text-gray-700">
-            {(page - 1) * 10 + 1}
+            {(page - 1) * pageSize + 1}
           </span>{" "}
           to{" "}
           <span className="font-medium text-gray-700">
-            {Math.min(page * 10, total)}
+            {Math.min(page * pageSize, total)}
           </span>{" "}
           of <span className="font-semibold text-gray-800">{total}</span> users
         </div>
 
         <div className="flex justify-end">
           <Pagination
-            page={page}
+            page={filters.page}
             totalPages={totalPages}
             onPageChange={handlePageChange}
           />

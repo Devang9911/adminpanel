@@ -62,7 +62,7 @@ function AddFeature({
         <div>
           <label className="text-sm font-medium text-gray-600">Product</label>
 
-          <div className="bg-gray-200 mt-1 flex items-center border border-gray-300 rounded px-3 focus-within:ring-2 focus-within:ring-indigo-500">
+          <div className="bg-gray-200 mt-1 flex items-center border border-gray-300 rounded-xl px-3 focus-within:ring-2 focus-within:ring-indigo-500">
             <input
               {...register("product")}
               readOnly
@@ -76,7 +76,7 @@ function AddFeature({
             Feature Name
           </label>
 
-          <div className="mt-1 flex items-center border border-gray-300 rounded px-3 focus-within:ring-2 focus-within:ring-indigo-500">
+          <div className="mt-1 flex items-center border border-gray-300 rounded-xl px-3 focus-within:ring-2 focus-within:ring-indigo-500">
             <input
               {...register("featureName")}
               required
@@ -86,7 +86,7 @@ function AddFeature({
           </div>
         </div>
 
-        <div className="flex items-center justify-between bg-gray-50 rounded px-4 py-4">
+        <div className="flex items-center justify-between bg-gray-50 rounded-xl px-4 py-4">
           <div>
             <p className="font-medium text-sm">Active Feature</p>
             <p className="text-xs text-gray-500">
@@ -112,14 +112,14 @@ function AddFeature({
         <button
           type="button"
           onClick={onClose}
-          className="px-4 py-2 text-sm rounded border border-gray-300 hover:bg-gray-100"
+          className="px-4 py-2 text-sm rounded-xl border border-gray-300 hover:bg-gray-100"
         >
           Cancel
         </button>
 
         <button
           type="submit"
-          className="px-5 py-2 text-sm rounded bg-indigo-600 text-white hover:bg-indigo-700 transition"
+          className="px-5 py-2 text-sm rounded-xl bg-indigo-600 text-white hover:bg-indigo-700 transition"
         >
           {editData ? "Update" : "Add"}
         </button>

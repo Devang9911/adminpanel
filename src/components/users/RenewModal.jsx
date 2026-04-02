@@ -56,7 +56,7 @@ export default function RenewModal({ onClose, data }) {
   return (
     <div className="bg-white w-100 p-5">
       {data?.category === "General" ? (
-        <div className="bg-yellow-50 text-yellow-700 p-3 rounded-md text-sm mb-5">
+        <div className="bg-yellow-50 text-yellow-700 p-3 rounded-xl text-sm mb-5">
           User is not subscribed to any plan yet.
         </div>
       ) : (
@@ -96,7 +96,7 @@ export default function RenewModal({ onClose, data }) {
 
         <select
           onChange={handleSelect}
-          className="w-full border p-2 rounded-md"
+          className="w-full border p-2 rounded-xl"
           defaultValue=""
         >
           <option value="" disabled>
@@ -121,7 +121,7 @@ export default function RenewModal({ onClose, data }) {
         </select>
 
         {selectedPlan && (
-          <div className="mt-3 p-3 bg-indigo-50 rounded-md text-sm capitalize">
+          <div className="mt-3 p-3 bg-indigo-50 rounded-xl text-sm capitalize">
             <p>
               <strong>Selected :</strong> {selectedPlan.billingCycle} plan
             </p>
@@ -132,7 +132,7 @@ export default function RenewModal({ onClose, data }) {
       <div className="flex justify-end gap-2">
         <button
           onClick={onClose}
-          className="px-4 py-2 border rounded-md hover:bg-gray-100"
+          className="px-4 py-2 border rounded-xl hover:bg-gray-100"
         >
           Cancel
         </button>
@@ -140,7 +140,7 @@ export default function RenewModal({ onClose, data }) {
         <button
           onClick={handleRenew}
           disabled={!selectedPlan}
-          className={`px-4 py-2 rounded-md text-white ${
+          className={`px-4 py-2 rounded-xl text-white ${
             selectedPlan
               ? "bg-indigo-600 hover:bg-indigo-700"
               : "bg-gray-400 cursor-not-allowed"

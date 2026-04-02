@@ -5,22 +5,29 @@ import { getCategories } from "../../../store/categorySlice";
 import { getAllPlans } from "../../../store/planSlice";
 import Loader from "../../common/Loader";
 import PlansDrawer from "./PlansDrawer";
+import { getProducts } from "../../../store/productSlice";
 
 const tabs = [{ name: "All" }, { name: "Active" }, { name: "Inactive" }];
 
 function Plans() {
+  const [filters, setFilters] = useState({
+    search: "",
+    plan: "all",
+    category: "all",
+    module: "all",
+    status: "all",
+  });
   const dispatch = useDispatch();
 
   const { plans, loading } = useSelector((state) => state.plans);
-  const categories = useSelector((state) => state.category.categories);
 
-  const [toggleForm, setToggleForm] = useState(false);
-  const [viewPlan, setViewPlan] = useState(null);
+  const { products } = useSelector((state) => state.product);
+  const { categories } = useSelector((state) => state.category);
 
-  const [filters, setFilters] = useState({
-    search: "",
-    status: "all",
-  });
+  useEffect(() => {
+    dispatch(getCategories());
+    dispatch(getProducts());
+  }, []);
 
   const [drawer, setDrawer] = useState({
     open: false,
@@ -29,9 +36,12 @@ function Plans() {
   });
 
   useEffect(() => {
-    dispatch(getAllPlans());
-    dispatch(getCategories());
-  }, [dispatch]);
+    const delay = setTimeout(() => {
+      dispatch(getAllPlans(filters));
+    }, 400);
+
+    return () => clearTimeout(delay);
+  }, [filters]);
 
   const handleStatusTab = (status) => {
     setFilters((prev) => ({
@@ -40,8 +50,15 @@ function Plans() {
     }));
   };
 
+  const handleFilterChange = (key, value) => {
+    setFilters((prev) => ({
+      ...prev,
+      [key]: value,
+    }));
+  };
+
   return (
-    <div className="w-full bg-white rounded shadow">
+    <div className="w-full bg-white rounded-xl shadow">
       <div className="flex items-center justify-between py-3 px-5 border-b border-gray-300">
         <h2 className="text-2xl uppercase tracking-wider font-semibold">
           Plans
@@ -51,7 +68,7 @@ function Plans() {
           onClick={() => {
             setDrawer({ open: true, type: "add", data: null });
           }}
-          className="flex items-center gap-2 px-4 py-2 text-sm bg-indigo-600 text-white rounded hover:bg-indigo-700"
+          className="flex items-center gap-2 px-4 py-2 text-sm bg-indigo-600 text-white rounded-xl hover:bg-indigo-700"
         >
           <PlusIcon className="w-4 h-4" />
           Add Plan
@@ -81,9 +98,49 @@ function Plans() {
       <div className="flex flex-wrap gap-3 py-3 px-5 border-b border-gray-300">
         <input
           type="text"
-          placeholder="Search name, email, phone..."
-          className="flex-1 min-w-62.5 px-4 py-2 border border-gray-300 rounded text-sm"
+          value={filters.search}
+          onChange={(e) => handleFilterChange("search", e.target.value)}
+          placeholder="Search by plan..."
+          className="flex-1 min-w-62.5 px-4 py-2 border border-gray-300 rounded-xl text-sm"
         />
+        <select
+          value={filters.module}
+          onChange={(e) => handleFilterChange("module", e.target.value)}
+          className="border rounded-xl border-gray-300 px-3 py-2 text-sm"
+        >
+          <option value="all">All Modules</option>
+          {products.map((p) => (
+            <option key={p.id} value={p.product_name}>
+              {p.product_name}
+            </option>
+          ))}
+        </select>
+
+        <select
+          value={filters.category}
+          onChange={(e) => handleFilterChange("category", e.target.value)}
+          className="border rounded-xl border-gray-300 px-3 py-2 text-sm"
+        >
+          <option value="all">All Categories</option>
+          {categories.map((c) => (
+            <option key={c.id} value={c.categoryName}>
+              {c.categoryName}
+            </option>
+          ))}
+        </select>
+
+        <select
+          value={filters.plan}
+          onChange={(e) => handleFilterChange("plan", e.target.value)}
+          className="border rounded-xl border-gray-300 px-3 py-2 text-sm"
+        >
+          <option value="all">All Plans</option>
+          {plans.map((p) => (
+            <option key={p.planId} value={p.planName}>
+              {p.planName}
+            </option>
+          ))}
+        </select>
       </div>
 
       <div className="overflow-x-auto">
@@ -163,22 +220,22 @@ function Plans() {
                           onClick={() => {
                             setDrawer({ open: true, type: "view", data: p });
                           }}
-                          className="group relative hover:bg-gray-200 p-2 rounded"
+                          className="group relative hover:bg-gray-200 p-2 rounded-xl"
                         >
                           <EyeIcon className="w-5 h-5 text-gray-600" />
-                          <span className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 bg-gray-700 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition whitespace-nowrap z-50">
+                          <span className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 bg-gray-700 text-white text-xs px-2 py-1 rounded-xl opacity-0 group-hover:opacity-100 transition whitespace-nowrap z-50">
                             View
                           </span>
                         </button>
 
                         <button
-                          className="group relative hover:bg-blue-100 p-2 rounded"
+                          className="group relative hover:bg-blue-100 p-2 rounded-xl"
                           onClick={() => {
                             setDrawer({ open: true, type: "edit", data: p });
                           }}
                         >
                           <PencilSquareIcon className="w-5 h-5 text-blue-600" />
-                          <span className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 bg-gray-700 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition whitespace-nowrap z-50">
+                          <span className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 bg-gray-700 text-white text-xs px-2 py-1 rounded-xl opacity-0 group-hover:opacity-100 transition whitespace-nowrap z-50">
                             Edit
                           </span>
                         </button>

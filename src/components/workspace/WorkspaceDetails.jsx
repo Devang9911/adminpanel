@@ -73,9 +73,9 @@ function WorkspaceDetails() {
 
   return (
     <div className="space-y-3">
-      <div className="flex justify-between items-center bg-white p-6 rounded shadow-sm">
+      <div className="flex justify-between items-center bg-white p-6 rounded-xl shadow-sm">
         <div className="flex items-center gap-4">
-          <div className="bg-indigo-100 p-3 rounded">
+          <div className="bg-indigo-100 p-3 rounded-xl">
             <UsersIcon className="w-6 h-6 text-indigo-600" />
           </div>
 
@@ -91,14 +91,14 @@ function WorkspaceDetails() {
 
         <button
           onClick={() => navigate("/workspaces")}
-          className="flex items-center gap-2 px-4 py-2 text-sm bg-gray-100 hover:bg-gray-200 rounded-lg transition"
+          className="flex items-center gap-2 px-4 py-2 text-sm bg-gray-100 hover:bg-gray-200 rounded-xl transition"
         >
           <ArrowLeftIcon className="w-5 h-5" />
           Back
         </button>
       </div>
 
-      <div className="bg-white rounded shadow-sm">
+      <div className="bg-white rounded-xl shadow-sm">
         <div className="flex justify-between items-center p-5 border-b border-gray-300">
           <h3 className="text-lg font-semibold text-gray-700">
             Members ({members.length})
@@ -112,7 +112,7 @@ function WorkspaceDetails() {
                 data: { groupId: id },
               })
             }
-            className="flex items-center gap-2 px-4 py-2 text-sm bg-indigo-600 hover:bg-indigo-700 text-white rounded transition"
+            className="flex items-center gap-2 px-4 py-2 text-sm bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl transition"
           >
             <PlusIcon className="w-5 h-5" />
             Add Member
@@ -187,7 +187,7 @@ function WorkspaceDetails() {
                                 data: { groupId: id, member },
                               })
                             }
-                            className="p-2 rounded hover:bg-green-100 text-green-600 transition"
+                            className="p-2 rounded-xl hover:bg-green-100 text-green-600 transition"
                           >
                             <PencilSquareIcon className="w-5 h-5" />
                           </button>
@@ -200,7 +200,7 @@ function WorkspaceDetails() {
                         <div className="relative group">
                           <button
                             onClick={() => handleDelete(member.id)}
-                            className="p-2 rounded hover:bg-red-100 text-red-600 transition"
+                            className="p-2 rounded-xl hover:bg-red-100 text-red-600 transition"
                           >
                             <TrashIcon className="w-5 h-5" />
                           </button>

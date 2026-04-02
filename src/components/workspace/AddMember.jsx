@@ -79,7 +79,7 @@ export default function AddMemberForm({ groupId, member, type, onClose }) {
           <select
             value={userId}
             onChange={(e) => setUserId(e.target.value)}
-            className="w-full mt-1 border border-gray-300 p-2 rounded"
+            className="w-full mt-1 border border-gray-300 p-2 rounded-xl"
           >
             <option value="">Select user</option>
 
@@ -98,7 +98,7 @@ export default function AddMemberForm({ groupId, member, type, onClose }) {
         <select
           value={role}
           onChange={(e) => setRole(e.target.value)}
-          className="w-full mt-1 border border-gray-300 p-2 rounded"
+          className="w-full mt-1 border border-gray-300 p-2 rounded-xl"
         >
           <option value="support">Support</option>
           <option value="admin">Admin</option>
@@ -109,7 +109,7 @@ export default function AddMemberForm({ groupId, member, type, onClose }) {
       <div className="flex justify-end gap-2 pt-4">
         <button
           onClick={onClose}
-          className="px-4 py-2 border border-gray-300 rounded"
+          className="px-4 py-2 border border-gray-300 rounded-xl"
         >
           Cancel
         </button>
@@ -117,7 +117,7 @@ export default function AddMemberForm({ groupId, member, type, onClose }) {
         <button
           onClick={handleSubmit}
           disabled={loading}
-          className={`px-4 py-2 text-white rounded ${
+          className={`px-4 py-2 text-white rounded-xl ${
             loading ? "bg-gray-400" : "bg-indigo-600 hover:bg-indigo-700"
           }`}
         >
