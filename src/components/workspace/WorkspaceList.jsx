@@ -1,12 +1,13 @@
 import { EyeIcon } from "@heroicons/react/24/solid";
+import { ChevronDownIcon, ChevronUpIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { getAllWorkspace } from "../../store/workspaceSlice";
+import Drawer from "../common/Drawer";
 import Loader from "../common/Loader";
 import Pagination from "../common/Pagination";
-import WorkspaceDrawer from "./WorkspaceDrawer";
-import { ChevronDownIcon, ChevronUpIcon } from "lucide-react";
+import AddWorkspaceForm from "./AddWorkspaceForm";
 
 function formatDate(dateString, locale = "en-IN") {
   if (!dateString) return "";
@@ -51,7 +52,7 @@ function WorkspaceList() {
 
   const [drawer, setDrawer] = useState({
     open: false,
-    type: "add",
+    type: "",
     data: null,
   });
 
@@ -119,7 +120,7 @@ function WorkspaceList() {
         <button
           className="px-4 py-2 text-sm bg-indigo-600 text-white rounded-xl hover:bg-indigo-700"
           onClick={() => {
-            setDrawer({ open: true, type: "add", data: null });
+            setDrawer({ open: true, type: "addWorkspace", data: null });
           }}
         >
           + Add Workspace
@@ -277,12 +278,13 @@ function WorkspaceList() {
           />
         </div>
       </div>
-      <WorkspaceDrawer
+      <Drawer
+        title={"Create New Workspace"}
         open={drawer.open}
-        type={drawer.type}
-        data={drawer.data}
         onClose={() => setDrawer({ open: false })}
-      />
+      >
+        {drawer.type === "addWorkspace" && <AddWorkspaceForm />}
+      </Drawer>
     </div>
   );
 }

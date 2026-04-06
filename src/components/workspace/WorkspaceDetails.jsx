@@ -3,10 +3,10 @@ import Loader from "../common/Loader";
 
 import {
   ArrowLeftIcon,
-  PlusIcon,
-  UsersIcon,
   PencilSquareIcon,
+  PlusIcon,
   TrashIcon,
+  UsersIcon,
 } from "@heroicons/react/24/outline";
 
 import { useEffect, useState } from "react";
@@ -18,7 +18,8 @@ import {
   getWorkspaceMembers,
   removeMember,
 } from "../../store/workspaceSlice";
-import WorkspaceDrawer from "./WorkspaceDrawer";
+import Drawer from "../common/Drawer";
+import AddMemberForm from "./AddMember";
 
 function formatDate(dateString, locale = "en-IN") {
   if (!dateString) return "";
@@ -108,7 +109,7 @@ function WorkspaceDetails() {
             onClick={() =>
               setDrawer({
                 open: true,
-                type: "add-member",
+                type: "addMember",
                 data: { groupId: id },
               })
             }
@@ -183,7 +184,7 @@ function WorkspaceDetails() {
                             onClick={() =>
                               setDrawer({
                                 open: true,
-                                type: "update-member",
+                                type: "updateMember",
                                 data: { groupId: id, member },
                               })
                             }
@@ -218,13 +219,18 @@ function WorkspaceDetails() {
           </table>
         </div>
       </div>
-
-      <WorkspaceDrawer
+      <Drawer
+        title={drawer.type === "updateMember" ? "Update Member" : "Add Member"}
         open={drawer.open}
-        type={drawer.type}
-        data={drawer.data}
         onClose={() => setDrawer({ open: false, type: "", data: null })}
-      />
+      >
+        <AddMemberForm
+          type={drawer.type}
+          groupId={drawer.data?.groupId}
+          onClose={() => setDrawer({ open: false, type: "", data: null })}
+          members={members}
+        />
+      </Drawer>
     </div>
   );
 }

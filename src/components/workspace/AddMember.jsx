@@ -4,13 +4,20 @@ import { addMember, updateMember } from "../../store/workspaceSlice";
 import { getAllUsers } from "../../store/userSlice";
 import toast from "react-hot-toast";
 
-export default function AddMemberForm({ groupId, member, type, onClose }) {
+export default function AddMemberForm({
+  groupId,
+  member,
+  type,
+  onClose,
+  members,
+}) {
   const dispatch = useDispatch();
   const { users = [] } = useSelector((state) => state.users);
 
   const [userId, setUserId] = useState(member?.id || "");
   const [role, setRole] = useState(member?.user_role || "support");
   const [loading, setLoading] = useState(false);
+  const memberIds = members.map((m) => m.id);
 
   useEffect(() => {
     dispatch(
@@ -27,14 +34,14 @@ export default function AddMemberForm({ groupId, member, type, onClose }) {
   }, [dispatch]);
 
   const handleSubmit = async () => {
-    if (type === "add-member" && !userId) {
+    if (type === "addMember" && !userId) {
       return toast.error("Please select user");
     }
 
     try {
       setLoading(true);
 
-      if (type === "add-member") {
+      if (type === "addMember") {
         await dispatch(
           addMember({
             groupId,
@@ -48,7 +55,7 @@ export default function AddMemberForm({ groupId, member, type, onClose }) {
         toast.success("Member added");
       }
 
-      if (type === "update-member") {
+      if (type === "updateMember") {
         await dispatch(
           updateMember({
             groupId,
@@ -70,7 +77,7 @@ export default function AddMemberForm({ groupId, member, type, onClose }) {
 
   return (
     <div className="space-y-5">
-      {type === "add-member" && (
+      {type === "addMember" && (
         <div>
           <label className="text-sm font-medium text-gray-600">
             Select User
@@ -83,11 +90,13 @@ export default function AddMemberForm({ groupId, member, type, onClose }) {
           >
             <option value="">Select user</option>
 
-            {users.map((u) => (
-              <option key={u.id} value={u.id}>
-                {u.email}
-              </option>
-            ))}
+            {users
+              .filter((u) => !memberIds.includes(u.id))
+              .map((u) => (
+                <option key={u.id} value={u.id}>
+                  {u.email}
+                </option>
+              ))}
           </select>
         </div>
       )}
@@ -123,7 +132,7 @@ export default function AddMemberForm({ groupId, member, type, onClose }) {
         >
           {loading
             ? "Processing..."
-            : type === "add-member"
+            : type === "addMember"
               ? "Add Member"
               : "Update Member"}
         </button>
