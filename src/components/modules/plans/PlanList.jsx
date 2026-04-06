@@ -5,8 +5,9 @@ import { useNavigate } from "react-router-dom";
 import { getCategories } from "../../../store/categorySlice";
 import { getAllPlans } from "../../../store/planSlice";
 import { getProducts } from "../../../store/productSlice";
+import Drawer from "../../common/Drawer";
 import Loader from "../../common/Loader";
-import PlansDrawer from "./PlansDrawer";
+import AddPlan from "./AddPlan";
 
 const tabs = [{ name: "All" }, { name: "Active" }, { name: "Inactive" }];
 
@@ -211,7 +212,9 @@ function PlanList() {
                     <td className="px-6 py-4">
                       <div className="flex justify-center gap-3">
                         <button
-                          onClick={() => navigate(`details/${p.planId}`)}
+                          onClick={() =>
+                            navigate(`details/${p.planId}/${p.productId}`)
+                          }
                           className="group relative hover:bg-gray-200 p-2 rounded-xl"
                         >
                           <EyeIcon className="w-5 h-5 text-gray-600" />
@@ -228,12 +231,15 @@ function PlanList() {
         </table>
       </div>
 
-      <PlansDrawer
+      <Drawer
         open={drawer.open}
-        type={drawer.type}
-        data={drawer.data}
         onClose={() => setDrawer({ open: false, type: "", data: null })}
-      />
+        title={"Create Plan"}
+      >
+        <AddPlan
+          onClose={() => setDrawer({ open: false, type: "", data: null })}
+        />
+      </Drawer>
     </div>
   );
 }

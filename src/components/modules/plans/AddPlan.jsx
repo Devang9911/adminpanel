@@ -1,10 +1,9 @@
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { useDispatch, useSelector } from "react-redux";
-import { getProducts } from "../../../store/productSlice";
-import { getCategories } from "../../../store/categorySlice";
-import { createPlan, getAllPlans } from "../../../store/planSlice";
 import toast from "react-hot-toast";
+import { useDispatch, useSelector } from "react-redux";
+import { getCategories } from "../../../store/categorySlice";
+import { getProducts } from "../../../store/productSlice";
 
 export default function AddPlan({ onClose }) {
   const { register, handleSubmit, reset } = useForm();
@@ -54,6 +53,7 @@ export default function AddPlan({ onClose }) {
         <select
           {...register("productId", { required: true })}
           className="border border-gray-300 p-2 rounded w-full"
+          required
         >
           <option value="">Select Product</option>
           {products?.map((p) => (
@@ -66,6 +66,7 @@ export default function AddPlan({ onClose }) {
         <select
           {...register("categoryId", { required: true })}
           className="border border-gray-300 p-2 rounded w-full"
+          required
         >
           <option value="">Select Category</option>
           {categoryList?.map((c) => (
@@ -79,16 +80,19 @@ export default function AddPlan({ onClose }) {
           {...register("planName", { required: true })}
           placeholder="Plan Name"
           className="border border-gray-300 p-2 rounded w-full"
+          required
         />
 
         <textarea
           {...register("planDescription")}
           placeholder="Plan Description"
           className="border border-gray-300 p-2 rounded w-full"
+          required
         />
         <div className="flex gap-2">
           <button
             className="w-full text-black border border-gray-300 p-2 rounded-lg"
+            type="button"
             onClick={onClose}
           >
             Cancel

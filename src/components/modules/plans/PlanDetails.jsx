@@ -5,8 +5,11 @@ import {
   PlusIcon,
   TrashIcon,
 } from "lucide-react";
-import React from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import Drawer from "../../common/Drawer";
+import { useState } from "react";
+import PricingForm from "./PricingForm";
+import FeaturesForm from "./FeaturesForm";
 
 const sampleData = {
   planId: 1,
@@ -69,7 +72,13 @@ const sampleData = {
 };
 
 function PlanDetails() {
+  const { planId, productId } = useParams();
   const navigate = useNavigate();
+  const [drawer, setDrawer] = useState({
+    open: false,
+    type: "add",
+    data: null,
+  });
   return (
     <div className="space-y-3">
       <div className="flex justify-between items-center bg-white rounded-xl shadow-sm p-6">
@@ -78,7 +87,7 @@ function PlanDetails() {
             <CreditCardIcon className="w-6 h-6 text-indigo-600" />
           </div>
           <div>
-            <h1 className="text-xl font-semibold text-gray-800">
+            <h1 className="text-xl font-semibold text-gray-800 uppercase tracking-wide">
               {sampleData.planName}
             </h1>
             <p className="text-sm text-gray-500">
@@ -97,8 +106,15 @@ function PlanDetails() {
 
       <div className="bg-white rounded-xl shadow-sm">
         <div className="flex justify-between items-center p-5 border-b border-gray-300">
-          <h3 className="text-lg font-semibold text-gray-700">Pricing</h3>
-          <button className="flex items-center gap-2 px-4 py-2 text-sm bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl transition">
+          <h3 className="text-lg font-semibold text-gray-700">
+            Add Billing Information
+          </h3>
+          <button
+            className="flex items-center gap-2 px-4 py-2 text-sm bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl transition"
+            onClick={() =>
+              setDrawer({ type: "addPricing", open: true, data: null })
+            }
+          >
             <PlusIcon className="w-5 h-5" />
             Add Pricing
           </button>
@@ -107,7 +123,7 @@ function PlanDetails() {
           <table className="w-full text-sm">
             <thead className="bg-gray-50 text-gray-500">
               <tr>
-                <th className="p-4 text-left">Billing Cycle</th>
+                <th className="p-4 text-left w-1/3">Billing Cycle</th>
                 <th className="p-4 text-left">Amount</th>
                 <th className="p-4 text-center">Actions</th>
               </tr>
@@ -132,7 +148,16 @@ function PlanDetails() {
                   <td className="p-4">
                     <div className="flex justify-center gap-3">
                       <div className="relative group">
-                        <button className="p-2 rounded-xl hover:bg-green-100 text-green-600 transition">
+                        <button
+                          className="p-2 rounded-xl hover:bg-green-100 text-green-600 transition"
+                          onClick={() =>
+                            setDrawer({
+                              open: true,
+                              type: "editPricing",
+                              data: price,
+                            })
+                          }
+                        >
                           <PencilSquareIcon className="w-5 h-5" />
                         </button>
                         <span className="absolute -top-8 left-1/2 -translate-x-1/2 whitespace-nowrap bg-gray-900 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition">
@@ -158,8 +183,15 @@ function PlanDetails() {
 
       <div className="bg-white rounded-xl shadow-sm">
         <div className="flex justify-between items-center p-5 border-b border-gray-300">
-          <h3 className="text-lg font-semibold text-gray-700">Features</h3>
-          <button className="flex items-center gap-2 px-4 py-2 text-sm bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl transition">
+          <h3 className="text-lg font-semibold text-gray-700">
+            Add Features Information
+          </h3>
+          <button
+            className="flex items-center gap-2 px-4 py-2 text-sm bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl transition"
+            onClick={() =>
+              setDrawer({ open: true, type: "addFeatures", data: null })
+            }
+          >
             <PlusIcon className="w-5 h-5" />
             Add Feature
           </button>
@@ -168,7 +200,7 @@ function PlanDetails() {
           <table className="w-full text-sm">
             <thead className="bg-gray-50 text-gray-500">
               <tr>
-                <th className="p-4 text-left">Feature</th>
+                <th className="p-4 text-left w-1/3">Feature</th>
                 <th className="p-4 text-left">Value</th>
                 <th className="p-4 text-center">Actions</th>
               </tr>
@@ -191,7 +223,16 @@ function PlanDetails() {
                   <td className="p-4">
                     <div className="flex justify-center gap-3">
                       <div className="relative group">
-                        <button className="p-2 rounded-xl hover:bg-green-100 text-green-600 transition">
+                        <button
+                          className="p-2 rounded-xl hover:bg-green-100 text-green-600 transition"
+                          onClick={() =>
+                            setDrawer({
+                              open: true,
+                              type: "editFeature",
+                              data: feature,
+                            })
+                          }
+                        >
                           <PencilSquareIcon className="w-5 h-5" />
                         </button>
                         <span className="absolute -top-8 left-1/2 -translate-x-1/2 whitespace-nowrap bg-gray-900 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition">
@@ -214,6 +255,35 @@ function PlanDetails() {
             </tbody>
           </table>
         </div>
+        <Drawer
+          open={drawer.open}
+          onClose={() => setDrawer({ open: false, type: "", data: null })}
+          title={
+            drawer.type === "addPricing"
+              ? "Add Billing Info"
+              : drawer.type === "editPricing"
+                ? "Edit Billing Info"
+                : drawer.type === "addFeatures"
+                  ? "Add Features Info"
+                  : drawer.type === "editFeature"
+                    ? "Edit Features Info"
+                    : ""
+          }
+        >
+          {drawer.type === "addPricing" && (
+            <PricingForm
+              onClose={() => setDrawer({ open: false, type: "", data: null })}
+              planId={planId}
+            />
+          )}
+          {drawer.type === "addFeatures" && (
+            <FeaturesForm
+              onClose={() => setDrawer({ open: false, type: "", data: null })}
+              planId={planId}
+              productId={productId}
+            />
+          )}
+        </Drawer>
       </div>
     </div>
   );

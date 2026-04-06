@@ -72,7 +72,10 @@ function App() {
             <Route path="plans" element={<Plans />}>
               <Route index element={<PlanList />} />
               <Route path="list" element={<PlanList />} />
-              <Route path="details/:id" element={<PlanDetails />} />
+              <Route
+                path="details/:planId/:productId"
+                element={<PlanDetails />}
+              />
             </Route>
           </Route>
         </Route>
