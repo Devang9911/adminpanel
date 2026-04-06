@@ -121,7 +121,7 @@ function WorkspaceDetails() {
 
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
-            <thead className="bg-gray-50 text-gray-500 uppercase text-xs">
+            <thead className="bg-gray-50 text-gray-500">
               <tr>
                 <th className="p-4 text-left">User</th>
                 <th className="p-4 text-left">Role</th>
