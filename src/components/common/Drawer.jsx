@@ -29,7 +29,7 @@ export default function Drawer({
             <button onClick={onClose}>✕</button>
           </div>
 
-          <div className="flex-1 overflow-y-auto">{children}</div>
+          <div className="flex-1 overflow-y-auto p-4">{children}</div>
         </div>
       </div>
     </div>
