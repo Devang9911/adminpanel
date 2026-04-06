@@ -4,19 +4,19 @@ import { useDispatch } from "react-redux";
 import { getProducts, manageProduct } from "../../../store/productSlice";
 import { useEffect } from "react";
 
-function AddModules({ setToggleForm, mode, defaultData }) {
+function AddModules({ onClose, type, editData }) {
   const dispatch = useDispatch();
 
   const { register, handleSubmit, reset } = useForm({
-    defaultValues: defaultData || {},
+    defaultValues: editData || {},
   });
 
   useEffect(() => {
-    if (defaultData) {
+    if (editData) {
       reset({
-        product_name: defaultData.product_name,
-        product_description: defaultData.product_description,
-        is_active: !!defaultData.is_active,
+        product_name: editData.product_name,
+        product_description: editData.product_description,
+        is_active: !!editData.is_active,
       });
     } else {
       reset({
@@ -25,7 +25,7 @@ function AddModules({ setToggleForm, mode, defaultData }) {
         is_active: true,
       });
     }
-  }, [defaultData, reset]);
+  }, [editData, reset]);
 
   const handleFormSubmit = async (formData) => {
     try {
@@ -33,15 +33,16 @@ function AddModules({ setToggleForm, mode, defaultData }) {
         productName: formData.product_name,
         productDescription: formData.product_description,
         isActive: !!formData.is_active,
-        id: mode === "edit" ? defaultData?.id : undefined,
+        id: type === "editModule" ? editData?.id : undefined,
       };
 
       await dispatch(manageProduct(payload)).unwrap();
       dispatch(getProducts());
 
-      toast.success(mode === "edit" ? "Module updated" : "Module created");
-
-      setToggleForm(false);
+      toast.success(
+        type === "editModule" ? "Module updated" : "Module created",
+      );
+      onClose();
       reset();
     } catch (error) {
       toast.error(error?.message || "Something went wrong");
@@ -113,12 +114,12 @@ function AddModules({ setToggleForm, mode, defaultData }) {
             type="submit"
             className="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white py-2.5 rounded-xl font-medium transition"
           >
-            {mode === "edit" ? "Save Changes" : "Create Module"}
+            {type === "editModule" ? "Save Changes" : "Create Module"}
           </button>
 
           <button
             type="button"
-            onClick={() => setToggleForm(false)}
+            onClick={onClose}
             className="px-4 py-2 border rounded-xl hover:bg-gray-50 transition"
           >
             Cancel

@@ -2,7 +2,8 @@ import { PencilIcon } from "@heroicons/react/24/solid";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getProducts } from "../../../store/productSlice";
-import ModuleDrawer from "./ModuleDrawer";
+import Drawer from "../../common/Drawer";
+import AddModules from "./AddModules";
 
 function ProductList() {
   const dispatch = useDispatch();
@@ -24,7 +25,9 @@ function ProductList() {
 
         <div className="flex gap-2">
           <button
-            onClick={() => setDrawer({ open: true, type: "add", data: null })}
+            onClick={() =>
+              setDrawer({ open: true, type: "addModule", data: null })
+            }
             className="px-4 py-2 text-sm bg-indigo-600 text-white rounded-xl hover:bg-indigo-700"
           >
             + Add Modules
@@ -35,7 +38,10 @@ function ProductList() {
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5 p-3">
         {loading
           ? [...Array(6)].map((_, i) => (
-              <div key={i} className="h-36 rounded-xl bg-gray-200 animate-pulse" />
+              <div
+                key={i}
+                className="h-36 rounded-xl bg-gray-200 animate-pulse"
+              />
             ))
           : products.map((p) => (
               <div
@@ -85,7 +91,7 @@ function ProductList() {
 
                   <button
                     onClick={() =>
-                      setDrawer({ open: true, type: "edit", data: p })
+                      setDrawer({ open: true, type: "editModule", data: p })
                     }
                     className="flex items-center gap-1 px-3 py-1.5 rounded-xl bg-blue-500/10 text-blue-600 hover:bg-blue-500/20 transition"
                   >
@@ -96,12 +102,17 @@ function ProductList() {
               </div>
             ))}
       </div>
-      <ModuleDrawer
+      <Drawer
         open={drawer.open}
-        type={drawer.type}
-        data={drawer.data}
-        onClose={() => setDrawer({ open: false })}
-      />
+        onClose={() => setDrawer({ open: false, type: "", data: null })}
+        title={drawer.type === "addModule" ? "Add Module" : "Update Module"}
+      >
+        <AddModules
+          onClose={() => setDrawer({ open: false, type: "", data: null })}
+          type={drawer.type}
+          editData={drawer.data}
+        />
+      </Drawer>
     </div>
   );
 }
