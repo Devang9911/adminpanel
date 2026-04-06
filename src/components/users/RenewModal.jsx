@@ -54,7 +54,7 @@ export default function RenewModal({ onClose, data }) {
   };
 
   return (
-    <div className="bg-white w-100 p-5">
+    <div className="bg-white">
       {data?.category === "General" ? (
         <div className="bg-yellow-50 text-yellow-700 p-3 rounded-xl text-sm mb-5">
           User is not subscribed to any plan yet.

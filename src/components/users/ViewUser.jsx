@@ -14,7 +14,7 @@ export default function ViewUser({ data }) {
   if (!data) return null;
 
   return (
-    <div className="bg-white rounded-xl flex flex-col gap-6 p-5">
+    <div className="bg-white rounded-xl flex flex-col gap-6">
       <div className="flex items-center gap-4">
         <div className="capitalize w-14 h-14 bg-linear-to-br from-green-400 to-green-600 text-white rounded-full flex items-center justify-center text-lg font-bold shadow">
           {data.name?.[0] || "U"}
