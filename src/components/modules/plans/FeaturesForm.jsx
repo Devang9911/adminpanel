@@ -4,8 +4,17 @@ import toast from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
 import { getFeaturesById } from "../../../store/featuresSlice";
 
-export default function FeaturesForm({ planId, productId, onClose }) {
+export default function FeaturesForm({ planId, productId, onClose, editData }) {
   const { register, handleSubmit, reset } = useForm();
+  useEffect(() => {
+    if (editData) {
+      reset({
+        featureId: editData.featureId,
+        featureValue: editData.featureValue,
+      });
+    }
+  }, [editData, reset]);
+  const isEdit = !!editData;
   const dispatch = useDispatch();
 
   const features = useSelector((state) => state.features.features);
@@ -13,8 +22,10 @@ export default function FeaturesForm({ planId, productId, onClose }) {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    dispatch(getFeaturesById(productId));
-  }, [dispatch]);
+    if (productId) {
+      dispatch(getFeaturesById(productId));
+    }
+  }, [dispatch, productId]);
 
   const onSubmit = async (data) => {
     try {
@@ -57,15 +68,12 @@ export default function FeaturesForm({ planId, productId, onClose }) {
           ))}
         </select>
 
-        <select
+        <input
+          type="text"
           {...register("featureValue", { required: true })}
           className="border border-gray-300 p-2 rounded w-full"
-          required
-        >
-          <option value="">Select Value</option>
-          <option value="true">True</option>
-          <option value="false">False</option>
-        </select>
+          placeholder="Enter feature value"
+        />
 
         <div className="flex gap-2">
           <button
@@ -81,7 +89,7 @@ export default function FeaturesForm({ planId, productId, onClose }) {
             disabled={loading}
             className="w-full bg-blue-600 text-white p-2 rounded-lg"
           >
-            {loading ? "Saving..." : "Save Feature"}
+            {loading ? "Saving..." : isEdit ? "Update Feature" : "Save Feature"}
           </button>
         </div>
       </form>

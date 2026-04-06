@@ -1,10 +1,20 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 
-export default function PricingForm({ planId, onClose }) {
+export default function PricingForm({ planId, onClose, editData }) {
   const { register, handleSubmit, reset } = useForm();
   const [loading, setLoading] = useState(false);
+  const isEdit = !!editData;
+
+  useEffect(() => {
+    if (editData) {
+      reset({
+        planBillingCycle: editData.billingCycle,
+        planAmount: editData.amount,
+      });
+    }
+  }, [editData, reset]);
 
   const onSubmit = async (data) => {
     try {
@@ -18,9 +28,13 @@ export default function PricingForm({ planId, onClose }) {
 
       console.log("FINAL PAYLOAD:", payload);
 
-      // await dispatch(createPricing(payload)).unwrap();
-
-      toast.success("Pricing Added Successfully");
+      if (isEdit) {
+        // update api
+        toast.success("Pricing Updated Successfully");
+      } else {
+        // create api
+        toast.success("Pricing Added Successfully");
+      }
       onClose();
       reset();
     } catch (err) {
@@ -40,6 +54,7 @@ export default function PricingForm({ planId, onClose }) {
           required
         >
           <option value="">Select Billing Cycle</option>
+          <option value="15 days">15 Days</option>
           <option value="monthly">Monthly</option>
           <option value="yearly">Yearly</option>
         </select>
@@ -66,7 +81,11 @@ export default function PricingForm({ planId, onClose }) {
             disabled={loading}
             className="w-full bg-blue-600 text-white p-2 rounded-lg"
           >
-            {loading ? "Saving..." : "Save Pricing"}
+            {loading
+              ? "Saving..."
+              : editData
+                ? "Update Pricing"
+                : "Save Pricing"}
           </button>
         </div>
       </form>

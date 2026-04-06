@@ -16,6 +16,7 @@ const sampleData = {
   planName: "Trial",
   isActive: true,
   categoryId: 1,
+  categoryName: "Individual",
   productId: 1,
   productName: "SignalX",
   prices: [
@@ -87,9 +88,27 @@ function PlanDetails() {
             <CreditCardIcon className="w-6 h-6 text-indigo-600" />
           </div>
           <div>
-            <h1 className="text-xl font-semibold text-gray-800 uppercase tracking-wide">
-              {sampleData.planName}
-            </h1>
+            <div className="flex items-center gap-2 text-xl font-semibold text-gray-800 tracking-wide">
+              <span className="uppercase">{sampleData.planName}</span>
+
+              <span className="text-gray-400">|</span>
+
+              <span className="uppercase">{sampleData.productName}</span>
+
+              <span className="text-gray-400">|</span>
+
+              <span className="uppercase">{sampleData.categoryName}</span>
+
+              <span
+                className={`ml-3 rounded-xl px-3 text-sm ${
+                  sampleData.isActive
+                    ? "bg-green-100 text-green-700"
+                    : "bg-gray-200 text-gray-600"
+                }`}
+              >
+                {sampleData.isActive ? "Active" : "Inactive"}
+              </span>
+            </div>
             <p className="text-sm text-gray-500">
               Manage plan pricing and features
             </p>
@@ -107,7 +126,7 @@ function PlanDetails() {
       <div className="bg-white rounded-xl shadow-sm">
         <div className="flex justify-between items-center p-5 border-b border-gray-300">
           <h3 className="text-lg font-semibold text-gray-700">
-            Add Billing Information
+            Billing Information
           </h3>
           <button
             className="flex items-center gap-2 px-4 py-2 text-sm bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl transition"
@@ -184,7 +203,7 @@ function PlanDetails() {
       <div className="bg-white rounded-xl shadow-sm">
         <div className="flex justify-between items-center p-5 border-b border-gray-300">
           <h3 className="text-lg font-semibold text-gray-700">
-            Add Features Information
+            Features Information
           </h3>
           <button
             className="flex items-center gap-2 px-4 py-2 text-sm bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl transition"
@@ -276,11 +295,26 @@ function PlanDetails() {
               planId={planId}
             />
           )}
+          {drawer.type === "editPricing" && (
+            <PricingForm
+              onClose={() => setDrawer({ open: false, type: "", data: null })}
+              planId={planId}
+              editData={drawer.data}
+            />
+          )}
           {drawer.type === "addFeatures" && (
             <FeaturesForm
               onClose={() => setDrawer({ open: false, type: "", data: null })}
               planId={planId}
               productId={productId}
+            />
+          )}
+          {drawer.type === "editFeature" && (
+            <FeaturesForm
+              onClose={() => setDrawer({ open: false, type: "", data: null })}
+              planId={planId}
+              productId={productId}
+              editData={drawer.data}
             />
           )}
         </Drawer>
