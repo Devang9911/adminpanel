@@ -1,9 +1,12 @@
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
+import { useDispatch } from "react-redux";
+import { addPricing } from "../../../store/planSlice";
 
 export default function PricingForm({ planId, onClose, editData }) {
   const { register, handleSubmit, reset } = useForm();
+  const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
   const isEdit = !!editData;
 
@@ -33,6 +36,7 @@ export default function PricingForm({ planId, onClose, editData }) {
         toast.success("Pricing Updated Successfully");
       } else {
         // create api
+        await dispatch(addPricing(payload)).unwrap();
         toast.success("Pricing Added Successfully");
       }
       onClose();
