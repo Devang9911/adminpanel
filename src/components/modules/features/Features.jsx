@@ -1,10 +1,11 @@
-import { PlusIcon, PencilSquareIcon } from "@heroicons/react/24/solid";
+import { PencilSquareIcon, PlusIcon } from "@heroicons/react/24/solid";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getProducts } from "../../../store/productSlice";
 import { getFeaturesById } from "../../../store/featuresSlice";
+import { getProducts } from "../../../store/productSlice";
+import Drawer from "../../common/Drawer";
 import Loader from "../../common/Loader";
-import FeaturesDrawer from "./FeaturesDrawer";
+import AddFeature from "./AddFeature";
 
 const getStatusBadge = (active) => {
   return active ? "bg-green-100 text-green-700" : "bg-red-100 text-red-600";
@@ -60,7 +61,7 @@ function Features() {
         </div>
 
         <button
-          onClick={() => setDrawer({ open: true, type: "add", data: null })}
+          onClick={() => setDrawer({ open: true, type: "addFeature", data: null })}
           className="flex gap-2 items-center px-4 py-2 text-sm bg-indigo-600 text-white rounded-xl hover:bg-indigo-700"
         >
           <PlusIcon className="w-4 h-4" />
@@ -134,7 +135,7 @@ function Features() {
                       onClick={() =>
                         setDrawer({
                           open: true,
-                          type: "edit",
+                          type: "editFeature",
                           data: f,
                         })
                       }
@@ -148,15 +149,18 @@ function Features() {
           </tbody>
         </table>
       </div>
-
-      <FeaturesDrawer
+      <Drawer
         open={drawer.open}
-        type={drawer.type}
-        data={drawer.data}
-        selectedProduct={selectedProduct}
-        selectedProductName={selectedProductName}
-        onClose={() => setDrawer({ open: false, type: "add", data: null })}
-      />
+        onClose={() => setDrawer({ open: false, type: "", data: null })}
+        title={drawer.type === "addFeature" ? "Add Feature" : "Update Feature"}
+      >
+        <AddFeature
+          selectedProduct={selectedProduct}
+          selectedProductName={selectedProductName}
+          editData={drawer.data}
+          onClose={() => setDrawer({ open: false, type: "", data: null })}
+        />
+      </Drawer>
     </div>
   );
 }

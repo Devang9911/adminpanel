@@ -1,8 +1,8 @@
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { useDispatch } from "react-redux";
 import { getFeaturesById, manageFeatures } from "../../../store/featuresSlice";
-import { useEffect } from "react";
 
 function AddFeature({
   selectedProductName,
