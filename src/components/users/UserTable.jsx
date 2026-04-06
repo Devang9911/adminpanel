@@ -324,7 +324,7 @@ function UserTable() {
                   <td className="px-6 py-4 text-gray-600">{u.category}</td>
 
                   <td className="px-6 py-4">
-                    <span className="px-3 py-1 text-xs rounded-full bg-indigo-100 text-indigo-600">
+                    <span className={`px-3 py-1 text-xs rounded-full text-indigo-600 ${u.plan?.name && "bg-indigo-100"}`}>
                       {u.plan?.name || "-"}
                     </span>
                   </td>
