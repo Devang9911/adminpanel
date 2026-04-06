@@ -50,7 +50,7 @@ export default function PricingForm({ planId, onClose, editData }) {
   };
 
   return (
-    <div className="mx-auto p-5 bg-white rounded-2xl">
+    <div className="mx-auto bg-white rounded-2xl">
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
         <select
           {...register("planBillingCycle", { required: true })}
