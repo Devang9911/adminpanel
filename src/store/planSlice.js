@@ -6,14 +6,14 @@ export const getAllPlans = createAsyncThunk(
   "plans/get",
   async (_, { rejectWithValue }) => {
     try {
-      const response = await fetch(`${BASE_URL}/api/Product/getallplan`);
+      const response = await fetch(`${BASE_URL}/api/Product/getallplans`);
 
       if (!response.ok) {
         return rejectWithValue("Failed to fetch plans");
       }
 
       const data = await response.json();
-      return data;
+      return data.data;
     } catch (error) {
       return rejectWithValue(error.message);
     }
@@ -125,10 +125,38 @@ export const addFeature = createAsyncThunk(
   },
 );
 
+export const getPlanById = createAsyncThunk(
+  "plans/getById",
+  async ({ planId }, { rejectWithValue }) => {
+    try {
+      const token = localStorage.getItem("token");
+
+      const response = await fetch(
+        `${BASE_URL}/api/Product/getPlanDetails/${planId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
+
+      if (!response.ok) {
+        return rejectWithValue("Failed to fetch plan details");
+      }
+
+      const data = await response.json();
+      return data.data;
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  },
+);
+
 const planSlice = createSlice({
   name: "plans",
   initialState: {
     plans: [],
+    selectedPlan: null,
     loading: false,
     error: null,
   },
@@ -176,6 +204,18 @@ const planSlice = createSlice({
         state.loading = false;
       })
       .addCase(addFeature.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+
+      .addCase(getPlanById.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(getPlanById.fulfilled, (state, action) => {
+        state.loading = false;
+        state.selectedPlan = action.payload;
+      })
+      .addCase(getPlanById.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       });

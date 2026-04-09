@@ -10,8 +10,7 @@ export default function FeaturesForm({ planId, productId, onClose, editData }) {
   useEffect(() => {
     if (editData) {
       reset({
-        featureId: editData.featureId,
-        featureValue: editData.featureValue,
+        featureValue: editData.feature_value,
       });
     }
   }, [editData, reset]);
@@ -23,9 +22,8 @@ export default function FeaturesForm({ planId, productId, onClose, editData }) {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    if (productId) {
-      dispatch(getFeaturesById(productId));
-    }
+    if (!productId) return;
+    dispatch(getFeaturesById(productId));
   }, [dispatch, productId]);
 
   const onSubmit = async (data) => {
@@ -40,6 +38,7 @@ export default function FeaturesForm({ planId, productId, onClose, editData }) {
 
       console.log("FINAL PAYLOAD:", payload);
       await dispatch(addFeature(payload)).unwrap();
+      dispatch(getFeaturesById(productId));
       toast.success("Feature Added Successfully");
       onClose();
       reset();
@@ -56,8 +55,8 @@ export default function FeaturesForm({ planId, productId, onClose, editData }) {
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
         <select
           {...register("featureId", { required: true })}
+          disabled={isEdit}
           className="border border-gray-300 p-2 rounded w-full"
-          required
         >
           <option value="">Select Feature</option>
           {features?.map((f) => (

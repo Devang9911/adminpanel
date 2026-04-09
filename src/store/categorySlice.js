@@ -33,6 +33,24 @@ export const manageCategory = createAsyncThunk(
   },
 );
 
+export const deleteCategory = createAsyncThunk(
+  "workspace/deleteCategory",
+  async ({ categoryId }, { rejectWithValue }) => {
+    const token = localStorage.getItem("token");
+    try {
+      await fetch(`${BASE_URL}/api/Product/category/${categoryId}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+    } catch (err) {
+      return rejectWithValue(err.message);
+    }
+  },
+);
+
 const categorySlice = createSlice({
   name: "category",
   initialState: {
@@ -49,6 +67,12 @@ const categorySlice = createSlice({
       .addCase(getCategories.fulfilled, (state, action) => {
         state.loading = false;
         state.categories = action.payload;
+      })
+
+      .addCase(deleteCategory.fulfilled, (state, action) => {
+        state.categories = state.categories.filter(
+          (c) => c.id !== action.payload,
+        );
       });
   },
 });

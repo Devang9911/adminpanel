@@ -73,7 +73,7 @@ function App() {
               <Route index element={<PlanList />} />
               <Route path="list" element={<PlanList />} />
               <Route
-                path="details/:planId/:productId"
+                path="details/:planId"
                 element={<PlanDetails />}
               />
             </Route>

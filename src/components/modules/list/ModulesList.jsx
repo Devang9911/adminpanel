@@ -1,9 +1,11 @@
 import { PencilIcon } from "@heroicons/react/24/solid";
 import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
-import { getProducts } from "../../../store/productSlice";
+import { deleteModule, getProducts } from "../../../store/productSlice";
 import Drawer from "../../common/Drawer";
 import AddModules from "./AddModules";
+import { Trash } from "lucide-react";
 
 function ProductList() {
   const dispatch = useDispatch();
@@ -16,6 +18,15 @@ function ProductList() {
     type: "add",
     data: null,
   });
+  const handleDelete = async (moduleId) => {
+    try {
+      await dispatch(deleteModule({ moduleId })).unwrap();
+      dispatch(getProducts());
+      toast.success("Feature deleted");
+    } catch (error) {
+      toast.error(error);
+    }
+  };
   return (
     <div className="bg-white rounded-xl flex flex-col">
       <div className="flex items-center justify-between py-3 px-5 border-b border-gray-300">
@@ -88,16 +99,28 @@ function ProductList() {
 
                 <div className="flex justify-between items-center mt-5 pt-3 border-t">
                   <span className="text-xs text-gray-400">ID: {p.id}</span>
-
-                  <button
-                    onClick={() =>
-                      setDrawer({ open: true, type: "editModule", data: p })
-                    }
-                    className="flex items-center gap-1 px-3 py-1.5 rounded-xl bg-blue-500/10 text-blue-600 hover:bg-blue-500/20 transition"
-                  >
-                    <PencilIcon className="w-4 h-4" />
-                    Edit
-                  </button>
+                  <div className="flex items-center gap-3">
+                    <button
+                      onClick={() =>
+                        setDrawer({ open: true, type: "editModule", data: p })
+                      }
+                      className="group/btn relative flex items-center gap-1 px-3 py-1.5 rounded-xl bg-blue-500/10 text-blue-600 hover:bg-blue-500/20 transition"
+                    >
+                      <PencilIcon className="w-4 h-4" />
+                      <span className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 bg-gray-700 text-white text-xs px-2 py-1 rounded-xl opacity-0 group-hover/btn:opacity-100 transition whitespace-nowrap z-50">
+                        Edit
+                      </span>
+                    </button>
+                    <button
+                      onClick={() => handleDelete(p.id)}
+                      className="group/btn relative flex items-center gap-1 px-3 py-1.5 rounded-xl bg-red-500/10 text-red-600 hover:bg-red-500/20 transition"
+                    >
+                      <Trash className="w-4 h-4" />
+                      <span className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 bg-gray-700 text-white text-xs px-2 py-1 rounded-xl opacity-0 group-hover/btn:opacity-100 transition whitespace-nowrap z-50">
+                        Delete
+                      </span>
+                    </button>
+                  </div>
                 </div>
               </div>
             ))}

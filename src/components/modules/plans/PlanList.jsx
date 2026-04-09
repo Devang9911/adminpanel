@@ -163,14 +163,6 @@ function PlanList() {
               </tr>
             )}
 
-            {loading && plans?.length > 0 && (
-              <tr>
-                <td colSpan={6}>
-                  <Loader />
-                </td>
-              </tr>
-            )}
-
             {!loading && plans?.length === 0 && (
               <tr>
                 <td colSpan={6} className="text-center py-6 text-gray-400">
@@ -186,12 +178,12 @@ function PlanList() {
                   "—";
 
                 return (
-                  <tr key={p.planId} className="border-t hover:bg-gray-50">
+                  <tr key={p.id} className="border-t hover:bg-gray-50">
                     <td className="px-6 py-4 font-medium capitalize">
-                      {p.planName}
+                      {p.plan_name}
                     </td>
 
-                    <td className="px-6 py-4 capitalize">{p.productName}</td>
+                    <td className="px-6 py-4 capitalize">{p.plan_name}</td>
 
                     <td className="px-6 py-4 capitalize text-gray-600">
                       {categoryName}
@@ -200,12 +192,12 @@ function PlanList() {
                     <td className="px-6 py-4">
                       <span
                         className={`px-3 py-1 text-xs rounded-full ${
-                          p.isActive
+                          p.is_active
                             ? "bg-green-100 text-green-700"
                             : "bg-red-100 text-red-600"
                         }`}
                       >
-                        {p.isActive ? "Active" : "Inactive"}
+                        {p.is_active ? "Active" : "Inactive"}
                       </span>
                     </td>
 
@@ -213,7 +205,7 @@ function PlanList() {
                       <div className="flex justify-center gap-3">
                         <button
                           onClick={() =>
-                            navigate(`details/${p.planId}/${p.productId}`)
+                            navigate(`details/${p.id}`)
                           }
                           className="group relative hover:bg-gray-200 p-2 rounded-xl"
                         >

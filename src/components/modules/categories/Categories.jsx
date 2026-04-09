@@ -1,9 +1,10 @@
 import { PencilIcon, TrashIcon } from "@heroicons/react/24/solid";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getCategories } from "../../../store/categorySlice";
+import { deleteCategory, getCategories } from "../../../store/categorySlice";
 import Loader from "../../common/Loader";
 import CategoryDrawer from "./CategoryDrawer";
+import toast from "react-hot-toast";
 
 const colors = [
   "bg-red-500",
@@ -40,6 +41,16 @@ function Categories() {
 
   const handleEdit = (cat) => {
     setDrawer({ open: true, type: "edit", data: cat });
+  };
+
+  const handleDelete = async (categoryId) => {
+    try {
+      await dispatch(deleteCategory({ categoryId })).unwrap();
+      dispatch(getCategories());
+      toast.success("Category deleted");
+    } catch (error) {
+      toast.error(error);
+    }
   };
 
   return (
@@ -111,7 +122,10 @@ function Categories() {
                         </span>
                       </button>
 
-                      <button className="group relative p-2 rounded-xl hover:bg-red-100 text-red-600 transition">
+                      <button
+                        className="group relative p-2 rounded-xl hover:bg-red-100 text-red-600 transition"
+                        onClick={() => handleDelete(cat.id)}
+                      >
                         <TrashIcon className="w-5 h-5" />
                         <span className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 bg-gray-700 text-white text-xs px-2 py-1 rounded-xl opacity-0 group-hover:opacity-100 transition whitespace-nowrap">
                           Delete

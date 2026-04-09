@@ -1,11 +1,13 @@
 import { PencilSquareIcon, PlusIcon } from "@heroicons/react/24/solid";
+import { Trash } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getFeaturesById } from "../../../store/featuresSlice";
+import { deleteFeature, getFeaturesById } from "../../../store/featuresSlice";
 import { getProducts } from "../../../store/productSlice";
 import Drawer from "../../common/Drawer";
 import Loader from "../../common/Loader";
 import AddFeature from "./AddFeature";
+import toast from "react-hot-toast";
 
 const getStatusBadge = (active) => {
   return active ? "bg-green-100 text-green-700" : "bg-red-100 text-red-600";
@@ -51,6 +53,16 @@ function Features() {
     setSelectedProductName(product?.product_name || "");
   };
 
+  const handleDelete = async (featureId) => {
+    try {
+      await dispatch(deleteFeature({ featureId })).unwrap();
+      dispatch(getFeaturesById(selectedProduct));
+      toast.success("Feature deleted");
+    } catch (error) {
+      toast.error(error);
+    }
+  };
+
   return (
     <div className="w-full bg-white rounded-xl shadow">
       <div className="flex items-center justify-between py-3 px-5 border-b border-gray-300">
@@ -61,7 +73,9 @@ function Features() {
         </div>
 
         <button
-          onClick={() => setDrawer({ open: true, type: "addFeature", data: null })}
+          onClick={() =>
+            setDrawer({ open: true, type: "addFeature", data: null })
+          }
           className="flex gap-2 items-center px-4 py-2 text-sm bg-indigo-600 text-white rounded-xl hover:bg-indigo-700"
         >
           <PlusIcon className="w-4 h-4" />
@@ -142,6 +156,12 @@ function Features() {
                       className="hover:bg-blue-100 p-2 rounded-xl"
                     >
                       <PencilSquareIcon className="w-5 h-5 text-blue-600" />
+                    </button>
+                    <button
+                      onClick={() => handleDelete(f.id)}
+                      className="hover:bg-red-100 p-2 rounded-xl"
+                    >
+                      <Trash className="w-5 h-5 text-red-600" />
                     </button>
                   </td>
                 </tr>

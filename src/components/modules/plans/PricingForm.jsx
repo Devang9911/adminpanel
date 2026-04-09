@@ -2,19 +2,20 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { useDispatch } from "react-redux";
-import { addPricing } from "../../../store/planSlice";
+import { addPricing, getPlanById } from "../../../store/planSlice";
 
 export default function PricingForm({ planId, onClose, editData }) {
   const { register, handleSubmit, reset } = useForm();
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
+
   const isEdit = !!editData;
 
   useEffect(() => {
     if (editData) {
       reset({
-        planBillingCycle: editData.billingCycle,
-        planAmount: editData.amount,
+        planBillingCycle: editData.plan_billing_cycle,
+        planAmount: editData.plan_amount,
       });
     }
   }, [editData, reset]);
@@ -29,21 +30,20 @@ export default function PricingForm({ planId, onClose, editData }) {
         planAmount: Number(data.planAmount),
       };
 
-      console.log("FINAL PAYLOAD:", payload);
-
       if (isEdit) {
-        // update api
         toast.success("Pricing Updated Successfully");
       } else {
-        // create api
         await dispatch(addPricing(payload)).unwrap();
         toast.success("Pricing Added Successfully");
       }
+
+      dispatch(getPlanById({ planId }));
+
       onClose();
       reset();
     } catch (err) {
       console.error(err);
-      toast.error("Error adding pricing");
+      toast.error("Something went wrong");
     } finally {
       setLoading(false);
     }
@@ -55,7 +55,6 @@ export default function PricingForm({ planId, onClose, editData }) {
         <select
           {...register("planBillingCycle", { required: true })}
           className="border border-gray-300 p-2 rounded w-full"
-          required
         >
           <option value="">Select Billing Cycle</option>
           <option value="15 days">15 Days</option>
@@ -68,14 +67,13 @@ export default function PricingForm({ planId, onClose, editData }) {
           {...register("planAmount", { required: true })}
           placeholder="Plan Amount"
           className="border border-gray-300 p-2 rounded w-full"
-          required
         />
 
         <div className="flex gap-2">
           <button
-            className="w-full text-black border border-gray-300 p-2 rounded-lg"
             type="button"
             onClick={onClose}
+            className="w-full border border-gray-300 p-2 rounded-lg"
           >
             Cancel
           </button>
@@ -85,11 +83,7 @@ export default function PricingForm({ planId, onClose, editData }) {
             disabled={loading}
             className="w-full bg-blue-600 text-white p-2 rounded-lg"
           >
-            {loading
-              ? "Saving..."
-              : editData
-                ? "Update Pricing"
-                : "Save Pricing"}
+            {loading ? "Saving..." : isEdit ? "Update Pricing" : "Save Pricing"}
           </button>
         </div>
       </form>

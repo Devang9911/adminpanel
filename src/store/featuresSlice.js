@@ -62,6 +62,24 @@ export const manageFeatures = createAsyncThunk(
   },
 );
 
+export const deleteFeature = createAsyncThunk(
+  "workspace/deleteFeature",
+  async ({ featureId }, { rejectWithValue }) => {
+    const token = localStorage.getItem("token");
+    try {
+      await fetch(`${BASE_URL}/api/Product/feature/${featureId}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+    } catch (err) {
+      return rejectWithValue(err.message);
+    }
+  },
+);
+
 const featuresSlice = createSlice({
   name: "features",
   initialState: {
@@ -81,6 +99,10 @@ const featuresSlice = createSlice({
       })
       .addCase(getFeaturesById.rejected, (state) => {
         state.loading = false;
+      })
+
+      .addCase(deleteFeature.fulfilled, (state, action) => {
+        state.features = state.features.filter((f) => f.id !== action.payload);
       });
   },
 });
