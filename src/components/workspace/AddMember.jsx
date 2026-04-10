@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { addMember, updateMember } from "../../store/workspaceSlice";
 import { getAllUsers } from "../../store/userSlice";
+import { addMember, updateMember } from "../../store/workspaceSlice";
 import toast from "react-hot-toast";
 
 export default function AddMemberForm({
@@ -34,39 +34,22 @@ export default function AddMemberForm({
   }, [dispatch]);
 
   const handleSubmit = async () => {
-    if (type === "addMember" && !userId) {
-      return toast.error("Please select user");
-    }
-
+    if (type === "addMember" && !userId)
+      return toast.error("Please select a user");
     try {
       setLoading(true);
-
       if (type === "addMember") {
         await dispatch(
-          addMember({
-            groupId,
-            body: {
-              userId: Number(userId),
-              role,
-            },
-          }),
+          addMember({ groupId, body: { userId: Number(userId), role } }),
         ).unwrap();
-
         toast.success("Member added");
       }
-
       if (type === "updateMember") {
         await dispatch(
-          updateMember({
-            groupId,
-            userId: member.id,
-            body: { newRole: role },
-          }),
+          updateMember({ groupId, userId: member.id, body: { newRole: role } }),
         ).unwrap();
-
         toast.success("Member updated");
       }
-
       onClose();
     } catch (err) {
       toast.error(err || "Something went wrong");
@@ -76,20 +59,18 @@ export default function AddMemberForm({
   };
 
   return (
-    <div className="space-y-5">
+    <div className="flex flex-col gap-5">
       {type === "addMember" && (
         <div>
-          <label className="text-sm font-medium text-gray-600">
-            Select User
+          <label className="text-xs font-semibold text-gray-600 mb-1.5 block">
+            User
           </label>
-
           <select
             value={userId}
             onChange={(e) => setUserId(e.target.value)}
-            className="w-full mt-1 border border-gray-300 p-2 rounded-xl"
+            className="w-full border border-gray-200 bg-gray-50 rounded-xl px-3 py-2.5 text-xs text-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-100 focus:border-indigo-300 transition"
           >
-            <option value="">Select user</option>
-
+            <option value="">Select user…</option>
             {users
               .filter((u) => !memberIds.includes(u.id))
               .map((u) => (
@@ -102,12 +83,13 @@ export default function AddMemberForm({
       )}
 
       <div>
-        <label className="text-sm font-medium text-gray-600">Select Role</label>
-
+        <label className="text-xs font-semibold text-gray-600 mb-1.5 block">
+          Role
+        </label>
         <select
           value={role}
           onChange={(e) => setRole(e.target.value)}
-          className="w-full mt-1 border border-gray-300 p-2 rounded-xl"
+          className="w-full border border-gray-200 bg-gray-50 rounded-xl px-3 py-2.5 text-xs text-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-100 focus:border-indigo-300 transition"
         >
           <option value="support">Support</option>
           <option value="admin">Admin</option>
@@ -115,26 +97,23 @@ export default function AddMemberForm({
         </select>
       </div>
 
-      <div className="flex justify-end gap-2 pt-4">
+      <div className="flex items-center justify-end gap-2 pt-1">
         <button
           onClick={onClose}
-          className="px-4 py-2 border border-gray-300 rounded-xl"
+          className="px-4 py-2 text-xs font-medium text-gray-500 bg-white border border-gray-200 rounded-xl hover:bg-gray-50 transition-colors"
         >
           Cancel
         </button>
-
         <button
           onClick={handleSubmit}
           disabled={loading}
-          className={`px-4 py-2 text-white rounded-xl ${
-            loading ? "bg-gray-400" : "bg-indigo-600 hover:bg-indigo-700"
-          }`}
+          className="px-4 py-2 text-xs font-medium bg-indigo-600 text-white rounded-xl hover:bg-indigo-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {loading
-            ? "Processing..."
+            ? "Processing…"
             : type === "addMember"
-              ? "Add Member"
-              : "Update Member"}
+              ? "Add member"
+              : "Save changes"}
         </button>
       </div>
     </div>

@@ -1,6 +1,3 @@
-import { useNavigate, useParams } from "react-router-dom";
-import Loader from "../common/Loader";
-
 import {
   ArrowLeftIcon,
   PencilSquareIcon,
@@ -8,10 +5,9 @@ import {
   TrashIcon,
   UsersIcon,
 } from "@heroicons/react/24/outline";
-
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-
+import { useNavigate, useParams } from "react-router-dom";
 import toast from "react-hot-toast";
 import {
   getWorkspaceDetails,
@@ -19,6 +15,7 @@ import {
   removeMember,
 } from "../../store/workspaceSlice";
 import Drawer from "../common/Drawer";
+import Loader from "../common/Loader";
 import AddMemberForm from "./AddMember";
 
 function formatDate(dateString, locale = "en-IN") {
@@ -30,6 +27,19 @@ function formatDate(dateString, locale = "en-IN") {
   });
 }
 
+const colors = [
+  "bg-violet-500",
+  "bg-blue-500",
+  "bg-emerald-500",
+  "bg-purple-500",
+  "bg-pink-500",
+];
+const getColorFromName = (name = "") => {
+  const index =
+    name.split("").reduce((acc, c) => acc + c.charCodeAt(0), 0) % colors.length;
+  return colors[index];
+};
+
 function WorkspaceDetails() {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -38,7 +48,6 @@ function WorkspaceDetails() {
   const { members, details, loadingMembers, loadingDetails } = useSelector(
     (state) => state.workspace,
   );
-
   const [drawer, setDrawer] = useState({
     open: false,
     type: "add",
@@ -52,17 +61,14 @@ function WorkspaceDetails() {
 
   const handleDelete = (delid) => {
     try {
-      dispatch(
-        removeMember({
-          groupId: id,
-          userId: delid,
-        }),
-      );
+      dispatch(removeMember({ groupId: id, userId: delid }));
       toast.success("Member removed");
     } catch (error) {
       toast.error(error);
     }
   };
+
+  const closeDrawer = () => setDrawer({ open: false, type: "", data: null });
 
   if (loadingDetails) {
     return (
@@ -73,38 +79,37 @@ function WorkspaceDetails() {
   }
 
   return (
-    <div className="space-y-3">
-      <div className="flex justify-between items-center bg-white p-6 rounded-xl shadow-sm">
-        <div className="flex items-center gap-4">
-          <div className="bg-indigo-100 p-3 rounded-xl">
-            <UsersIcon className="w-6 h-6 text-indigo-600" />
+    <div className="space-y-4">
+      <div className="flex items-center justify-between bg-white rounded-2xl border border-gray-100 shadow-sm px-6 py-4">
+        <div className="flex items-center gap-3.5">
+          <div className="w-10 h-10 bg-indigo-50 rounded-xl flex items-center justify-center flex-shrink-0">
+            <UsersIcon className="w-5 h-5 text-indigo-500" />
           </div>
-
           <div>
-            <h1 className="text-xl font-semibold text-gray-800">
+            <h1 className="text-sm font-semibold text-gray-800">
               {details?.group_name}
             </h1>
-            <p className="text-sm text-gray-500">
+            <p className="text-[11px] text-gray-400 mt-0.5">
               Manage workspace members and roles
             </p>
           </div>
         </div>
-
         <button
           onClick={() => navigate("/workspaces")}
-          className="flex items-center gap-2 px-4 py-2 text-sm bg-gray-100 hover:bg-gray-200 rounded-xl transition"
+          className="flex items-center gap-1.5 px-3 py-2 text-xs font-medium text-gray-500 bg-gray-50 border border-gray-100 rounded-lg hover:bg-gray-100 transition-colors"
         >
-          <ArrowLeftIcon className="w-5 h-5" />
-          Back
+          <ArrowLeftIcon className="w-3.5 h-3.5" /> Back
         </button>
       </div>
 
-      <div className="bg-white rounded-xl shadow-sm">
-        <div className="flex justify-between items-center p-5 border-b border-gray-300">
-          <h3 className="text-lg font-semibold text-gray-700">
-            Members ({members.length})
-          </h3>
-
+      <div className="bg-white rounded-2xl border border-gray-100 shadow-sm">
+        <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100">
+          <div className="flex items-center gap-2.5">
+            <h3 className="text-sm font-semibold text-gray-800">Members</h3>
+            <span className="text-xs font-medium text-gray-400 bg-gray-100 px-2 py-0.5 rounded-full">
+              {members.length}
+            </span>
+          </div>
           <button
             onClick={() =>
               setDrawer({
@@ -113,103 +118,121 @@ function WorkspaceDetails() {
                 data: { groupId: id },
               })
             }
-            className="flex items-center gap-2 px-4 py-2 text-sm bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl transition"
+            className="flex items-center gap-1.5 px-3.5 py-2 text-xs font-medium bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors"
           >
-            <PlusIcon className="w-5 h-5" />
-            Add Member
+            <PlusIcon className="w-3.5 h-3.5" /> Add member
           </button>
         </div>
 
         <div className="overflow-x-auto">
-          <table className="w-full text-sm">
-            <thead className="bg-gray-50 text-gray-500">
-              <tr>
-                <th className="p-4 text-left">User</th>
-                <th className="p-4 text-left">Role</th>
-                <th className="p-4 text-left">Joined</th>
-                <th className="p-4 text-center">Actions</th>
+          <table className="w-full">
+            <thead>
+              <tr className="bg-gray-50/70">
+                <th className="text-left px-6 py-3 text-[11px] font-semibold text-gray-400 uppercase tracking-wider">
+                  User
+                </th>
+                <th className="text-left px-6 py-3 text-[11px] font-semibold text-gray-400 uppercase tracking-wider">
+                  Role
+                </th>
+                <th className="text-left px-6 py-3 text-[11px] font-semibold text-gray-400 uppercase tracking-wider">
+                  Joined
+                </th>
+                <th className="text-center px-6 py-3 text-[11px] font-semibold text-gray-400 uppercase tracking-wider">
+                  Actions
+                </th>
               </tr>
             </thead>
 
-            <tbody>
+            <tbody className="divide-y divide-gray-50">
               {loadingMembers ? (
                 <tr>
-                  <td colSpan={4} className="p-6 text-center">
+                  <td colSpan={4}>
                     <Loader />
                   </td>
                 </tr>
               ) : members.length === 0 ? (
                 <tr>
-                  <td colSpan={4} className="text-center p-10 text-gray-400">
-                    No members found
+                  <td
+                    colSpan={4}
+                    className="text-center py-14 text-gray-300 text-xs"
+                  >
+                    <div className="flex flex-col items-center gap-2">
+                      <svg
+                        className="w-7 h-7"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="1.2"
+                        viewBox="0 0 24 24"
+                      >
+                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                        <circle cx="9" cy="7" r="4" />
+                        <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+                        <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+                      </svg>
+                      No members found
+                    </div>
                   </td>
                 </tr>
               ) : (
                 members.map((member) => (
                   <tr
                     key={member.id}
-                    className="border-t hover:bg-gray-50 transition"
+                    className="hover:bg-gray-50/60 transition-colors"
                   >
-                    <td className="p-4">
+                    <td className="px-6 py-3.5">
                       <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 rounded-full bg-indigo-100 flex items-center justify-center font-semibold text-indigo-600 uppercase">
+                        <div
+                          className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-semibold text-white uppercase flex-shrink-0 ${getColorFromName(member.user_name)}`}
+                        >
                           {member.user_name?.[0]}
                         </div>
-
                         <div>
-                          <div className="font-medium text-gray-800 capitalize">
+                          <div className="text-xs font-semibold text-gray-800 capitalize">
                             {member.user_name}
                           </div>
-                          <div className="text-xs text-gray-500">
+                          <div className="text-[11px] text-gray-400 mt-0.5">
                             {member.user_email}
                           </div>
                         </div>
                       </div>
                     </td>
 
-                    <td className="p-4">
-                      <span className="px-2 py-1 text-xs bg-indigo-100 text-indigo-700 rounded-full">
+                    <td className="px-6 py-3.5">
+                      <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-medium bg-indigo-50 text-indigo-600 ring-1 ring-indigo-100 capitalize">
                         {member.user_role}
                       </span>
                     </td>
 
-                    <td className="p-4 text-gray-500">
+                    <td className="px-6 py-3.5 text-xs text-gray-400">
                       {formatDate(member.joined_at)}
                     </td>
 
-                    <td className="p-4">
-                      <div className="flex justify-center gap-3">
-                        <div className="relative group">
-                          <button
-                            onClick={() =>
-                              setDrawer({
-                                open: true,
-                                type: "updateMember",
-                                data: { groupId: id, member },
-                              })
-                            }
-                            className="p-2 rounded-xl hover:bg-green-100 text-green-600 transition"
-                          >
-                            <PencilSquareIcon className="w-5 h-5" />
-                          </button>
-
-                          <span className="absolute -top-8 left-1/2 -translate-x-1/2 whitespace-nowrap bg-gray-900 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition">
-                            Update
+                    <td className="px-6 py-3.5">
+                      <div className="flex justify-center items-center gap-1">
+                        <button
+                          onClick={() =>
+                            setDrawer({
+                              open: true,
+                              type: "updateMember",
+                              data: { groupId: id, member },
+                            })
+                          }
+                          className="relative p-1.5 rounded-lg hover:bg-blue-50 transition-colors group/btn"
+                        >
+                          <PencilSquareIcon className="w-4 h-4 text-blue-400 group-hover/btn:text-blue-600" />
+                          <span className="absolute bottom-full left-1/2 -translate-x-1/2 mb-1.5 bg-gray-800 text-white text-[10px] px-1.5 py-0.5 rounded opacity-0 group-hover/btn:opacity-100 transition whitespace-nowrap pointer-events-none z-50">
+                            Edit
                           </span>
-                        </div>
-
-                        <div className="relative group">
-                          <button
-                            onClick={() => handleDelete(member.id)}
-                            className="p-2 rounded-xl hover:bg-red-100 text-red-600 transition"
-                          >
-                            <TrashIcon className="w-5 h-5" />
-                          </button>
-
-                          <span className="absolute -top-8 left-1/2 -translate-x-1/2 whitespace-nowrap bg-gray-900 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition">
-                            Delete
+                        </button>
+                        <button
+                          onClick={() => handleDelete(member.id)}
+                          className="relative p-1.5 rounded-lg hover:bg-red-50 transition-colors group/btn"
+                        >
+                          <TrashIcon className="w-4 h-4 text-red-400 group-hover/btn:text-red-600" />
+                          <span className="absolute bottom-full left-1/2 -translate-x-1/2 mb-1.5 bg-gray-800 text-white text-[10px] px-1.5 py-0.5 rounded opacity-0 group-hover/btn:opacity-100 transition whitespace-nowrap pointer-events-none z-50">
+                            Remove
                           </span>
-                        </div>
+                        </button>
                       </div>
                     </td>
                   </tr>
@@ -219,15 +242,17 @@ function WorkspaceDetails() {
           </table>
         </div>
       </div>
+
       <Drawer
-        title={drawer.type === "updateMember" ? "Update Member" : "Add Member"}
+        title={drawer.type === "updateMember" ? "Update member" : "Add member"}
         open={drawer.open}
-        onClose={() => setDrawer({ open: false, type: "", data: null })}
+        onClose={closeDrawer}
       >
         <AddMemberForm
           type={drawer.type}
           groupId={drawer.data?.groupId}
-          onClose={() => setDrawer({ open: false, type: "", data: null })}
+          member={drawer.data?.member}
+          onClose={closeDrawer}
           members={members}
         />
       </Drawer>

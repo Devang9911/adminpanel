@@ -1,47 +1,83 @@
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 
 export default function PricingForm({ planId, onClose, editData }) {
   const { register, handleSubmit, reset } = useForm();
-  
+  const [loading, setLoading] = useState(false);
+  const isEdit = !!editData;
+
+  useEffect(() => {
+    if (editData) {
+      reset({
+        planBillingCycle: editData.plan_billing_cycle,
+        planAmount: editData.plan_amount,
+      });
+    }
+  }, [editData, reset]);
+
+  const onSubmit = async (data) => {
+    try {
+      setLoading(true);
+      const payload = {
+        planId: Number(planId),
+        planBillingCycle: data.planBillingCycle,
+        planAmount: Number(data.planAmount),
+      };
+      console.log("Pricing payload:", payload);
+      // await dispatch(...)
+      onClose();
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
-    <div className="mx-auto bg-white rounded-2xl">
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+    <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-5">
+
+      <div>
+        <label className="text-xs font-semibold text-gray-600 mb-1.5 block">Billing cycle</label>
         <select
           {...register("planBillingCycle", { required: true })}
-          className="border border-gray-300 p-2 rounded w-full"
+          className="w-full border border-gray-200 bg-gray-50 rounded-xl px-3 py-2.5 text-xs text-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-100 focus:border-indigo-300 transition"
         >
-          <option value="">Select Billing Cycle</option>
-          <option value="15 days">15 Days</option>
+          <option value="">Select billing cycle…</option>
+          <option value="15 days">15 days</option>
           <option value="monthly">Monthly</option>
           <option value="yearly">Yearly</option>
         </select>
+      </div>
 
-        <input
-          type="number"
-          {...register("planAmount", { required: true })}
-          placeholder="Plan Amount"
-          className="border border-gray-300 p-2 rounded w-full"
-        />
-
-        <div className="flex gap-2">
-          <button
-            type="button"
-            onClick={onClose}
-            className="w-full border border-gray-300 p-2 rounded-lg"
-          >
-            Cancel
-          </button>
-
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full bg-blue-600 text-white p-2 rounded-lg"
-          >
-            {loading ? "Saving..." : isEdit ? "Update Pricing" : "Save Pricing"}
-          </button>
+      <div>
+        <label className="text-xs font-semibold text-gray-600 mb-1.5 block">Amount (₹)</label>
+        <div className="relative">
+          <span className="absolute left-3 top-1/2 -translate-y-1/2 text-xs text-gray-400 font-medium">₹</span>
+          <input
+            type="number"
+            {...register("planAmount", { required: true })}
+            placeholder="0"
+            className="w-full border border-gray-200 bg-gray-50 rounded-xl pl-7 pr-3 py-2.5 text-xs text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-100 focus:border-indigo-300 transition"
+          />
         </div>
-      </form>
-    </div>
+      </div>
+
+      <div className="flex items-center justify-end gap-2 pt-1">
+        <button
+          type="button"
+          onClick={onClose}
+          className="px-4 py-2 text-xs font-medium text-gray-500 bg-white border border-gray-200 rounded-xl hover:bg-gray-50 transition-colors"
+        >
+          Cancel
+        </button>
+        <button
+          type="submit"
+          disabled={loading}
+          className="px-4 py-2 text-xs font-medium bg-indigo-600 text-white rounded-xl hover:bg-indigo-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+        >
+          {loading ? "Saving…" : isEdit ? "Save changes" : "Add pricing"}
+        </button>
+      </div>
+    </form>
   );
 }

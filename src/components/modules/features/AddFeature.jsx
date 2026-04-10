@@ -11,13 +11,8 @@ function AddFeature({
   onClose,
 }) {
   const dispatch = useDispatch();
-
   const { register, handleSubmit, reset } = useForm({
-    defaultValues: {
-      product: "",
-      featureName: "",
-      active: true,
-    },
+    defaultValues: { product: "", featureName: "", active: true },
   });
 
   useEffect(() => {
@@ -28,11 +23,7 @@ function AddFeature({
         active: editData.isActive,
       });
     } else {
-      reset({
-        product: selectedProductName,
-        featureName: "",
-        active: true,
-      });
+      reset({ product: selectedProductName, featureName: "", active: true });
     }
   }, [selectedProductName, editData, reset]);
 
@@ -43,13 +34,10 @@ function AddFeature({
       featureName: data.featureName,
       isActive: data.active,
     };
-
     try {
       await dispatch(manageFeatures(payload)).unwrap();
       dispatch(getFeaturesById(selectedProduct));
-
       toast.success(editData ? "Feature updated" : "Feature added");
-
       onClose();
     } catch {
       toast.error("Something went wrong");
@@ -57,71 +45,64 @@ function AddFeature({
   };
 
   return (
-    <form onSubmit={handleSubmit(handleFormSubmit)} className="flex flex-col">
-      <div className="flex-1 space-y-6">
-        <div>
-          <label className="text-sm font-medium text-gray-600">Product</label>
-
-          <div className="bg-gray-200 mt-1 flex items-center border border-gray-300 rounded-xl px-3 focus-within:ring-2 focus-within:ring-indigo-500">
-            <input
-              {...register("product")}
-              readOnly
-              className="w-full py-2.5 outline-none text-sm cursor-not-allowed"
-            />
-          </div>
-        </div>
-
-        <div>
-          <label className="text-sm font-medium text-gray-600">
-            Feature Name
-          </label>
-
-          <div className="mt-1 flex items-center border border-gray-300 rounded-xl px-3 focus-within:ring-2 focus-within:ring-indigo-500">
-            <input
-              {...register("featureName")}
-              required
-              placeholder="Enter feature name"
-              className="w-full py-2.5 outline-none text-sm"
-            />
-          </div>
-        </div>
-
-        <div className="flex items-center justify-between bg-gray-50 rounded-xl px-4 py-4">
-          <div>
-            <p className="font-medium text-sm">Active Feature</p>
-            <p className="text-xs text-gray-500">
-              Enable or disable this feature
-            </p>
-          </div>
-
-          <label className="relative inline-flex items-center cursor-pointer">
-            <input
-              type="checkbox"
-              {...register("active")}
-              className="sr-only peer"
-            />
-
-            <div className="w-11 h-6 bg-gray-300 rounded-full peer peer-checked:bg-indigo-600 transition"></div>
-
-            <div className="absolute left-1 top-1 w-4 h-4 bg-white rounded-full transition peer-checked:translate-x-5"></div>
-          </label>
-        </div>
+    <form
+      onSubmit={handleSubmit(handleFormSubmit)}
+      className="flex flex-col gap-5"
+    >
+      <div>
+        <label className="text-xs font-semibold text-gray-600 mb-1.5 block">
+          Module
+        </label>
+        <input
+          {...register("product")}
+          readOnly
+          className="w-full border border-gray-100 bg-gray-100 rounded-xl px-3 py-2.5 text-xs text-gray-400 cursor-not-allowed outline-none"
+        />
       </div>
 
-      <div className="py-3 flex justify-end gap-3 bg-white">
+      <div>
+        <label className="text-xs font-semibold text-gray-600 mb-1.5 block">
+          Feature name
+        </label>
+        <input
+          {...register("featureName")}
+          required
+          placeholder="Enter feature name"
+          className="w-full border border-gray-200 bg-gray-50 rounded-xl px-3 py-2.5 text-xs text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-100 focus:border-indigo-300 transition"
+        />
+      </div>
+
+      <div className="flex items-center justify-between px-4 py-3.5 bg-gray-50 border border-gray-100 rounded-xl">
+        <div>
+          <p className="text-xs font-semibold text-gray-700">Active feature</p>
+          <p className="text-[11px] text-gray-400 mt-0.5">
+            Enable or disable this feature
+          </p>
+        </div>
+        <label className="relative inline-flex items-center cursor-pointer">
+          <input
+            type="checkbox"
+            {...register("active")}
+            className="sr-only peer"
+          />
+          <div className="w-10 h-5 bg-gray-200 rounded-full peer-checked:bg-indigo-500 transition-colors" />
+          <div className="absolute left-0.5 top-0.5 w-4 h-4 bg-white rounded-full shadow-sm transition-transform peer-checked:translate-x-5" />
+        </label>
+      </div>
+
+      <div className="flex items-center justify-end gap-2 pt-1">
         <button
           type="button"
           onClick={onClose}
-          className="px-4 py-2 text-sm rounded-xl border border-gray-300 hover:bg-gray-100"
+          className="px-4 py-2 text-xs font-medium text-gray-500 bg-white border border-gray-200 rounded-xl hover:bg-gray-50 transition-colors"
         >
           Cancel
         </button>
-
         <button
           type="submit"
-          className="px-5 py-2 text-sm rounded-xl bg-indigo-600 text-white hover:bg-indigo-700 transition"
+          className="px-4 py-2 text-xs font-medium bg-indigo-600 text-white rounded-xl hover:bg-indigo-700 transition-colors"
         >
-          {editData ? "Update" : "Add"}
+          {editData ? "Save changes" : "Add feature"}
         </button>
       </div>
     </form>

@@ -1,12 +1,11 @@
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { useDispatch } from "react-redux";
 import { getProducts, manageProduct } from "../../../store/productSlice";
-import { useEffect } from "react";
 
 function AddModules({ onClose, type, editData }) {
   const dispatch = useDispatch();
-
   const { register, handleSubmit, reset } = useForm({
     defaultValues: editData || {},
   });
@@ -19,11 +18,7 @@ function AddModules({ onClose, type, editData }) {
         is_active: !!editData.is_active,
       });
     } else {
-      reset({
-        product_name: "",
-        product_description: "",
-        is_active: true,
-      });
+      reset({ product_name: "", product_description: "", is_active: true });
     }
   }, [editData, reset]);
 
@@ -35,10 +30,8 @@ function AddModules({ onClose, type, editData }) {
         isActive: !!formData.is_active,
         id: type === "editModule" ? editData?.id : undefined,
       };
-
       await dispatch(manageProduct(payload)).unwrap();
       dispatch(getProducts());
-
       toast.success(
         type === "editModule" ? "Module updated" : "Module created",
       );
@@ -50,83 +43,68 @@ function AddModules({ onClose, type, editData }) {
   };
 
   return (
-    <div className="flex flex-col h-full bg-white">
-      <form
-        onSubmit={handleSubmit(handleFormSubmit)}
-        className="flex flex-col overflow-hidden"
-      >
-        <div className="flex-1 overflow-y-auto space-y-6">
-          <div className="space-y-4">
-            <div>
-              <label className="text-sm font-medium mb-1 block">
-                Module Name
-              </label>
-              <input
-                {...register("product_name")}
-                required
-                placeholder="e.g. SignalX"
-                className="w-full border border-gray-300 rounded-xl px-3 py-2 focus:ring-2 focus:ring-indigo-500 outline-none"
-              />
-            </div>
+    <form
+      onSubmit={handleSubmit(handleFormSubmit)}
+      className="flex flex-col gap-5"
+    >
+      <div>
+        <label className="text-xs font-semibold text-gray-600 mb-1.5 block">
+          Module name
+        </label>
+        <input
+          {...register("product_name")}
+          required
+          placeholder="e.g. SignalX"
+          className="w-full border border-gray-200 bg-gray-50 rounded-xl px-3 py-2.5 text-xs text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-100 focus:border-indigo-300 transition"
+        />
+      </div>
 
-            <div>
-              <label className="text-sm font-medium mb-1 block">
-                Description
-              </label>
-              <textarea
-                {...register("product_description")}
-                placeholder="Short description about module..."
-                className="w-full border border-gray-300 rounded-xl px-3 py-2 h-24 resize-none focus:ring-2 focus:ring-indigo-500 outline-none"
-              />
-            </div>
-          </div>
+      <div>
+        <label className="text-xs font-semibold text-gray-600 mb-1.5 block">
+          Description
+        </label>
+        <textarea
+          {...register("product_description")}
+          placeholder="Short description about this module…"
+          rows={3}
+          className="w-full border border-gray-200 bg-gray-50 rounded-xl px-3 py-2.5 text-xs text-gray-700 placeholder-gray-400 resize-none focus:outline-none focus:ring-2 focus:ring-indigo-100 focus:border-indigo-300 transition"
+        />
+      </div>
 
-          <div>
-            <h3 className="text-xs font-semibold text-gray-400 uppercase mb-3">
-              Settings
-            </h3>
-
-            <div className="flex items-center justify-between border border-gray-300 rounded-xl px-4 py-3">
-              <div>
-                <p className="font-medium text-sm">Active Module</p>
-                <p className="text-xs text-gray-500">
-                  Enable or disable this module
-                </p>
-              </div>
-
-              <label className="relative inline-flex items-center cursor-pointer">
-                <input
-                  type="checkbox"
-                  {...register("is_active")}
-                  className="sr-only peer"
-                />
-
-                <div className="w-11 h-6 bg-gray-300 rounded-full peer-checked:bg-indigo-600 transition"></div>
-
-                <div className="absolute left-1 top-1 w-4 h-4 bg-white rounded-full transition peer-checked:translate-x-5"></div>
-              </label>
-            </div>
-          </div>
+      <div className="flex items-center justify-between px-4 py-3.5 bg-gray-50 border border-gray-100 rounded-xl">
+        <div>
+          <p className="text-xs font-semibold text-gray-700">Active module</p>
+          <p className="text-[11px] text-gray-400 mt-0.5">
+            Enable or disable this module
+          </p>
         </div>
+        <label className="relative inline-flex items-center cursor-pointer">
+          <input
+            type="checkbox"
+            {...register("is_active")}
+            className="sr-only peer"
+          />
+          <div className="w-10 h-5 bg-gray-200 rounded-full peer-checked:bg-indigo-500 transition-colors" />
+          <div className="absolute left-0.5 top-0.5 w-4 h-4 bg-white rounded-full shadow-sm transition-transform peer-checked:translate-x-5" />
+        </label>
+      </div>
 
-        <div className="py-4 bg-white flex gap-3">
-          <button
-            type="submit"
-            className="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white py-2.5 rounded-xl font-medium transition"
-          >
-            {type === "editModule" ? "Save Changes" : "Create Module"}
-          </button>
-
-          <button
-            type="button"
-            onClick={onClose}
-            className="px-4 py-2 border rounded-xl hover:bg-gray-50 transition"
-          >
-            Cancel
-          </button>
-        </div>
-      </form>
-    </div>
+      <div className="flex items-center justify-end gap-2 pt-1">
+        <button
+          type="button"
+          onClick={onClose}
+          className="px-4 py-2 text-xs font-medium text-gray-500 bg-white border border-gray-200 rounded-xl hover:bg-gray-50 transition-colors"
+        >
+          Cancel
+        </button>
+        <button
+          type="submit"
+          className="px-4 py-2 text-xs font-medium bg-indigo-600 text-white rounded-xl hover:bg-indigo-700 transition-colors"
+        >
+          {type === "editModule" ? "Save changes" : "Create module"}
+        </button>
+      </div>
+    </form>
   );
 }
 

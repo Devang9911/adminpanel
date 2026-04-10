@@ -1,47 +1,20 @@
 import { PencilIcon, TrashIcon } from "@heroicons/react/24/solid";
 import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
 import { deleteCategory, getCategories } from "../../../store/categorySlice";
+import Drawer from "../../common/Drawer";
 import Loader from "../../common/Loader";
-import CategoryDrawer from "./CategoryDrawer";
-import toast from "react-hot-toast";
-
-const colors = [
-  "bg-red-500",
-  "bg-blue-500",
-  "bg-green-500",
-  "bg-purple-500",
-  "bg-pink-500",
-];
-
-const getColorFromName = (name = "") => {
-  const index =
-    name.split("").reduce((acc, char) => acc + char.charCodeAt(0), 0) %
-    colors.length;
-  return colors[index];
-};
+import AddCategory from "./AddCategory";
 
 function Categories() {
   const dispatch = useDispatch();
   const { categories, loading } = useSelector((state) => state.category);
-
-  const [drawer, setDrawer] = useState({
-    open: false,
-    type: "add",
-    data: null,
-  });
+  const [drawer, setDrawer] = useState({ open: false, type: null, data: null });
 
   useEffect(() => {
     dispatch(getCategories());
   }, [dispatch]);
-
-  const handleAdd = () => {
-    setDrawer({ open: true, type: "add", data: null });
-  };
-
-  const handleEdit = (cat) => {
-    setDrawer({ open: true, type: "edit", data: cat });
-  };
 
   const handleDelete = async (categoryId) => {
     try {
@@ -53,31 +26,43 @@ function Categories() {
     }
   };
 
-  return (
-    <div className="w-full bg-white rounded-xl shadow">
-      <div className="flex items-center justify-between py-3 px-5 border-b border-gray-300">
-        <h2 className="text-2xl uppercase tracking-wider font-semibold">
-          Categories
-        </h2>
+  const closeDrawer = () => setDrawer({ open: false, type: null, data: null });
 
+  return (
+    <div className="w-full bg-white rounded-2xl border border-gray-100 shadow-sm">
+      <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100">
+        <div className="flex items-center gap-2.5">
+          <h2 className="text-base font-semibold text-gray-800 tracking-tight">
+            Categories
+          </h2>
+          {!loading && (
+            <span className="text-xs font-medium text-gray-400 bg-gray-100 px-2 py-0.5 rounded-full">
+              {categories.length}
+            </span>
+          )}
+        </div>
         <button
-          onClick={handleAdd}
-          className="px-4 py-2 text-sm bg-indigo-600 text-white rounded-xl hover:bg-indigo-700"
+          onClick={() => setDrawer({ open: true, type: "add", data: null })}
+          className="flex items-center gap-1.5 px-3.5 py-2 text-xs font-medium bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors"
         >
-          + Add Category
+          <span className="text-base leading-none">+</span> Add category
         </button>
       </div>
 
       <div className="overflow-x-auto">
-        <table className="w-full text-sm">
-          <thead className="bg-gray-50 text-gray-500">
-            <tr>
-              <th className="text-left px-6 py-3">Category</th>
-              <th className="text-center px-6 py-3">Actions</th>
+        <table className="w-full">
+          <thead>
+            <tr className="bg-gray-50/70">
+              <th className="text-left px-6 py-3 text-[11px] font-semibold text-gray-400 uppercase tracking-wider">
+                Category
+              </th>
+              <th className="text-center px-6 py-3 text-[11px] font-semibold text-gray-400 uppercase tracking-wider">
+                Actions
+              </th>
             </tr>
           </thead>
 
-          <tbody>
+          <tbody className="divide-y divide-gray-50">
             {loading && (
               <tr>
                 <td colSpan={2}>
@@ -88,46 +73,60 @@ function Categories() {
 
             {!loading && categories?.length === 0 && (
               <tr>
-                <td colSpan={2} className="text-center py-6 text-gray-400">
-                  No categories found
+                <td
+                  colSpan={2}
+                  className="text-center py-14 text-gray-300 text-xs"
+                >
+                  <div className="flex flex-col items-center gap-2">
+                    <svg
+                      className="w-7 h-7"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="1.2"
+                      viewBox="0 0 24 24"
+                    >
+                      <path d="M4 6h16M4 12h16M4 18h7" />
+                    </svg>
+                    No categories found
+                  </div>
                 </td>
               </tr>
             )}
 
             {!loading &&
               categories?.map((cat) => (
-                <tr key={cat.id} className="border-t hover:bg-gray-50">
-                  <td className="px-6 py-4">
-                    <div className="flex items-center gap-3">
-                      <div>
-                        <div className="font-medium capitalize">
-                          {cat.categoryName}
-                        </div>
-                        <div className="text-xs text-gray-500">
-                          ID: {cat.id}
-                        </div>
-                      </div>
-                    </div>
+                <tr
+                  key={cat.id}
+                  className="hover:bg-gray-50/60 transition-colors"
+                >
+                  <td className="px-6 py-3.5">
+                    <p className="text-xs font-semibold text-gray-700 capitalize">
+                      {cat.categoryName}
+                    </p>
+                    <p className="text-[11px] text-gray-300 font-mono mt-0.5">
+                      #{cat.id}
+                    </p>
                   </td>
 
-                  <td className="px-6 py-4">
-                    <div className="flex justify-center gap-3">
+                  <td className="px-6 py-3.5">
+                    <div className="flex justify-center items-center gap-1">
                       <button
-                        onClick={() => handleEdit(cat)}
-                        className="group relative p-2 rounded-xl hover:bg-blue-100"
+                        onClick={() =>
+                          setDrawer({ open: true, type: "edit", data: cat })
+                        }
+                        className="relative p-1.5 rounded-lg hover:bg-blue-50 transition-colors group/btn"
                       >
-                        <PencilIcon className="w-5 h-5 text-blue-600" />
-                        <span className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 bg-gray-700 text-white text-xs px-2 py-1 rounded-xl opacity-0 group-hover:opacity-100 transition whitespace-nowrap">
+                        <PencilIcon className="w-4 h-4 text-blue-400 group-hover/btn:text-blue-600" />
+                        <span className="absolute bottom-full left-1/2 -translate-x-1/2 mb-1.5 bg-gray-800 text-white text-[10px] px-1.5 py-0.5 rounded opacity-0 group-hover/btn:opacity-100 transition whitespace-nowrap pointer-events-none z-50">
                           Edit
                         </span>
                       </button>
-
                       <button
-                        className="group relative p-2 rounded-xl hover:bg-red-100 text-red-600 transition"
                         onClick={() => handleDelete(cat.id)}
+                        className="relative p-1.5 rounded-lg hover:bg-red-50 transition-colors group/btn"
                       >
-                        <TrashIcon className="w-5 h-5" />
-                        <span className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 bg-gray-700 text-white text-xs px-2 py-1 rounded-xl opacity-0 group-hover:opacity-100 transition whitespace-nowrap">
+                        <TrashIcon className="w-4 h-4 text-red-400 group-hover/btn:text-red-600" />
+                        <span className="absolute bottom-full left-1/2 -translate-x-1/2 mb-1.5 bg-gray-800 text-white text-[10px] px-1.5 py-0.5 rounded opacity-0 group-hover/btn:opacity-100 transition whitespace-nowrap pointer-events-none z-50">
                           Delete
                         </span>
                       </button>
@@ -139,12 +138,17 @@ function Categories() {
         </table>
       </div>
 
-      <CategoryDrawer
+      <Drawer
         open={drawer.open}
-        type={drawer.type}
-        data={drawer.data}
-        onClose={() => setDrawer({ open: false, type: "add", data: null })}
-      />
+        onClose={closeDrawer}
+        title={drawer.type === "edit" ? "Update category" : "Add category"}
+      >
+        <AddCategory
+          mode={drawer.type}
+          editData={drawer.data}
+          onClose={closeDrawer}
+        />
+      </Drawer>
     </div>
   );
 }
