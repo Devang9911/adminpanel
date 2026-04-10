@@ -3,7 +3,7 @@ import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
 import { getFeaturesById } from "../../../store/featuresSlice";
-import { addFeature } from "../../../store/planSlice";
+import { addFeature, getPlanById } from "../../../store/planSlice";
 
 export default function FeaturesForm({ planId, productId, onClose, editData }) {
   const { register, handleSubmit, reset } = useForm();
@@ -36,9 +36,7 @@ export default function FeaturesForm({ planId, productId, onClose, editData }) {
         featureValue: data.featureValue,
       };
 
-      console.log("FINAL PAYLOAD:", payload);
       await dispatch(addFeature(payload)).unwrap();
-      dispatch(getFeaturesById(productId));
       toast.success("Feature Added Successfully");
       onClose();
       reset();

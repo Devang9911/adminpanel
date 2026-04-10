@@ -43,14 +43,7 @@ function PlanDetails() {
     console.log("Delete feature:", feature);
   };
 
-  if (loading || !selectedPlan) return <Loader />;
-
-  const uniqueFeatures = Object.values(
-    (selectedPlan.features || []).reduce((acc, curr) => {
-      acc[curr.feature_name] = curr;
-      return acc;
-    }, {}),
-  );
+  if (!selectedPlan) return <Loader />;
 
   return (
     <div className="space-y-3">
@@ -190,14 +183,14 @@ function PlanDetails() {
           </thead>
 
           <tbody>
-            {uniqueFeatures.length === 0 ? (
+            {selectedPlan.features.length === 0 ? (
               <tr>
                 <td colSpan={3} className="text-center p-6 text-gray-400">
                   No features available
                 </td>
               </tr>
             ) : (
-              uniqueFeatures.map((f, i) => (
+              selectedPlan.features.map((f, i) => (
                 <tr key={`${f.feature_name}-${i}`} className="border-t">
                   <td className="p-4">{f.feature_name}</td>
                   <td className="p-4">{f.feature_value}</td>

@@ -1,98 +1,139 @@
+const colors = [
+  "bg-violet-500",
+  "bg-pink-500",
+  "bg-blue-500",
+  "bg-amber-500",
+  "bg-purple-500",
+  "bg-emerald-500",
+  "bg-indigo-500",
+];
+
+const getColorFromName = (name = "") => {
+  const index =
+    name.split("").reduce((acc, c) => acc + c.charCodeAt(0), 0) % colors.length;
+  return colors[index];
+};
+
+const getStatusStyle = (status) => {
+  switch (status) {
+    case "active":
+      return "bg-emerald-50 text-emerald-700 ring-1 ring-emerald-200";
+    case "inactive":
+      return "bg-gray-100 text-gray-500 ring-1 ring-gray-200";
+    case "expired":
+      return "bg-red-50 text-red-600 ring-1 ring-red-200";
+    default:
+      return "bg-gray-100 text-gray-400";
+  }
+};
+
 function formatDate(dateString, locale = "en-IN") {
-  if (!dateString) return "";
-
-  const date = new Date(dateString);
-
-  return date.toLocaleDateString(locale, {
+  if (!dateString) return "—";
+  return new Date(dateString).toLocaleDateString(locale, {
     day: "numeric",
     month: "long",
     year: "numeric",
   });
 }
 
+function InfoRow({ label, value }) {
+  return (
+    <div className="flex items-center justify-between py-2.5 border-b border-gray-50 last:border-0">
+      <span className="text-xs text-gray-400">{label}</span>
+      <span className="text-xs font-medium text-gray-700">{value ?? "—"}</span>
+    </div>
+  );
+}
+
 export default function ViewUser({ data }) {
   if (!data) return null;
 
   return (
-    <div className="bg-white rounded-xl flex flex-col gap-6">
-      <div className="flex items-center gap-4">
-        <div className="capitalize w-14 h-14 bg-linear-to-br from-green-400 to-green-600 text-white rounded-full flex items-center justify-center text-lg font-bold shadow">
+    <div className="flex flex-col gap-5">
+      <div className="flex items-center gap-3.5 p-4 bg-gray-50 rounded-xl border border-gray-100">
+        <div
+          className={`w-11 h-11 rounded-full flex items-center justify-center text-sm font-semibold text-white uppercase flex-shrink-0 ${getColorFromName(data.name)}`}
+        >
           {data.name?.[0] || "U"}
         </div>
-
-        <div className="flex flex-col">
-          <h2 className="capitalize text-lg font-semibold text-gray-800">
-            {data.name || "-"}
-          </h2>
-          <span className="text-sm text-gray-500">{data.email || "-"}</span>
-          <span className="text-xs text-gray-400">{data.phone || "-"}</span>
+        <div className="flex-1 min-w-0">
+          <p className="text-sm font-semibold text-gray-800 capitalize truncate">
+            {data.name || "—"}
+          </p>
+          <p className="text-xs text-gray-400 truncate mt-0.5">
+            {data.email || "—"}
+          </p>
+          {data.phone && (
+            <p className="text-xs text-gray-400 mt-0.5">{data.phone}</p>
+          )}
         </div>
+        <span
+          className={`text-[11px] px-2.5 py-0.5 rounded-full font-medium capitalize flex-shrink-0 ${getStatusStyle(data.status)}`}
+        >
+          {data.status || "—"}
+        </span>
       </div>
 
-      <div className="grid grid-cols-2 gap-4">
-        <div className="bg-gray-50 rounded-xl p-4">
-          <p className="text-xs text-gray-400 mb-1">Plan</p>
-          <span className="inline-block px-3 py-1 text-xs font-medium bg-indigo-100 text-indigo-600 rounded-full">
-            {data.plan?.name || data.plan || "N/A"}
-          </span>
+      <div className="grid grid-cols-2 gap-3">
+        <div className="p-3.5 bg-gray-50 rounded-xl border border-gray-100">
+          <p className="text-[11px] text-gray-400 uppercase tracking-wider font-medium mb-2">
+            Plan
+          </p>
+          {data.plan?.name || data.plan ? (
+            <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-medium bg-indigo-50 text-indigo-600 ring-1 ring-indigo-100">
+              {data.plan?.name || data.plan}
+            </span>
+          ) : (
+            <span className="text-xs text-gray-300">No plan</span>
+          )}
         </div>
 
-        <div className="bg-gray-50 rounded-xl p-4">
-          <p className="text-xs text-gray-400 mb-1">Status</p>
-          <span
-            className={`inline-block px-3 py-1 text-xs font-medium rounded-full ${
-              data.status === "active"
-                ? "bg-green-100 text-green-600"
-                : "bg-red-100 text-red-500"
-            }`}
-          >
-            {data.status || "N/A"}
-          </span>
-        </div>
-
-        <div className="bg-gray-50 rounded-xl p-4">
-          <p className="text-xs text-gray-400 mb-1">Category</p>
-          <p className="text-sm font-medium text-gray-700">
-            {data.category || "-"}
+        <div className="p-3.5 bg-gray-50 rounded-xl border border-gray-100">
+          <p className="text-[11px] text-gray-400 uppercase tracking-wider font-medium mb-2">
+            Category
+          </p>
+          <p className="text-xs font-medium text-gray-700">
+            {data.category || <span className="text-gray-300">—</span>}
           </p>
         </div>
+      </div>
 
-        <div className="bg-gray-50 rounded-xl p-4">
-          <p className="text-xs text-gray-400 mb-2">Modules</p>
-
-          <div className="flex flex-wrap gap-2">
-            {data.modules?.length ? (
-              data.modules.map((m, i) => (
-                <span
-                  key={i}
-                  className="px-2.5 py-1 text-xs bg-blue-100 text-blue-600 rounded-full"
-                >
-                  {m}
-                </span>
-              ))
-            ) : (
-              <span className="text-sm text-gray-400">No modules</span>
-            )}
-          </div>
+      <div className="p-3.5 bg-gray-50 rounded-xl border border-gray-100">
+        <p className="text-[11px] text-gray-400 uppercase tracking-wider font-medium mb-2.5">
+          Modules
+        </p>
+        <div className="flex flex-wrap gap-1.5">
+          {data.modules?.length ? (
+            data.modules.map((m, i) => (
+              <span
+                key={i}
+                className="inline-flex items-center px-2.5 py-0.5 rounded-md text-[11px] font-medium bg-blue-50 text-blue-500"
+              >
+                {m}
+              </span>
+            ))
+          ) : (
+            <span className="text-xs text-gray-300">No modules assigned</span>
+          )}
         </div>
       </div>
 
-      <div className="bg-gray-50 rounded-xl p-4">
-        <h3 className="text-sm font-semibold text-gray-600 mb-3">
-          Subscription
-        </h3>
-        <div className="flex justify-between text-sm">
-          <span className="text-gray-500">Last renewal</span>
-          <span className="font-medium text-gray-700">
-            {formatDate(data.renewal_date) || "-"}
+      <div className="rounded-xl border border-gray-100 overflow-hidden">
+        <div className="px-4 py-3 border-b border-gray-100 bg-gray-50">
+          <span className="text-[11px] font-semibold text-gray-400 uppercase tracking-wider">
+            Subscription
           </span>
         </div>
-
-        <div className="flex justify-between text-sm mb-2">
-          <span className="text-gray-500">Expiry</span>
-          <span className="font-medium text-gray-700">
-            {formatDate(data.expiry_date) || "-"}
-          </span>
+        <div className="px-4 py-1 bg-white">
+          <InfoRow label="Last renewal" value={formatDate(data.renewal_date)} />
+          <InfoRow
+            label="Expiry"
+            value={
+              <span className={data.status === "expired" ? "text-red-500" : ""}>
+                {formatDate(data.expiry_date)}
+              </span>
+            }
+          />
         </div>
       </div>
     </div>

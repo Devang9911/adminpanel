@@ -12,6 +12,8 @@ import { useDispatch } from "react-redux";
 import Categories from "./components/modules/categories/Categories";
 import Features from "./components/modules/features/Features";
 import ModulesList from "./components/modules/list/ModulesList";
+import PlanDetails from "./components/modules/plans/PlanDetails";
+import PlanList from "./components/modules/plans/PlanList";
 import Plans from "./components/modules/plans/Plans";
 import UserTable from "./components/users/UserTable";
 import WorkspaceDetails from "./components/workspace/WorkspaceDetails";
@@ -19,8 +21,6 @@ import WorkspaceList from "./components/workspace/WorkspaceList";
 import Modules from "./pages/modules/Modules";
 import ProtectedRoute from "./routes/ProtectedRoute";
 import { getCurrentUser } from "./store/authSlice";
-import PlanDetails from "./components/modules/plans/PlanDetails";
-import PlanList from "./components/modules/plans/PlanList";
 
 function App() {
   const dispatch = useDispatch();

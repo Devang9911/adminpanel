@@ -8,12 +8,21 @@ export const getAllUsers = createAsyncThunk(
     try {
       const token = localStorage.getItem("token");
 
-      const { search = "", status = "", page, pageSize } = filters;
+      const {
+        search = "",
+        status = "",
+        page,
+        pageSize,
+        module = "",
+        plan = "",
+      } = filters;
 
       const query = new URLSearchParams({
         search,
         status: status === "all" ? "" : status,
         page,
+        plan: plan === "all" ? "" : plan,
+        module: module === "all" ? "" : module,
         pageSize,
       });
 

@@ -173,9 +173,6 @@ function PlanList() {
 
             {!loading &&
               plans?.map((p) => {
-                const categoryName =
-                  categories.find((c) => c.id === p.categoryId)?.categoryName ||
-                  "—";
 
                 return (
                   <tr key={p.id} className="border-t hover:bg-gray-50">
@@ -183,10 +180,10 @@ function PlanList() {
                       {p.plan_name}
                     </td>
 
-                    <td className="px-6 py-4 capitalize">{p.plan_name}</td>
+                    <td className="px-6 py-4 capitalize">{p.module_name}</td>
 
                     <td className="px-6 py-4 capitalize text-gray-600">
-                      {categoryName}
+                      {p.category_name}
                     </td>
 
                     <td className="px-6 py-4">

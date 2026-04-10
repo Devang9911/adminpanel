@@ -7,11 +7,7 @@ export const getAllPlans = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const response = await fetch(`${BASE_URL}/api/Product/getallplans`);
-
-      if (!response.ok) {
-        return rejectWithValue("Failed to fetch plans");
-      }
-
+      if (!response.ok) return rejectWithValue("Failed to fetch plans");
       const data = await response.json();
       return data.data;
     } catch (error) {
@@ -42,8 +38,6 @@ export const createPlan = createAsyncThunk(
       });
 
       const data = await response.json();
-      console.log("CREATE PLAN RESPONSE:", data);
-
       if (!response.ok) {
         return rejectWithValue(data?.message || "Plan create failed");
       }
@@ -54,6 +48,7 @@ export const createPlan = createAsyncThunk(
     }
   },
 );
+
 export const addPricing = createAsyncThunk(
   "plans/addPricing",
   async (formData, { rejectWithValue }) => {
@@ -68,17 +63,11 @@ export const addPricing = createAsyncThunk(
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
           },
-          body: JSON.stringify({
-            planId: formData.planId,
-            planBillingCycle: formData.planBillingCycle,
-            planAmount: formData.planAmount,
-          }),
+          body: JSON.stringify(formData),
         },
       );
 
       const data = await response.json();
-      console.log("Pricing add RESPONSE:", data);
-
       if (!response.ok) {
         return rejectWithValue(data?.message || "Price add failed");
       }
@@ -89,6 +78,7 @@ export const addPricing = createAsyncThunk(
     }
   },
 );
+
 export const addFeature = createAsyncThunk(
   "plans/addFeature",
   async (formData, { rejectWithValue }) => {
@@ -103,17 +93,11 @@ export const addFeature = createAsyncThunk(
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
           },
-          body: JSON.stringify({
-            planId: formData.planId,
-            featureId: formData.featureId,
-            featureValue: formData.featureValue,
-          }),
+          body: JSON.stringify(formData),
         },
       );
 
       const data = await response.json();
-      console.log("Feature add RESPONSE:", data);
-
       if (!response.ok) {
         return rejectWithValue(data?.message || "Feature add failed");
       }
@@ -134,9 +118,7 @@ export const getPlanById = createAsyncThunk(
       const response = await fetch(
         `${BASE_URL}/api/Product/getPlanDetails/${planId}`,
         {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+          headers: { Authorization: `Bearer ${token}` },
         },
       );
 
@@ -158,10 +140,10 @@ const planSlice = createSlice({
     plans: [],
     selectedPlan: null,
     loading: false,
+    actionLoading: false,
     error: null,
   },
   reducers: {},
-
   extraReducers: (builder) => {
     builder
       .addCase(getAllPlans.pending, (state) => {
@@ -186,25 +168,8 @@ const planSlice = createSlice({
         state.error = action.payload;
       })
 
-      .addCase(addPricing.pending, (state, action) => {
-        state.loading = true;
-      })
-      .addCase(addPricing.fulfilled, (state, action) => {
-        state.loading = false;
-      })
-      .addCase(addPricing.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload;
-      })
-
-      .addCase(addFeature.pending, (state, action) => {
-        state.loading = true;
-      })
-      .addCase(addFeature.fulfilled, (state, action) => {
-        state.loading = false;
-      })
       .addCase(addFeature.rejected, (state, action) => {
-        state.loading = false;
+        state.actionLoading = false;
         state.error = action.payload;
       })
 
@@ -215,9 +180,8 @@ const planSlice = createSlice({
         state.loading = false;
         state.selectedPlan = action.payload;
       })
-      .addCase(getPlanById.rejected, (state, action) => {
+      .addCase(getPlanById.rejected, (state) => {
         state.loading = false;
-        state.error = action.payload;
       });
   },
 });
