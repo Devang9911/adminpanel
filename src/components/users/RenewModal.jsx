@@ -39,7 +39,7 @@ export default function RenewModal({ onClose, data }) {
   const [selectedPlan, setSelectedPlan] = useState(null);
 
   useEffect(() => {
-    dispatch(getAllPlans());
+    dispatch(getAllPlans({ status: "", module: "", category: "" }));
   }, [dispatch]);
 
   const handleRenew = () => {
@@ -116,16 +116,16 @@ export default function RenewModal({ onClose, data }) {
             Choose a plan…
           </option>
           {plans.map((p) =>
-            p.prices?.map((price) => (
+            p.pricing?.map((price , i) => (
               <option
-                key={price.priceId}
+                key={i}
                 value={JSON.stringify({
-                  planId: p.planId,
+                  planId: p.id,
                   priceId: price.priceId,
-                  billingCycle: price.billingCycle,
+                  billingCycle: price.cycle,
                 })}
               >
-                {p.planName} — {p.productName} — {price.billingCycle} — ₹
+                {p.plan_name} — {p.module_name} — {price.cycle} — ₹
                 {price.amount}
               </option>
             )),

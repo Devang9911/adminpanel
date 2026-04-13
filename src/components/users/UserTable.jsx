@@ -119,7 +119,7 @@ function UserTable() {
   const { plans = [] } = useSelector((state) => state.plans);
 
   useEffect(() => {
-    dispatch(getAllPlans());
+    dispatch(getAllPlans({ status: "", module: "", category: "" }));
     dispatch(getProducts());
   }, [dispatch]);
 
@@ -225,7 +225,7 @@ function UserTable() {
         >
           <option value="all">All plans</option>
           {plans.map((p) => (
-            <option key={p.plan_id} value={p.plan_name}>
+            <option key={p.id} value={p.plan_name}>
               {p.plan_name}
             </option>
           ))}
@@ -336,7 +336,7 @@ function UserTable() {
                   </td>
 
                   <td className="px-6 py-3.5 text-xs text-gray-500">
-                    {u.category ?? <span className="text-gray-300">—</span>}
+                    {u.category ?? <span className="text-gray-500">-</span>}
                   </td>
 
                   <td className="px-6 py-3.5">
@@ -345,7 +345,7 @@ function UserTable() {
                         {u.plan.name}
                       </span>
                     ) : (
-                      <span className="text-gray-300 text-xs">—</span>
+                      <span className="text-gray-500 text-xs">-</span>
                     )}
                   </td>
 
@@ -361,7 +361,7 @@ function UserTable() {
                           </span>
                         ))
                       ) : (
-                        <span className="text-gray-300 text-xs">—</span>
+                        <span className="text-gray-500 text-xs">-</span>
                       )}
                     </div>
                   </td>
@@ -380,7 +380,7 @@ function UserTable() {
                         {formatDate(u.expiry_date)}
                       </span>
                     ) : (
-                      <span className="text-gray-300 text-xs">—</span>
+                      <span className="text-gray-500 text-xs">-</span>
                     )}
                   </td>
 
@@ -390,7 +390,7 @@ function UserTable() {
                         {formatDate(u.renewal_date)}
                       </span>
                     ) : (
-                      <span className="text-gray-300 text-xs">—</span>
+                      <span className="text-gray-500 text-xs">-</span>
                     )}
                   </td>
 

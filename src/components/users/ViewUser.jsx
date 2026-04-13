@@ -40,7 +40,7 @@ function InfoRow({ label, value }) {
   return (
     <div className="flex items-center justify-between py-2.5 border-b border-gray-50 last:border-0">
       <span className="text-xs text-gray-400">{label}</span>
-      <span className="text-xs font-medium text-gray-700">{value ?? "—"}</span>
+      <span className="text-xs font-medium text-gray-700">{value ?? "-"}</span>
     </div>
   );
 }
@@ -58,10 +58,10 @@ export default function ViewUser({ data }) {
         </div>
         <div className="flex-1 min-w-0">
           <p className="text-sm font-semibold text-gray-800 capitalize truncate">
-            {data.name || "—"}
+            {data.name || "-"}
           </p>
           <p className="text-xs text-gray-400 truncate mt-0.5">
-            {data.email || "—"}
+            {data.email || "-"}
           </p>
           {data.phone && (
             <p className="text-xs text-gray-400 mt-0.5">{data.phone}</p>
@@ -70,7 +70,7 @@ export default function ViewUser({ data }) {
         <span
           className={`text-[11px] px-2.5 py-0.5 rounded-full font-medium capitalize flex-shrink-0 ${getStatusStyle(data.status)}`}
         >
-          {data.status || "—"}
+          {data.status || "-"}
         </span>
       </div>
 
@@ -93,7 +93,7 @@ export default function ViewUser({ data }) {
             Category
           </p>
           <p className="text-xs font-medium text-gray-700">
-            {data.category || <span className="text-gray-300">—</span>}
+            {data.category || <span className="text-gray-300">-</span>}
           </p>
         </div>
       </div>
