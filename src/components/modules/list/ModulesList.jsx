@@ -62,7 +62,7 @@ function ProductList() {
           : products.map((p) => (
               <div
                 key={p.id}
-                className="flex flex-col justify-between bg-gray-100 border border-gray-200 rounded-xl p-4 hover:border-gray-200 hover:shadow-sm transition-all group"
+                className="flex flex-col justify-between bg-gray-50/30 border border-gray-100 rounded-xl p-4 hover:border-gray-200 hover:shadow-sm transition-all group"
               >
                 <div className="flex items-start justify-between gap-3">
                   <div className="flex-1 min-w-0">

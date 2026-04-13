@@ -10,6 +10,7 @@ import {
   Zap,
 } from "lucide-react";
 import { useState } from "react";
+import { useSelector } from "react-redux";
 import { NavLink } from "react-router-dom";
 
 const sidebarData = [
@@ -41,9 +42,10 @@ const sidebarData = [
 
 export default function Sidebar() {
   const [collapsed, setCollapsed] = useState(false);
+  const { total } = useSelector((state) => state.users);
 
   const linkClass = ({ isActive }) =>
-    `flex items-center gap-3 px-3 py-2 rounded-lg text-xs font-medium transition-all ${
+    `flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-all ${
       isActive
         ? "bg-indigo-50 text-indigo-600"
         : "text-gray-500 hover:bg-gray-50 hover:text-gray-700"
@@ -51,48 +53,59 @@ export default function Sidebar() {
 
   return (
     <aside
-      className={`${collapsed ? "w-14" : "w-56"} h-screen bg-white border-r border-gray-100 flex flex-col transition-all duration-300 flex-shrink-0`}
+      className={`${
+        collapsed ? "w-[58px]" : "w-[220px]"
+      } h-screen bg-white border-r border-gray-100 flex flex-col transition-all duration-300 flex-shrink-0`}
     >
-      <div className="flex items-center justify-between px-3 h-14 border-b border-gray-100">
+      <div className="flex items-center justify-center px-4 h-20 border-b border-gray-100 flex-shrink-0">
         {!collapsed && (
-          <div className="flex items-center gap-2">
-            <div className="w-7 h-7 bg-indigo-600 text-white flex items-center justify-center rounded-lg text-xs font-bold">
-              A
-            </div>
-            <span className="text-sm font-semibold text-gray-800">
-              AdminPanel
-            </span>
-          </div>
+          <img
+            src="/tdLogo.png"
+            alt="TrueData"
+            className="h-14 w-auto object-contain cursor-pointer"
+            onClick={() => setCollapsed(!collapsed)}
+          />
         )}
-        <button
-          onClick={() => setCollapsed(!collapsed)}
-          className={`p-1.5 rounded-lg hover:bg-gray-100 transition-colors ${collapsed ? "mx-auto" : ""}`}
-        >
-          <Bars3Icon className="w-4 h-4 text-gray-400" />
-        </button>
+        {collapsed && (
+          <button
+            onClick={() => setCollapsed(!collapsed)}
+            className={`p-1.5 rounded-lg hover:bg-gray-100 cursor-pointer transition-colors text-gray-400 ${
+              collapsed ? "mx-auto" : ""
+            }`}
+          >
+            <Bars3Icon className="w-4 h-4" />
+          </button>
+        )}
       </div>
 
-      <div className="flex-1 overflow-y-auto px-2 py-4 space-y-5">
+      <div className="flex-1 overflow-y-auto px-2 py-2 space-y-1">
         {sidebarData.map((section) => (
-          <div key={section.title}>
+          <div key={section.title} className="mb-2">
             {!collapsed && (
-              <p className="px-3 mb-1.5 text-[10px] font-semibold text-gray-300 uppercase tracking-wider">
+              <p className="px-3 pt-3 pb-1 text-[10px] font-semibold text-gray-300 uppercase tracking-widest">
                 {section.title}
               </p>
             )}
-            <div className="space-y-0.5">
-              {section.items.map((item) => (
-                <NavLink
-                  key={item.path}
-                  to={item.path}
-                  className={linkClass}
-                  title={collapsed ? item.name : ""}
-                >
-                  <item.icon size={15} className="flex-shrink-0" />
-                  {!collapsed && <span>{item.name}</span>}
-                </NavLink>
-              ))}
-            </div>
+            {section.items.map((item) => (
+              <NavLink
+                key={item.path}
+                to={item.path}
+                className={linkClass}
+                title={collapsed ? item.name : ""}
+              >
+                <item.icon size={15} className="flex-shrink-0" />
+                {!collapsed && (
+                  <span>
+                    {item.name}
+                    {item.name === "Users" && (
+                      <span className="text-xs text-gray-400 ml-1">
+                        ({total})
+                      </span>
+                    )}
+                  </span>
+                )}
+              </NavLink>
+            ))}
           </div>
         ))}
       </div>
