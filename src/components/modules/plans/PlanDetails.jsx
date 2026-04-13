@@ -276,7 +276,7 @@ function PlanDetails() {
         {drawer.type === "addFeatures" && (
           <FeaturesForm
             planId={planId}
-            productId={selectedPlan.product_id}
+            productId={selectedPlan.product_id} 
             onClose={closeDrawer}
           />
         )}

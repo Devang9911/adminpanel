@@ -50,14 +50,14 @@ function ProductList() {
           : products.map((p) => (
               <div
                 key={p.id}
-                className="flex flex-col justify-between bg-white border border-gray-100 rounded-xl p-4 hover:border-gray-200 hover:shadow-sm transition-all group"
+                className="flex flex-col justify-between bg-gray-100 border border-gray-200 rounded-xl p-4 hover:border-gray-200 hover:shadow-sm transition-all group"
               >
                 <div className="flex items-start justify-between gap-3">
                   <div className="flex-1 min-w-0">
                     <h3 className="text-sm font-semibold text-gray-800 capitalize truncate">
                       {p.product_name}
                     </h3>
-                    <p className="text-xs text-gray-400 mt-1 line-clamp-2 leading-relaxed">
+                    <p className="text-xs text-gray-600 mt-1 line-clamp-2 leading-relaxed">
                       {p.product_description || "No description available"}
                     </p>
                   </div>
@@ -73,17 +73,17 @@ function ProductList() {
                 <div className="flex gap-4 mt-4">
                   <div className="flex flex-col">
                     <span className="text-sm font-semibold text-gray-800">{p.features_count}</span>
-                    <span className="text-[11px] text-gray-400">Features</span>
+                    <span className="text-[11px] text-gray-600">Features</span>
                   </div>
                   <div className="w-px bg-gray-100" />
                   <div className="flex flex-col">
                     <span className="text-sm font-semibold text-gray-800">{p.active_users_count}</span>
-                    <span className="text-[11px] text-gray-400">Users</span>
+                    <span className="text-[11px] text-gray-600">Users</span>
                   </div>
                 </div>
 
                 <div className="flex items-center justify-between mt-4 pt-3 border-t border-gray-50">
-                  <span className="text-[11px] text-gray-300 font-mono">#{p.id}</span>
+                  <span className="text-[11px] text-gray-600 font-mono">#{p.id}</span>
                   <div className="flex items-center gap-1">
                     <button
                       onClick={() => setDrawer({ open: true, type: "editModule", data: p })}

@@ -42,12 +42,22 @@ function WorkspaceList() {
     (state) => state.workspace,
   );
 
+  const [debouncedSearch, setDebouncedSearch] = useState("");
+
   const [filters, setFilters] = useState({
-    search: "",
     status: "all",
+    search: "",
     page: 1,
     pageSize: 10,
   });
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedSearch(filters.search);
+    }, 400);
+    return () => clearTimeout(timer);
+  }, [filters.search]);
+
   const [drawer, setDrawer] = useState({ open: false, type: "", data: null });
   const [sorting, setSorting] = useState({ field: "OwnerName", order: "asc" });
 
@@ -59,8 +69,8 @@ function WorkspaceList() {
   };
 
   useEffect(() => {
-    dispatch(getAllWorkspace(filters));
-  }, [dispatch, filters]);
+    dispatch(getAllWorkspace({ ...filters, search: debouncedSearch }));
+  }, [filters.page, filters.status, debouncedSearch, dispatch]);
 
   const handleSearch = (e) =>
     setFilters((prev) => ({ ...prev, search: e.target.value, page: 1 }));
