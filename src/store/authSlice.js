@@ -38,22 +38,24 @@ export const loginUser = createAsyncThunk(
     try {
       const response = await fetch(`${BASE_URL}/api/Auth/login`, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),
       });
 
       const result = await response.json();
-
+      if (!response.ok) {
+        return thunkAPI.rejectWithValue(result?.message || "Login failed");
+      }
+      if (result.role !== "super_admin") {
+        return thunkAPI.rejectWithValue("Access denied — super admins only.");
+      }
       if (result.token) {
         localStorage.setItem("token", result.token);
         localStorage.setItem("userId", result.userId);
       }
-
       return result;
     } catch (error) {
-      return thunkAPI.rejectWithValue(error.message);
+      return thunkAPI.rejectWithValue(error.message || "Network error");
     }
   },
 );

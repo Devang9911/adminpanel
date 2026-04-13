@@ -28,11 +28,11 @@ function Login() {
 
       if (response.token) {
         navigate("/");
-        toast.success(response.message);
+        toast.success(response.message || "Logged in successfully");
         reset();
       }
     } catch (error) {
-      console.log(error);
+      toast.error(error);
     }
   };
 
