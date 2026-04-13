@@ -1,13 +1,13 @@
 import { Bars3Icon } from "@heroicons/react/24/outline";
 import {
   Boxes,
-  LayoutDashboard,
-  Users,
-  Folder,
-  Zap,
-  CreditCard,
   Briefcase,
   ClipboardList,
+  CreditCard,
+  Folder,
+  LayoutDashboard,
+  Users,
+  Zap,
 } from "lucide-react";
 import { useState } from "react";
 import { NavLink } from "react-router-dom";
@@ -23,7 +23,7 @@ const sidebarData = [
   {
     title: "Modules",
     items: [
-      { name: "Modules List", path: "/modules/moduleslist", icon: Boxes },
+      { name: "Modules list", path: "/modules/moduleslist", icon: Boxes },
       { name: "Category", path: "/modules/categories", icon: Folder },
       { name: "Features", path: "/modules/features", icon: Zap },
       { name: "Plans", path: "/modules/plans", icon: CreditCard },
@@ -35,92 +35,67 @@ const sidebarData = [
   },
   {
     title: "System",
-    items: [{ name: "Audit Logs", path: "/auditlogs", icon: ClipboardList }],
+    items: [{ name: "Audit logs", path: "/auditlogs", icon: ClipboardList }],
   },
 ];
-
-const navItemClass =
-  "flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-all";
 
 export default function Sidebar() {
   const [collapsed, setCollapsed] = useState(false);
 
   const linkClass = ({ isActive }) =>
-    `${navItemClass} ${
+    `flex items-center gap-3 px-3 py-2 rounded-lg text-xs font-medium transition-all ${
       isActive
         ? "bg-indigo-50 text-indigo-600"
-        : "text-gray-700 hover:bg-gray-100"
+        : "text-gray-500 hover:bg-gray-50 hover:text-gray-700"
     }`;
 
   return (
     <aside
-      className={`${
-        collapsed ? "w-16" : "w-60"
-      } h-screen bg-white border-r border-gray-200 flex flex-col transition-all duration-300`}
+      className={`${collapsed ? "w-14" : "w-56"} h-screen bg-white border-r border-gray-100 flex flex-col transition-all duration-300 flex-shrink-0`}
     >
-      <div className="flex items-center justify-between px-3 h-15 border-b border-gray-200">
+      <div className="flex items-center justify-between px-3 h-14 border-b border-gray-100">
         {!collapsed && (
           <div className="flex items-center gap-2">
-            <div className="w-8 h-8 bg-indigo-600 text-white flex items-center justify-center rounded font-bold">
+            <div className="w-7 h-7 bg-indigo-600 text-white flex items-center justify-center rounded-lg text-xs font-bold">
               A
             </div>
-            <span className="font-semibold text-gray-800">AdminPanel</span>
+            <span className="text-sm font-semibold text-gray-800">
+              AdminPanel
+            </span>
           </div>
         )}
-
         <button
           onClick={() => setCollapsed(!collapsed)}
-          className="p-1.5 rounded hover:bg-gray-100"
+          className={`p-1.5 rounded-lg hover:bg-gray-100 transition-colors ${collapsed ? "mx-auto" : ""}`}
         >
-          <Bars3Icon className="w-5 h-5 text-gray-600" />
+          <Bars3Icon className="w-4 h-4 text-gray-400" />
         </button>
       </div>
 
-      <div className="flex-1 overflow-y-auto px-2 py-4 space-y-6">
+      <div className="flex-1 overflow-y-auto px-2 py-4 space-y-5">
         {sidebarData.map((section) => (
-          <SidebarSection
-            key={section.title}
-            title={section.title}
-            items={section.items}
-            collapsed={collapsed}
-            linkClass={linkClass}
-          />
+          <div key={section.title}>
+            {!collapsed && (
+              <p className="px-3 mb-1.5 text-[10px] font-semibold text-gray-300 uppercase tracking-wider">
+                {section.title}
+              </p>
+            )}
+            <div className="space-y-0.5">
+              {section.items.map((item) => (
+                <NavLink
+                  key={item.path}
+                  to={item.path}
+                  className={linkClass}
+                  title={collapsed ? item.name : ""}
+                >
+                  <item.icon size={15} className="flex-shrink-0" />
+                  {!collapsed && <span>{item.name}</span>}
+                </NavLink>
+              ))}
+            </div>
+          </div>
         ))}
       </div>
     </aside>
-  );
-}
-
-function NavItem({ to, icon: Icon, label, collapsed, linkClass }) {
-  return (
-    <NavLink to={to} className={linkClass}>
-      <Icon size={18} />
-      {!collapsed && label}
-    </NavLink>
-  );
-}
-
-function SidebarSection({ title, items, collapsed, linkClass }) {
-  return (
-    <div>
-      {!collapsed && (
-        <p className="px-3 mb-2 text-xs font-semibold text-gray-400 uppercase">
-          {title}
-        </p>
-      )}
-
-      <div className="space-y-1">
-        {items.map((item) => (
-          <NavItem
-            key={item.path}
-            to={item.path}
-            icon={item.icon}
-            label={item.name}
-            collapsed={collapsed}
-            linkClass={linkClass}
-          />
-        ))}
-      </div>
-    </div>
   );
 }
