@@ -8,6 +8,7 @@ import { getProducts } from "../../../store/productSlice";
 import Drawer from "../../common/Drawer";
 import Loader from "../../common/Loader";
 import AddPlan from "./AddPlan";
+import { TrashIcon } from "lucide-react";
 
 const tabs = [{ name: "All" }, { name: "Active" }, { name: "Inactive" }];
 
@@ -218,7 +219,16 @@ function PlanList() {
                     </span>
                   </td>
                   <td className="px-6 py-3.5">
-                    <div className="flex justify-center">
+                    <div className="flex justify-center items-center gap-2">
+                      <button
+                        onClick={() => console.log("Delete feature:", p.id)}
+                        className="relative p-1.5 rounded-lg hover:bg-red-50 transition-colors group/btn"
+                      >
+                        <TrashIcon className="w-4 h-4 text-red-400 group-hover/btn:text-red-600" />
+                        <span className="absolute bottom-full left-1/2 -translate-x-1/2 mb-1.5 bg-gray-800 text-white text-[10px] px-1.5 py-0.5 rounded opacity-0 group-hover/btn:opacity-100 transition whitespace-nowrap pointer-events-none z-50">
+                          Delete
+                        </span>
+                      </button>
                       <button
                         onClick={() => navigate(`details/${p.id}`)}
                         className="relative p-1.5 rounded-lg hover:bg-gray-100 transition-colors group/btn"
