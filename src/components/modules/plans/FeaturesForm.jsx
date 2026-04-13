@@ -3,38 +3,47 @@ import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
 import { getFeaturesById } from "../../../store/featuresSlice";
-import { addFeature } from "../../../store/planSlice";
+import { addFeature, getPlanById } from "../../../store/planSlice";
 
 export default function FeaturesForm({ planId, productId, onClose, editData }) {
-  const { register, handleSubmit, reset } = useForm();
+  const { register, handleSubmit, reset, setValue } = useForm();
   const dispatch = useDispatch();
   const features = useSelector((state) => state.features.features);
   const [loading, setLoading] = useState(false);
   const isEdit = !!editData;
 
   useEffect(() => {
-    if (editData) reset({ featureValue: editData.feature_value });
-  }, [editData, reset]);
+    if (productId) dispatch(getFeaturesById(productId));
+  }, [dispatch, productId]);
 
   useEffect(() => {
-    if (!productId) return;
-    dispatch(getFeaturesById(productId));
-  }, [dispatch, productId]);
+    if (editData && features.length) {
+      const matchedFeature = features.find(
+        (f) => f.featureName === editData.feature_name,
+      );
+      if (matchedFeature) {
+        setValue("featureId", matchedFeature.id);
+      }
+      setValue("featureValue", editData.feature_value);
+    }
+  }, [editData, features, setValue]);
 
   const onSubmit = async (data) => {
     try {
       setLoading(true);
       const payload = {
+        id: editData.plan_feature_id,
         planId: Number(planId),
         featureId: Number(data.featureId),
         featureValue: data.featureValue,
       };
       await dispatch(addFeature(payload)).unwrap();
-      toast.success("Feature added successfully");
+      dispatch(getPlanById({ planId }));
+      toast.success(isEdit ? "Feature updated" : "Feature added");
       onClose();
       reset();
-    } catch (err) {
-      toast.error("Error adding feature");
+    } catch (error) {
+      toast.error(error);
     } finally {
       setLoading(false);
     }

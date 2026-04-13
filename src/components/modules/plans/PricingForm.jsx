@@ -1,7 +1,11 @@
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
+import toast from "react-hot-toast";
+import { addPricing, getPlanById } from "../../../store/planSlice";
+import { useDispatch } from "react-redux";
 
 export default function PricingForm({ planId, onClose, editData }) {
+  const dispatch = useDispatch();
   const { register, handleSubmit, reset } = useForm();
   const [loading, setLoading] = useState(false);
   const isEdit = !!editData;
@@ -19,15 +23,18 @@ export default function PricingForm({ planId, onClose, editData }) {
     try {
       setLoading(true);
       const payload = {
+        id: editData?.price_id,
         planId: Number(planId),
         planBillingCycle: data.planBillingCycle,
         planAmount: Number(data.planAmount),
       };
-      console.log("Pricing payload:", payload);
-      // await dispatch(...)
+      await dispatch(addPricing(payload)).unwrap();
+      dispatch(getPlanById({ planId }));
+      toast.success(isEdit ? "Pricing updated" : "Pricing added");
       onClose();
-    } catch (err) {
-      console.error(err);
+      reset();
+    } catch (error) {
+      toast.error(error);
     } finally {
       setLoading(false);
     }
@@ -35,9 +42,10 @@ export default function PricingForm({ planId, onClose, editData }) {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-5">
-
       <div>
-        <label className="text-xs font-semibold text-gray-600 mb-1.5 block">Billing cycle</label>
+        <label className="text-xs font-semibold text-gray-600 mb-1.5 block">
+          Billing cycle
+        </label>
         <select
           {...register("planBillingCycle", { required: true })}
           className="w-full border border-gray-200 bg-gray-50 rounded-xl px-3 py-2.5 text-xs text-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-100 focus:border-indigo-300 transition"
@@ -50,9 +58,13 @@ export default function PricingForm({ planId, onClose, editData }) {
       </div>
 
       <div>
-        <label className="text-xs font-semibold text-gray-600 mb-1.5 block">Amount (₹)</label>
+        <label className="text-xs font-semibold text-gray-600 mb-1.5 block">
+          Amount (₹)
+        </label>
         <div className="relative">
-          <span className="absolute left-3 top-1/2 -translate-y-1/2 text-xs text-gray-400 font-medium">₹</span>
+          <span className="absolute left-3 top-1/2 -translate-y-1/2 text-xs text-gray-400 font-medium">
+            ₹
+          </span>
           <input
             type="number"
             {...register("planAmount", { required: true })}

@@ -39,8 +39,8 @@ function AddFeature({
       dispatch(getFeaturesById(selectedProduct));
       toast.success(editData ? "Feature updated" : "Feature added");
       onClose();
-    } catch {
-      toast.error("Something went wrong");
+    } catch (error) {
+      toast.error(error);
     }
   };
 

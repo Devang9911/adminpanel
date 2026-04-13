@@ -4,7 +4,7 @@ import toast from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
 import { getCategories } from "../../../store/categorySlice";
 import { getProducts } from "../../../store/productSlice";
-import { createPlan } from "../../../store/planSlice";
+import { createPlan, getAllPlans } from "../../../store/planSlice";
 
 export default function AddPlan({ onClose }) {
   const { register, handleSubmit, reset } = useForm();
@@ -31,12 +31,12 @@ export default function AddPlan({ onClose }) {
       };
       // console.log("FINAL PAYLOAD:", payload);
       await dispatch(createPlan(payload)).unwrap();
-      dispatch(getAllPlans());
+      dispatch(getAllPlans({ search: "", status: "", module: "", category: "" }));
       toast.success("Plan created successfully");
       onClose();
       reset();
-    } catch (err) {
-      toast.error("Error creating plan");
+    } catch (error) {
+      toast.error(error);
     } finally {
       setLoading(false);
     }

@@ -29,7 +29,7 @@ function AddCategory({ onClose, mode, editData }) {
       onClose();
       reset();
     } catch (error) {
-      toast.error(error?.message || "Something went wrong");
+      toast.error(error);
     } finally {
       setSubmitting(false);
     }
