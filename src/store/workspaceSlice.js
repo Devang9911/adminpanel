@@ -14,12 +14,12 @@ export const getAllWorkspace = createAsyncThunk(
   "workspace/getAll",
   async (filters, { rejectWithValue }) => {
     try {
-      const { page, pageSize, search, status } = filters;
+      const { page, pageSize, search = "", status = "" } = filters;
       const query = new URLSearchParams({
         page,
         pageSize,
         search,
-        status,
+        status: status === "all" ? "" : status,
       });
       const res = await fetch(
         `${BASE_URL}/api/admin/getAllWorkspaces?${query.toString()}`,
