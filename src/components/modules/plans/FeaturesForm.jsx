@@ -31,12 +31,23 @@ export default function FeaturesForm({ planId, productId, onClose, editData }) {
   const onSubmit = async (data) => {
     try {
       setLoading(true);
-      const payload = {
-        id: editData.plan_feature_id,
-        planId: Number(planId),
-        featureId: Number(data.featureId),
-        featureValue: data.featureValue,
-      };
+      let payload;
+
+      if (isEdit) {
+        payload = {
+          id: editData.plan_feature_id,
+          planId: Number(planId),
+          featureId: Number(data.featureId),
+          featureValue: data.featureValue,
+        };
+      } else {
+        payload = {
+          planId: Number(planId),
+          featureId: Number(data.featureId),
+          featureValue: data.featureValue,
+        };
+      }
+
       await dispatch(addFeature(payload)).unwrap();
       dispatch(getPlanById({ planId }));
       toast.success(isEdit ? "Feature updated" : "Feature added");

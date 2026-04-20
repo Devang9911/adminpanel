@@ -264,7 +264,7 @@ function PlanDetails() {
                           </span>
                         </button>
                         <button
-                          onClick={() => handleDeleteFeature(f.feature_id)}
+                          onClick={() => handleDeleteFeature(f.plan_feature_id)}
                           className="relative p-1.5 rounded-lg hover:bg-red-50 transition-colors group/btn"
                         >
                           <TrashIcon className="w-4 h-4 text-red-400 group-hover/btn:text-red-600" />

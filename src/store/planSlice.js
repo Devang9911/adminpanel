@@ -314,7 +314,7 @@ const planSlice = createSlice({
 
         if (state.selectedPlan?.features) {
           state.selectedPlan.features = state.selectedPlan.features.filter(
-            (item) => item.feature_id !== deletedId,
+            (item) => item.plan_feature_id !== deletedId,
           );
         }
       })
