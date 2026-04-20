@@ -8,11 +8,16 @@ import {
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
-import { getPlanById } from "../../../store/planSlice";
+import {
+  deleteBillingCycle,
+  deletePlanFeature,
+  getPlanById,
+} from "../../../store/planSlice";
 import Drawer from "../../common/Drawer";
 import Loader from "../../common/Loader";
 import FeaturesForm from "./FeaturesForm";
 import PricingForm from "./PricingForm";
+import toast from "react-hot-toast";
 
 function PlanDetails() {
   const { planId } = useParams();
@@ -27,6 +32,23 @@ function PlanDetails() {
   }, [planId, dispatch]);
 
   const closeDrawer = () => setDrawer({ open: false, type: "", data: null });
+
+  const handleDeletePrice = async (price_id) => {
+    try {
+      await dispatch(deleteBillingCycle({ price_id })).unwrap();
+      toast.success("Pricing deleted.");
+    } catch (error) {
+      toast.error(error);
+    }
+  };
+  const handleDeleteFeature = async (feature_id) => {
+    try {
+      await dispatch(deletePlanFeature({ feature_id })).unwrap();
+      toast.success("Feature deleted.");
+    } catch (error) {
+      toast.error(error);
+    }
+  };
 
   if (!selectedPlan || loading) return <Loader />;
 
@@ -151,9 +173,7 @@ function PlanDetails() {
                           </span>
                         </button>
                         <button
-                          onClick={() =>
-                            console.log("Delete pricing:", price.price_id)
-                          }
+                          onClick={() => handleDeletePrice(price.price_id)}
                           className="relative p-1.5 rounded-lg hover:bg-red-50 transition-colors group/btn"
                         >
                           <TrashIcon className="w-4 h-4 text-red-400 group-hover/btn:text-red-600" />
@@ -244,7 +264,7 @@ function PlanDetails() {
                           </span>
                         </button>
                         <button
-                          onClick={() => console.log("Delete feature:", f)}
+                          onClick={() => handleDeleteFeature(f.feature_id)}
                           className="relative p-1.5 rounded-lg hover:bg-red-50 transition-colors group/btn"
                         >
                           <TrashIcon className="w-4 h-4 text-red-400 group-hover/btn:text-red-600" />
@@ -276,7 +296,7 @@ function PlanDetails() {
         {drawer.type === "addFeatures" && (
           <FeaturesForm
             planId={planId}
-            productId={selectedPlan.product_id} 
+            productId={selectedPlan.product_id}
             onClose={closeDrawer}
           />
         )}

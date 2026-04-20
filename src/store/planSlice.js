@@ -158,6 +158,55 @@ export const getPlanById = createAsyncThunk(
   },
 );
 
+export const deleteBillingCycle = createAsyncThunk(
+  "workspace/deleteBillingCycle",
+  async ({ price_id }, { rejectWithValue }) => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await fetch(
+        `${BASE_URL}/api/Product/delete-plan-price/${price_id}`,
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
+      if (!response.ok) return rejectWithValue(await parseError(response));
+      return price_id;
+    } catch (err) {
+      return rejectWithValue(
+        err.message || "Network error — could not delete price.",
+      );
+    }
+  },
+);
+export const deletePlanFeature = createAsyncThunk(
+  "workspace/deletePlanFeature",
+  async ({ feature_id }, { rejectWithValue }) => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await fetch(
+        `${BASE_URL}/api/Product/delete-plan-feature/${feature_id}`,
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
+      if (!response.ok) return rejectWithValue(await parseError(response));
+      return feature_id;
+    } catch (err) {
+      return rejectWithValue(
+        err.message || "Network error — could not delete feature.",
+      );
+    }
+  },
+);
+
 const planSlice = createSlice({
   name: "plans",
   initialState: {
@@ -233,6 +282,44 @@ const planSlice = createSlice({
       })
       .addCase(getPlanById.rejected, (state, action) => {
         state.loading = false;
+        state.error = action.payload;
+      })
+
+      .addCase(deleteBillingCycle.pending, (state) => {
+        state.actionLoading = true;
+        state.error = null;
+      })
+      .addCase(deleteBillingCycle.fulfilled, (state, action) => {
+        state.actionLoading = false;
+        const deletedId = action.payload;
+
+        if (state.selectedPlan?.pricing) {
+          state.selectedPlan.pricing = state.selectedPlan.pricing.filter(
+            (item) => item.price_id !== deletedId,
+          );
+        }
+      })
+      .addCase(deleteBillingCycle.rejected, (state, action) => {
+        state.actionLoading = false;
+        state.error = action.payload;
+      })
+
+      .addCase(deletePlanFeature.pending, (state) => {
+        state.actionLoading = true;
+        state.error = null;
+      })
+      .addCase(deletePlanFeature.fulfilled, (state, action) => {
+        state.actionLoading = false;
+        const deletedId = action.payload;
+
+        if (state.selectedPlan?.features) {
+          state.selectedPlan.features = state.selectedPlan.features.filter(
+            (item) => item.feature_id !== deletedId,
+          );
+        }
+      })
+      .addCase(deletePlanFeature.rejected, (state, action) => {
+        state.actionLoading = false;
         state.error = action.payload;
       });
   },

@@ -43,6 +43,7 @@ function App() {
       />
       <Routes>
         <Route path="/login" element={<Login />} />
+
         <Route
           path="/"
           element={
@@ -72,10 +73,7 @@ function App() {
             <Route path="plans" element={<Plans />}>
               <Route index element={<PlanList />} />
               <Route path="list" element={<PlanList />} />
-              <Route
-                path="details/:planId"
-                element={<PlanDetails />}
-              />
+              <Route path="details/:planId" element={<PlanDetails />} />
             </Route>
           </Route>
         </Route>

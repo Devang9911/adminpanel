@@ -24,7 +24,7 @@ const sidebarData = [
   {
     title: "Modules",
     items: [
-      { name: "Modules list", path: "/modules/moduleslist", icon: Boxes },
+      { name: "Modules", path: "/modules/moduleslist", icon: Boxes },
       { name: "Category", path: "/modules/categories", icon: Folder },
       { name: "Features", path: "/modules/features", icon: Zap },
       { name: "Plans", path: "/modules/plans", icon: CreditCard },
@@ -42,7 +42,7 @@ const sidebarData = [
 
 export default function Sidebar() {
   const [collapsed, setCollapsed] = useState(false);
-  const { total } = useSelector((state) => state.users);
+  const {summary} = useSelector((state)=> state.dashboard)
 
   const linkClass = ({ isActive }) =>
     `flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-all ${
@@ -99,7 +99,12 @@ export default function Sidebar() {
                     {item.name}
                     {item.name === "Users" && (
                       <span className="text-xs text-gray-400 ml-1">
-                        ({total})
+                        ({summary.totalUsers})
+                      </span>
+                    )}
+                    {item.name === "Workspaces" && (
+                      <span className="text-xs text-gray-400 ml-1">
+                        ({summary.totalWorkspaces})
                       </span>
                     )}
                   </span>
