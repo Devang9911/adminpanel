@@ -10,7 +10,6 @@ import {
   Zap,
 } from "lucide-react";
 import { useState } from "react";
-import { useSelector } from "react-redux";
 import { NavLink } from "react-router-dom";
 
 const sidebarData = [
@@ -42,7 +41,6 @@ const sidebarData = [
 
 export default function Sidebar() {
   const [collapsed, setCollapsed] = useState(false);
-  const {summary} = useSelector((state)=> state.dashboard)
 
   const linkClass = ({ isActive }) =>
     `flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-all ${
@@ -94,21 +92,7 @@ export default function Sidebar() {
                 title={collapsed ? item.name : ""}
               >
                 <item.icon size={15} className="flex-shrink-0" />
-                {!collapsed && (
-                  <span>
-                    {item.name}
-                    {item.name === "Users" && (
-                      <span className="text-xs text-gray-400 ml-1">
-                        ({summary.totalUsers})
-                      </span>
-                    )}
-                    {item.name === "Workspaces" && (
-                      <span className="text-xs text-gray-400 ml-1">
-                        ({summary.totalWorkspaces})
-                      </span>
-                    )}
-                  </span>
-                )}
+                {!collapsed && <span>{item.name}</span>}
               </NavLink>
             ))}
           </div>

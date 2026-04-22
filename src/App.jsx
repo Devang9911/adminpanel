@@ -28,6 +28,7 @@ function App() {
     const token = localStorage.getItem("token");
     if (token) {
       dispatch(getCurrentUser());
+      
     }
   }, []);
   return (
