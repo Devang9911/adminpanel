@@ -36,6 +36,76 @@ export const getAllWorkspace = createAsyncThunk(
   },
 );
 
+export const createWorkspace = createAsyncThunk(
+  "workspace/create",
+  async (body, { dispatch, getState, rejectWithValue }) => {
+    try {
+      const res = await fetch(`${BASE_URL}/api/admin/add-workspace`, {
+        method: "POST",
+        headers: authHeader(),
+        body: JSON.stringify(body),
+      });
+
+      const data = await res.json();
+
+      const { page, pageSize } = getState().workspace;
+
+      dispatch(
+        getAllWorkspace({
+          page,
+          pageSize,
+          search: "",
+          status: "all",
+        }),
+      );
+
+      if (!res.ok) {
+        const error = await res.json();
+        throw new Error(error.message || "Failed to create workspace");
+      }
+
+      return data;
+    } catch (err) {
+      return rejectWithValue(err.message);
+    }
+  },
+);
+
+export const deleteWorkspace = createAsyncThunk(
+  "workspace/delete",
+  async (groupId, { dispatch, getState, rejectWithValue }) => {
+    try {
+      const res = await fetch(
+        `${BASE_URL}/api/admin/delete-workspaces/${groupId}`,
+        {
+          method: "DELETE",
+          headers: authHeader(),
+        },
+      );
+
+      if (!res.ok) {
+        const err = await res.json();
+        throw new Error(err.message || "Failed to delete workspace");
+      }
+
+      const { page, pageSize } = getState().workspace;
+
+      dispatch(
+        getAllWorkspace({
+          page,
+          pageSize,
+          search: "",
+          status: "all",
+        }),
+      );
+
+      return groupId;
+    } catch (err) {
+      return rejectWithValue(err.message);
+    }
+  },
+);
+
 //get individual workspace details by group id
 export const getWorkspaceDetails = createAsyncThunk(
   "workspace/details",

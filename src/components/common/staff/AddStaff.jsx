@@ -61,13 +61,13 @@ export default function StaffForm({ onClose, editData }) {
 
       if (isEdit) {
         const payload = {
-          userName: data.fullName,
-          userEmail: data.email,
-          userPhoneNumber: data.phoneNumber,
+          fullName: data.fullName,
+          email: data.email,
+          phoneNumber: data.phoneNumber,
           role: data.role,
           isActive: data.isActive,
-          websocketId: data.websocketId,
-          websocketPassword: data.websocketPassword,
+          websocketId: data.websocket_id,
+          websocketPassword: data.websocket_password,
         };
 
         await dispatch(
@@ -78,6 +78,17 @@ export default function StaffForm({ onClose, editData }) {
         ).unwrap();
 
         toast.success("Staff updated successfully");
+      } else {
+        const payload = {
+          fullName: data.fullName,
+          email: data.email,
+          phoneNumber: data.phoneNumber,
+          password: data.password,
+          role: data.role,
+        };
+        await dispatch(createStaff(payload)).unwrap();
+
+        toast.success("Staff created successfully");
       }
 
       dispatch(getAllStaff());

@@ -33,6 +33,12 @@ export default function AddMemberForm({
     );
   }, [dispatch]);
 
+  useEffect(() => {
+    if (type === "updateMember" && member) {
+      setRole(member.user_role || "support");
+    }
+  }, [member, type]);
+
   const handleSubmit = async () => {
     if (type === "addMember" && !userId)
       return toast.error("Please select a user");

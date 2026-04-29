@@ -249,6 +249,7 @@ function WorkspaceDetails() {
         onClose={closeDrawer}
       >
         <AddMemberForm
+          key={drawer.data?.member?.id || "new"}
           type={drawer.type}
           groupId={drawer.data?.groupId}
           member={drawer.data?.member}

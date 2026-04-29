@@ -1,13 +1,14 @@
 import { EyeIcon } from "@heroicons/react/24/solid";
-import { ChevronDownIcon, ChevronUpIcon } from "lucide-react";
+import { ChevronDownIcon, ChevronUpIcon, TrashIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { getAllWorkspace } from "../../store/workspaceSlice";
+import { deleteWorkspace, getAllWorkspace } from "../../store/workspaceSlice";
 import Drawer from "../common/Drawer";
 import Loader from "../common/Loader";
 import Pagination from "../common/Pagination";
 import AddWorkspaceForm from "./AddWorkspaceForm";
+import toast from "react-hot-toast";
 
 function formatDate(dateString, locale = "en-IN") {
   if (!dateString) return "";
@@ -88,6 +89,15 @@ function WorkspaceList() {
         : valueB.localeCompare(valueA);
     return sorting.order === "asc" ? valueA - valueB : valueB - valueA;
   });
+
+  const handleDelete = async (id) => {
+    try {
+      await dispatch(deleteWorkspace(id)).unwrap();
+      toast.success("Workspace deleted");
+    } catch (err) {
+      toast.error(err || "Failed to delete");
+    }
+  };
 
   return (
     <div className="w-full bg-white border border-gray-100 shadow-sm">
@@ -279,7 +289,7 @@ function WorkspaceList() {
                   </td>
 
                   <td className="px-6 py-3.5">
-                    <div className="flex justify-center">
+                    <div className="flex justify-center gap-2">
                       <button
                         onClick={() => navigate(`/workspaces/details/${w.id}`)}
                         className="relative p-1.5 hover:bg-gray-100 transition-colors group/btn"
@@ -287,6 +297,17 @@ function WorkspaceList() {
                         <EyeIcon className="w-4 h-4 text-gray-400 group-hover/btn:text-gray-600" />
                         <span className="absolute bottom-full left-1/2 -translate-x-1/2 mb-1.5 bg-gray-800 text-white text-[10px] px-1.5 py-0.5 rounded opacity-0 group-hover/btn:opacity-100 transition whitespace-nowrap pointer-events-none z-50">
                           Details
+                        </span>
+                      </button>
+
+                      <button
+                        onClick={() => handleDelete(w.id)}
+                        className="relative p-1.5 hover:bg-red-50 transition-colors group/btn"
+                      >
+                        <TrashIcon className="w-4 h-4 text-red-400 group-hover/btn:text-red-600" />
+
+                        <span className="absolute bottom-full left-1/2 -translate-x-1/2 mb-1.5 bg-gray-800 text-white text-[10px] px-1.5 py-0.5 rounded opacity-0 group-hover/btn:opacity-100 transition whitespace-nowrap pointer-events-none z-50">
+                          Delete
                         </span>
                       </button>
                     </div>
@@ -322,7 +343,9 @@ function WorkspaceList() {
         open={drawer.open}
         onClose={() => setDrawer({ open: false })}
       >
-        {drawer.type === "addWorkspace" && <AddWorkspaceForm />}
+        {drawer.type === "addWorkspace" && (
+          <AddWorkspaceForm onClose={() => setDrawer({ open: false })} />
+        )}
       </Drawer>
     </div>
   );
