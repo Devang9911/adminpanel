@@ -7,6 +7,7 @@ import featuresReducer from "./featuresSlice";
 import planReducer from "./planSlice";
 import workspaceReducer from "./workspaceSlice";
 import dashboardReducer from "./dashboardSlice";
+import staffReducer from "./staffSlice";
 
 export const store = configureStore({
   reducer: {
@@ -18,5 +19,6 @@ export const store = configureStore({
     plans: planReducer,
     workspace: workspaceReducer,
     dashboard: dashboardReducer,
+    staff: staffReducer,
   },
 });

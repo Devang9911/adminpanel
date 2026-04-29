@@ -18,6 +18,7 @@ const sidebarData = [
     items: [
       { name: "Dashboard", path: "/", icon: LayoutDashboard },
       { name: "Users", path: "/users", icon: Users },
+      { name: "Staff", path: "/staff", icon: Users },
     ],
   },
   {
@@ -36,6 +37,10 @@ const sidebarData = [
   {
     title: "System",
     items: [{ name: "Audit logs", path: "/auditlogs", icon: ClipboardList }],
+  },
+  {
+    title: "Change Logs",
+    items: [{ name: "Sheets Log", path: "/sheetslog", icon: ClipboardList }],
   },
 ];
 
