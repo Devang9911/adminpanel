@@ -90,7 +90,7 @@ function WorkspaceList() {
   });
 
   return (
-    <div className="w-full bg-white rounded-2xl border border-gray-100 shadow-sm">
+    <div className="w-full bg-white border border-gray-100 shadow-sm">
       <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100">
         <div className="flex items-center gap-2.5">
           <h2 className="text-base font-semibold text-gray-800 tracking-tight">
@@ -104,7 +104,7 @@ function WorkspaceList() {
           onClick={() =>
             setDrawer({ open: true, type: "addWorkspace", data: null })
           }
-          className="flex items-center gap-1.5 px-3.5 py-2 text-xs font-medium bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors"
+          className="flex items-center gap-1.5 px-3.5 py-2 text-xs font-medium bg-indigo-600 text-white hover:bg-indigo-700 transition-colors"
         >
           <span className="text-base leading-none">+</span> Add workspace
         </button>
@@ -152,7 +152,7 @@ function WorkspaceList() {
             onChange={handleSearch}
             type="text"
             placeholder="Search workspace, owner…"
-            className="w-full pl-8 pr-3 py-2 text-xs border border-gray-200 rounded-lg bg-gray-50 text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-100 focus:border-indigo-300"
+            className="w-full pl-8 pr-3 py-2 text-xs border border-gray-200 bg-gray-50 text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-100 focus:border-indigo-300"
           />
         </div>
       </div>
@@ -282,7 +282,7 @@ function WorkspaceList() {
                     <div className="flex justify-center">
                       <button
                         onClick={() => navigate(`/workspaces/details/${w.id}`)}
-                        className="relative p-1.5 rounded-lg hover:bg-gray-100 transition-colors group/btn"
+                        className="relative p-1.5 hover:bg-gray-100 transition-colors group/btn"
                       >
                         <EyeIcon className="w-4 h-4 text-gray-400 group-hover/btn:text-gray-600" />
                         <span className="absolute bottom-full left-1/2 -translate-x-1/2 mb-1.5 bg-gray-800 text-white text-[10px] px-1.5 py-0.5 rounded opacity-0 group-hover/btn:opacity-100 transition whitespace-nowrap pointer-events-none z-50">
@@ -297,7 +297,7 @@ function WorkspaceList() {
         </table>
       </div>
 
-      <div className="px-6 py-3 border-t border-gray-100 bg-white flex flex-col md:flex-row md:items-center md:justify-between gap-2 rounded-b-2xl">
+      <div className="px-6 py-3 border-t border-gray-100 bg-white flex flex-col md:flex-row md:items-center md:justify-between gap-2">
         <div className="text-xs text-gray-400">
           Showing{" "}
           <span className="font-medium text-gray-600">

@@ -55,7 +55,7 @@ function AddModules({ onClose, type, editData }) {
           {...register("product_name")}
           required
           placeholder="e.g. SignalX"
-          className="w-full border border-gray-200 bg-gray-50 rounded-xl px-3 py-2.5 text-xs text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-100 focus:border-indigo-300 transition"
+          className="w-full border border-gray-200 bg-gray-50 px-3 py-2.5 text-xs text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-100 focus:border-indigo-300 transition"
         />
       </div>
 
@@ -67,11 +67,11 @@ function AddModules({ onClose, type, editData }) {
           {...register("product_description")}
           placeholder="Short description about this module…"
           rows={3}
-          className="w-full border border-gray-200 bg-gray-50 rounded-xl px-3 py-2.5 text-xs text-gray-700 placeholder-gray-400 resize-none focus:outline-none focus:ring-2 focus:ring-indigo-100 focus:border-indigo-300 transition"
+          className="w-full border border-gray-200 bg-gray-50 px-3 py-2.5 text-xs text-gray-700 placeholder-gray-400 resize-none focus:outline-none focus:ring-2 focus:ring-indigo-100 focus:border-indigo-300 transition"
         />
       </div>
 
-      <div className="flex items-center justify-between px-4 py-3.5 bg-gray-50 border border-gray-100 rounded-xl">
+      <div className="flex items-center justify-between px-4 py-3.5 bg-gray-50 border border-gray-100">
         <div>
           <p className="text-xs font-semibold text-gray-700">Active module</p>
           <p className="text-[11px] text-gray-400 mt-0.5">
@@ -93,13 +93,13 @@ function AddModules({ onClose, type, editData }) {
         <button
           type="button"
           onClick={onClose}
-          className="px-4 py-2 text-xs font-medium text-gray-500 bg-white border border-gray-200 rounded-xl hover:bg-gray-50 transition-colors"
+          className="px-4 py-2 text-xs font-medium text-gray-500 bg-white border border-gray-200 hover:bg-gray-50 transition-colors"
         >
           Cancel
         </button>
         <button
           type="submit"
-          className="px-4 py-2 text-xs font-medium bg-indigo-600 text-white rounded-xl hover:bg-indigo-700 transition-colors"
+          className="px-4 py-2 text-xs font-medium bg-indigo-600 text-white hover:bg-indigo-700 transition-colors"
         >
           {type === "editModule" ? "Save changes" : "Create module"}
         </button>

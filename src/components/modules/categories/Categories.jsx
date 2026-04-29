@@ -29,7 +29,7 @@ function Categories() {
   const closeDrawer = () => setDrawer({ open: false, type: null, data: null });
 
   return (
-    <div className="w-full bg-white rounded-2xl border border-gray-100 shadow-sm">
+    <div className="w-full bg-white border border-gray-100 shadow-sm">
       <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100">
         <div className="flex items-center gap-2.5">
           <h2 className="text-base font-semibold text-gray-800 tracking-tight">
@@ -43,7 +43,7 @@ function Categories() {
         </div>
         <button
           onClick={() => setDrawer({ open: true, type: "add", data: null })}
-          className="flex items-center gap-1.5 px-3.5 py-2 text-xs font-medium bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors"
+          className="flex items-center gap-1.5 px-3.5 py-2 text-xs font-medium bg-indigo-600 text-white hover:bg-indigo-700 transition-colors"
         >
           <span className="text-base leading-none">+</span> Add category
         </button>
@@ -114,7 +114,7 @@ function Categories() {
                         onClick={() =>
                           setDrawer({ open: true, type: "edit", data: cat })
                         }
-                        className="relative p-1.5 rounded-lg hover:bg-blue-50 transition-colors group/btn"
+                        className="relative p-1.5 hover:bg-blue-50 transition-colors group/btn"
                       >
                         <PencilIcon className="w-4 h-4 text-blue-400 group-hover/btn:text-blue-600" />
                         <span className="absolute bottom-full left-1/2 -translate-x-1/2 mb-1.5 bg-gray-800 text-white text-[10px] px-1.5 py-0.5 rounded opacity-0 group-hover/btn:opacity-100 transition whitespace-nowrap pointer-events-none z-50">
@@ -123,7 +123,7 @@ function Categories() {
                       </button>
                       <button
                         onClick={() => handleDelete(cat.id)}
-                        className="relative p-1.5 rounded-lg hover:bg-red-50 transition-colors group/btn"
+                        className="relative p-1.5 hover:bg-red-50 transition-colors group/btn"
                       >
                         <TrashIcon className="w-4 h-4 text-red-400 group-hover/btn:text-red-600" />
                         <span className="absolute bottom-full left-1/2 -translate-x-1/2 mb-1.5 bg-gray-800 text-white text-[10px] px-1.5 py-0.5 rounded opacity-0 group-hover/btn:opacity-100 transition whitespace-nowrap pointer-events-none z-50">

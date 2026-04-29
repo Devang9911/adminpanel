@@ -16,7 +16,7 @@ export function Dropdown({ trigger, children }) {
     <div className="relative" ref={ref}>
       <div onClick={() => setOpen(!open)}>{trigger}</div>
       {open && (
-        <div className="absolute right-0 mt-2 w-52 bg-white border border-gray-100 rounded-xl shadow-lg shadow-gray-100/50 z-50 overflow-hidden">
+        <div className="absolute right-0 mt-2 w-52 bg-white border border-gray-100 shadow-lg shadow-gray-100/50 z-50 overflow-hidden">
           {children}
         </div>
       )}

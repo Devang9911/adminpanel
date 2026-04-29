@@ -80,9 +80,9 @@ function WorkspaceDetails() {
 
   return (
     <div className="space-y-4">
-      <div className="flex items-center justify-between bg-white rounded-2xl border border-gray-100 shadow-sm px-6 py-4">
+      <div className="flex items-center justify-between bg-white border border-gray-100 shadow-sm px-6 py-4">
         <div className="flex items-center gap-3.5">
-          <div className="w-10 h-10 bg-indigo-50 rounded-xl flex items-center justify-center flex-shrink-0">
+          <div className="w-10 h-10 bg-indigo-50 flex items-center justify-center flex-shrink-0">
             <UsersIcon className="w-5 h-5 text-indigo-500" />
           </div>
           <div>
@@ -96,13 +96,13 @@ function WorkspaceDetails() {
         </div>
         <button
           onClick={() => navigate("/workspaces")}
-          className="flex items-center gap-1.5 px-3 py-2 text-xs font-medium text-gray-500 bg-gray-50 border border-gray-100 rounded-lg hover:bg-gray-100 transition-colors"
+          className="flex items-center gap-1.5 px-3 py-2 text-xs font-medium text-gray-500 bg-gray-50 border border-gray-100 hover:bg-gray-100 transition-colors"
         >
           <ArrowLeftIcon className="w-3.5 h-3.5" /> Back
         </button>
       </div>
 
-      <div className="bg-white rounded-2xl border border-gray-100 shadow-sm">
+      <div className="bg-white border border-gray-100 shadow-sm">
         <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100">
           <div className="flex items-center gap-2.5">
             <h3 className="text-sm font-semibold text-gray-800">Members</h3>
@@ -118,7 +118,7 @@ function WorkspaceDetails() {
                 data: { groupId: id },
               })
             }
-            className="flex items-center gap-1.5 px-3.5 py-2 text-xs font-medium bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors"
+            className="flex items-center gap-1.5 px-3.5 py-2 text-xs font-medium bg-indigo-600 text-white hover:bg-indigo-700 transition-colors"
           >
             <PlusIcon className="w-3.5 h-3.5" /> Add member
           </button>
@@ -217,7 +217,7 @@ function WorkspaceDetails() {
                               data: { groupId: id, member },
                             })
                           }
-                          className="relative p-1.5 rounded-lg hover:bg-blue-50 transition-colors group/btn"
+                          className="relative p-1.5 hover:bg-blue-50 transition-colors group/btn"
                         >
                           <PencilSquareIcon className="w-4 h-4 text-blue-400 group-hover/btn:text-blue-600" />
                           <span className="absolute bottom-full left-1/2 -translate-x-1/2 mb-1.5 bg-gray-800 text-white text-[10px] px-1.5 py-0.5 rounded opacity-0 group-hover/btn:opacity-100 transition whitespace-nowrap pointer-events-none z-50">
@@ -226,7 +226,7 @@ function WorkspaceDetails() {
                         </button>
                         <button
                           onClick={() => handleDelete(member.id)}
-                          className="relative p-1.5 rounded-lg hover:bg-red-50 transition-colors group/btn"
+                          className="relative p-1.5 hover:bg-red-50 transition-colors group/btn"
                         >
                           <TrashIcon className="w-4 h-4 text-red-400 group-hover/btn:text-red-600" />
                           <span className="absolute bottom-full left-1/2 -translate-x-1/2 mb-1.5 bg-gray-800 text-white text-[10px] px-1.5 py-0.5 rounded opacity-0 group-hover/btn:opacity-100 transition whitespace-nowrap pointer-events-none z-50">

@@ -56,7 +56,7 @@ function Features() {
   };
 
   return (
-    <div className="w-full bg-white rounded-2xl border border-gray-100 shadow-sm">
+    <div className="w-full bg-white border border-gray-100 shadow-sm">
       <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100">
         <div className="flex items-center gap-2.5">
           <h2 className="text-base font-semibold text-gray-800 tracking-tight">
@@ -72,7 +72,7 @@ function Features() {
           onClick={() =>
             setDrawer({ open: true, type: "addFeature", data: null })
           }
-          className="flex items-center gap-1.5 px-3.5 py-2 text-xs font-medium bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors"
+          className="flex items-center gap-1.5 px-3.5 py-2 text-xs font-medium bg-indigo-600 text-white hover:bg-indigo-700 transition-colors"
         >
           <PlusIcon className="w-3.5 h-3.5" /> Add feature
         </button>
@@ -85,7 +85,7 @@ function Features() {
         <select
           value={selectedProduct}
           onChange={handleChangeProduct}
-          className="border border-gray-200 bg-gray-50 rounded-lg px-3 py-1.5 text-xs text-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-100 focus:border-indigo-300 transition"
+          className="border border-gray-200 bg-gray-50 px-3 py-1.5 text-xs text-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-100 focus:border-indigo-300 transition"
         >
           {products.map((p) => (
             <option key={p.id} value={p.id}>
@@ -184,7 +184,7 @@ function Features() {
                             data: f,
                           })
                         }
-                        className="relative p-1.5 rounded-lg hover:bg-blue-50 transition-colors group/btn"
+                        className="relative p-1.5 hover:bg-blue-50 transition-colors group/btn"
                       >
                         <PencilSquareIcon className="w-4 h-4 text-blue-400 group-hover/btn:text-blue-600" />
                         <span className="absolute bottom-full left-1/2 -translate-x-1/2 mb-1.5 bg-gray-800 text-white text-[10px] px-1.5 py-0.5 rounded opacity-0 group-hover/btn:opacity-100 transition whitespace-nowrap pointer-events-none z-50">
@@ -193,7 +193,7 @@ function Features() {
                       </button>
                       <button
                         onClick={() => handleDelete(f.id)}
-                        className="relative p-1.5 rounded-lg hover:bg-red-50 transition-colors group/btn"
+                        className="relative p-1.5 hover:bg-red-50 transition-colors group/btn"
                       >
                         <Trash className="w-4 h-4 text-red-400 group-hover/btn:text-red-600" />
                         <span className="absolute bottom-full left-1/2 -translate-x-1/2 mb-1.5 bg-gray-800 text-white text-[10px] px-1.5 py-0.5 rounded opacity-0 group-hover/btn:opacity-100 transition whitespace-nowrap pointer-events-none z-50">

@@ -48,7 +48,7 @@ export default function PricingForm({ planId, onClose, editData }) {
         </label>
         <select
           {...register("planBillingCycle", { required: true })}
-          className="w-full border border-gray-200 bg-gray-50 rounded-xl px-3 py-2.5 text-xs text-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-100 focus:border-indigo-300 transition"
+          className="w-full border border-gray-200 bg-gray-50 px-3 py-2.5 text-xs text-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-100 focus:border-indigo-300 transition"
         >
           <option value="">Select billing cycle…</option>
           <option value="15 days">15 days</option>
@@ -69,7 +69,7 @@ export default function PricingForm({ planId, onClose, editData }) {
             type="number"
             {...register("planAmount", { required: true })}
             placeholder="0"
-            className="w-full border border-gray-200 bg-gray-50 rounded-xl pl-7 pr-3 py-2.5 text-xs text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-100 focus:border-indigo-300 transition"
+            className="w-full border border-gray-200 bg-gray-50 pl-7 pr-3 py-2.5 text-xs text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-100 focus:border-indigo-300 transition"
           />
         </div>
       </div>
@@ -78,14 +78,14 @@ export default function PricingForm({ planId, onClose, editData }) {
         <button
           type="button"
           onClick={onClose}
-          className="px-4 py-2 text-xs font-medium text-gray-500 bg-white border border-gray-200 rounded-xl hover:bg-gray-50 transition-colors"
+          className="px-4 py-2 text-xs font-medium text-gray-500 bg-white border border-gray-200 hover:bg-gray-50 transition-colors"
         >
           Cancel
         </button>
         <button
           type="submit"
           disabled={loading}
-          className="px-4 py-2 text-xs font-medium bg-indigo-600 text-white rounded-xl hover:bg-indigo-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          className="px-4 py-2 text-xs font-medium bg-indigo-600 text-white hover:bg-indigo-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {loading ? "Saving…" : isEdit ? "Save changes" : "Add pricing"}
         </button>

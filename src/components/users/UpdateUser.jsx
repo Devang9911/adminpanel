@@ -1,8 +1,8 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { useDispatch } from "react-redux";
-import { createUser, getAllUsers } from "../../store/userSlice";
+import { updateUser, getAllUsers } from "../../store/userSlice";
 
 function Spinner({ className = "w-3.5 h-3.5" }) {
   return (
@@ -29,45 +29,44 @@ function Spinner({ className = "w-3.5 h-3.5" }) {
   );
 }
 
-export default function AddUser({ onClose }) {
+export default function UpdateUser({ data: user, onClose }) {
+  const dispatch = useDispatch();
+  const [loading, setLoading] = useState(false);
+
   const {
     register,
     handleSubmit,
     reset,
     formState: { errors },
   } = useForm();
-  const dispatch = useDispatch();
-  const [loading, setLoading] = useState(false);
 
-  const onSubmit = async (data) => {
+  useEffect(() => {
+    if (user) {
+      reset({
+        fullName: user.name || "",
+        email: user.email || "",
+        phoneNumber: user.phone || "",
+        isActive: user.isActive ?? user.status === "active",
+      });
+    }
+  }, [user, reset]);
+
+  const onSubmit = async (formData) => {
     try {
       setLoading(true);
-
-      const payload = {
-        fullName: data.fullName,
-        email: data.email,
-        password: data.password,
-        phoneNumber: data.phoneNumber,
-      };
-
-      await dispatch(createUser(payload)).unwrap();
-
-      dispatch(
-        getAllUsers({
-          search: "",
-          status: "",
-          page: 1,
-          pageSize: 10,
-          module: "",
-          plan: "",
+      await dispatch(
+        updateUser({
+          userId: user.id,
+          fullName: formData.fullName,
+          email: formData.email,
+          phoneNumber: formData.phoneNumber,
+          isActive: formData.isActive,
         }),
-      );
-
-      toast.success("User created successfully");
-      reset();
+      ).unwrap();
+      toast.success("User updated successfully");
       onClose();
     } catch (error) {
-      toast.error(error || "Failed to create user");
+      toast.error(error || "Failed to update user");
     } finally {
       setLoading(false);
     }
@@ -89,16 +88,6 @@ export default function AddUser({ onClose }) {
       validation: {
         required: "Email is required",
         pattern: { value: /^\S+@\S+$/i, message: "Invalid email address" },
-      },
-    },
-    {
-      name: "password",
-      label: "Password",
-      type: "password",
-      placeholder: "Enter password",
-      validation: {
-        required: "Password is required",
-        minLength: { value: 6, message: "Minimum 6 characters" },
       },
     },
     {
@@ -150,11 +139,32 @@ export default function AddUser({ onClose }) {
         </div>
       ))}
 
+      {/* isActive toggle */}
+      <div className="flex items-center justify-between px-3 py-2.5 bg-gray-50 border border-gray-200">
+        <span className="text-xs font-semibold text-gray-600">
+          Active status
+        </span>
+        <label className="relative inline-flex items-center cursor-pointer">
+          <input
+            type="checkbox"
+            {...register("isActive")}
+            className="sr-only peer"
+            disabled={loading}
+          />
+          <div
+            className="w-9 h-5 bg-gray-200 peer-focus:ring-2 peer-focus:ring-indigo-100 rounded-full peer
+            peer-checked:bg-indigo-600 transition-colors after:content-[''] after:absolute after:top-0.5
+            after:left-0.5 after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all
+            peer-checked:after:translate-x-4"
+          />
+        </label>
+      </div>
+
       {loading && (
         <div className="flex items-center gap-2 px-3 py-2.5 bg-indigo-50 border border-indigo-100">
           <Spinner className="w-3.5 h-3.5 text-indigo-500" />
           <span className="text-xs text-indigo-600 font-medium">
-            Creating user account…
+            Saving changes…
           </span>
         </div>
       )}
@@ -169,7 +179,6 @@ export default function AddUser({ onClose }) {
         >
           Cancel
         </button>
-
         <button
           type="submit"
           disabled={loading}
@@ -179,11 +188,10 @@ export default function AddUser({ onClose }) {
         >
           {loading ? (
             <>
-              <Spinner className="w-3 h-3 text-white" />
-              Creating…
+              <Spinner className="w-3 h-3 text-white" /> Saving…
             </>
           ) : (
-            "Create user"
+            "Save changes"
           )}
         </button>
       </div>

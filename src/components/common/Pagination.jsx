@@ -15,7 +15,7 @@ function Pagination({ page, totalPages, onPageChange }) {
       <button
         onClick={prev}
         disabled={page === 1}
-        className="flex items-center gap-1 px-3 py-1.5 text-xs font-medium text-gray-500 bg-white border border-gray-200 rounded-lg hover:bg-gray-50 hover:text-gray-700 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+        className="flex items-center gap-1 px-3 py-1.5 text-xs font-medium text-gray-500 bg-white border border-gray-200 hover:bg-gray-50 hover:text-gray-700 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
       >
         <svg
           className="w-3 h-3"
@@ -43,7 +43,7 @@ function Pagination({ page, totalPages, onPageChange }) {
               )}
               <button
                 onClick={() => onPageChange(visiblePage)}
-                className={`h-7 min-w-7 px-2 rounded-lg text-xs font-medium transition-colors ${
+                className={`h-7 min-w-7 px-2 text-xs font-medium transition-colors ${
                   isActive
                     ? "bg-indigo-600 text-white"
                     : "text-gray-500 hover:bg-gray-100 hover:text-gray-700"
@@ -59,7 +59,7 @@ function Pagination({ page, totalPages, onPageChange }) {
       <button
         onClick={next}
         disabled={page === totalPages}
-        className="flex items-center gap-1 px-3 py-1.5 text-xs font-medium text-gray-500 bg-white border border-gray-200 rounded-lg hover:bg-gray-50 hover:text-gray-700 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+        className="flex items-center gap-1 px-3 py-1.5 text-xs font-medium text-gray-500 bg-white border border-gray-200 hover:bg-gray-50 hover:text-gray-700 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
       >
         Next
         <svg

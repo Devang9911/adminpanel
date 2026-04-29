@@ -31,7 +31,7 @@ function ProductList() {
   };
 
   return (
-    <div className="bg-white rounded-2xl border border-gray-100 shadow-sm flex flex-col">
+    <div className="bg-white border border-gray-100 shadow-sm flex flex-col">
       <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100">
         <div className="flex items-center gap-2.5">
           <h2 className="text-base font-semibold text-gray-800 tracking-tight">
@@ -45,7 +45,7 @@ function ProductList() {
           onClick={() =>
             setDrawer({ open: true, type: "addModule", data: null })
           }
-          className="flex items-center gap-1.5 px-3.5 py-2 text-xs font-medium bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors"
+          className="flex items-center gap-1.5 px-3.5 py-2 text-xs font-medium bg-indigo-600 text-white hover:bg-indigo-700 transition-colors"
         >
           <span className="text-base leading-none">+</span> Add module
         </button>
@@ -56,13 +56,13 @@ function ProductList() {
           ? [...Array(6)].map((_, i) => (
               <div
                 key={i}
-                className="h-36 rounded-xl bg-gray-100 animate-pulse"
+                className="h-36 bg-gray-100 animate-pulse"
               />
             ))
           : products.map((p) => (
               <div
                 key={p.id}
-                className="flex flex-col justify-between bg-gray-50/30 border border-gray-100 rounded-xl p-4 hover:border-gray-200 hover:shadow-sm transition-all group"
+                className="flex flex-col justify-between bg-gray-50/30 border border-gray-100  p-4 hover:border-gray-200 hover:shadow-sm transition-all group"
               >
                 <div className="flex items-start justify-between gap-3">
                   <div className="flex-1 min-w-0">
@@ -109,19 +109,19 @@ function ProductList() {
                       onClick={() =>
                         setDrawer({ open: true, type: "editModule", data: p })
                       }
-                      className="relative p-1.5 rounded-lg hover:bg-blue-50 transition-colors group/btn"
+                      className="relative p-1.5 hover:bg-blue-50 transition-colors group/btn"
                     >
                       <PencilIcon className="w-3.5 h-3.5 text-blue-400 group-hover/btn:text-blue-600" />
-                      <span className="absolute bottom-full left-1/2 -translate-x-1/2 mb-1.5 bg-gray-800 text-white text-[10px] px-1.5 py-0.5 rounded opacity-0 group-hover/btn:opacity-100 transition whitespace-nowrap pointer-events-none z-50">
+                      <span className="absolute bottom-full left-1/2 -translate-x-1/2 mb-1.5 bg-gray-800 text-white text-[10px] px-1.5 py-0.5  opacity-0 group-hover/btn:opacity-100 transition whitespace-nowrap pointer-events-none z-50">
                         Edit
                       </span>
                     </button>
                     <button
                       onClick={() => handleDelete(p.id)}
-                      className="relative p-1.5 rounded-lg hover:bg-red-50 transition-colors group/btn"
+                      className="relative p-1.5  hover:bg-red-50 transition-colors group/btn"
                     >
                       <Trash className="w-3.5 h-3.5 text-red-400 group-hover/btn:text-red-600" />
-                      <span className="absolute bottom-full left-1/2 -translate-x-1/2 mb-1.5 bg-gray-800 text-white text-[10px] px-1.5 py-0.5 rounded opacity-0 group-hover/btn:opacity-100 transition whitespace-nowrap pointer-events-none z-50">
+                      <span className="absolute bottom-full left-1/2 -translate-x-1/2 mb-1.5 bg-gray-800 text-white text-[10px] px-1.5 py-0.5  opacity-0 group-hover/btn:opacity-100 transition whitespace-nowrap pointer-events-none z-50">
                         Delete
                       </span>
                     </button>

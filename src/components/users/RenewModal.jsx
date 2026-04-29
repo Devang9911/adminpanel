@@ -61,7 +61,7 @@ export default function RenewModal({ onClose, data }) {
   return (
     <div className="flex flex-col gap-5">
       {data?.category === null && (
-        <div className="flex items-start gap-2.5 p-3.5 bg-amber-50 border border-amber-100 rounded-xl">
+        <div className="flex items-start gap-2.5 p-3.5 bg-amber-50 border border-amber-100">
           <span className="text-amber-500 text-base mt-0.5">⚠</span>
           <p className="text-xs text-amber-700 leading-relaxed">
             This user is not subscribed to any plan yet.
@@ -70,7 +70,7 @@ export default function RenewModal({ onClose, data }) {
       )}
 
       {data?.category !== null && (
-        <div className="rounded-xl border border-gray-100 bg-gray-50 overflow-hidden">
+        <div className=" border border-gray-100 bg-gray-50 overflow-hidden">
           <div className="px-4 py-3 border-b border-gray-100 flex items-center justify-between">
             <span className="text-[11px] font-semibold text-gray-400 uppercase tracking-wider">
               Current subscription
@@ -110,7 +110,7 @@ export default function RenewModal({ onClose, data }) {
         <select
           onChange={handleSelect}
           defaultValue=""
-          className="w-full border border-gray-200 bg-gray-50 text-xs text-gray-700 px-3 py-2.5 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-100 focus:border-indigo-300 transition"
+          className="w-full border border-gray-200 bg-gray-50 text-xs text-gray-700 px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-indigo-100 focus:border-indigo-300 transition"
         >
           <option value="" disabled>
             Choose a plan…
@@ -133,7 +133,7 @@ export default function RenewModal({ onClose, data }) {
         </select>
 
         {selectedPlan && (
-          <div className="mt-3 flex items-center justify-between px-3.5 py-3 bg-indigo-50 border border-indigo-100 rounded-xl">
+          <div className="mt-3 flex items-center justify-between px-3.5 py-3 bg-indigo-50 border border-indigo-100">
             <div>
               <p className="text-[11px] text-indigo-400 font-medium uppercase tracking-wider mb-0.5">
                 Selected
@@ -160,14 +160,14 @@ export default function RenewModal({ onClose, data }) {
       <div className="flex items-center justify-end gap-2 pt-1">
         <button
           onClick={onClose}
-          className="px-4 py-2 text-xs font-medium text-gray-500 bg-white border border-gray-200 rounded-xl hover:bg-gray-50 transition-colors"
+          className="px-4 py-2 text-xs font-medium text-gray-500 bg-white border border-gray-200 hover:bg-gray-50 transition-colors"
         >
           Cancel
         </button>
         <button
           onClick={handleRenew}
           disabled={!selectedPlan}
-          className={`px-4 py-2 text-xs font-medium rounded-xl text-white transition-colors ${
+          className={`px-4 py-2 text-xs font-medium text-white transition-colors ${
             selectedPlan
               ? "bg-indigo-600 hover:bg-indigo-700"
               : "bg-gray-200 text-gray-400 cursor-not-allowed"

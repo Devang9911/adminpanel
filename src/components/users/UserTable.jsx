@@ -1,21 +1,21 @@
 import {
   ArrowPathIcon,
-  EnvelopeIcon,
   EyeIcon,
   PencilSquareIcon,
 } from "@heroicons/react/24/solid";
-import { ChevronDownIcon, ChevronUpIcon } from "lucide-react";
+import { ChevronDownIcon, ChevronUpIcon, Lock } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllPlans } from "../../store/planSlice";
 import { getProducts } from "../../store/productSlice";
-import { getAllUsers, updateUserStatus } from "../../store/userSlice";
+import { getAllUsers } from "../../store/userSlice";
 import Drawer from "../common/Drawer";
 import Pagination from "../common/Pagination";
 import ViewUser from "../users/ViewUser";
-import RenewModal from "./RenewModal";
-import toast from "react-hot-toast";
 import AddUser from "./AddUser";
+import RenewModal from "./RenewModal";
+import ResetPassword from "./ResetPassword";
+import UpdateUser from "./UpdateUser";
 
 function formatDate(dateString, locale = "en-IN") {
   if (!dateString) return "";
@@ -116,36 +116,14 @@ function SkeletonRow() {
   );
 }
 
-function StatusToggle({ user, updatingUserId, onClick }) {
-  const isUpdating = updatingUserId === user.id;
-
+function StatusBadge({ status }) {
   return (
-    <button
-      onClick={() => onClick(user)}
-      disabled={isUpdating}
-      title={
-        isUpdating
-          ? "Updating…"
-          : `Click to ${user.status === "active" ? "deactivate" : "activate"}`
-      }
+    <span
       className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-medium capitalize
-        transition-all duration-150 select-none
-        ${
-          isUpdating
-            ? "opacity-70 cursor-not-allowed"
-            : "cursor-pointer hover:opacity-80 hover:shadow-sm active:scale-95"
-        }
-        ${getStatusBadge(user.status)}`}
+      ${getStatusBadge(status)}`}
     >
-      {isUpdating ? (
-        <>
-          <Spinner className="w-2.5 h-2.5" />
-          <span>Saving…</span>
-        </>
-      ) : (
-        user.status
-      )}
-    </button>
+      {status}
+    </span>
   );
 }
 
@@ -196,11 +174,11 @@ function UserTable() {
   const {
     users = [],
     loading,
-    page,
-    totalPages,
-    total,
     updatingUserId,
+    pagination = {},
   } = useSelector((state) => state.users);
+
+  const { page = 1, totalPages = 1, total = 0, pageSize = 10 } = pagination;
   const { products = [] } = useSelector((state) => state.product);
   const { plans = [] } = useSelector((state) => state.plans);
 
@@ -228,28 +206,17 @@ function UserTable() {
     return sorting.order === "asc" ? valueA - valueB : valueB - valueA;
   });
 
-  const handleStatusClick = async (user) => {
-    const newStatus = user.status !== "active";
-    const toastId = toast.loading("Updating status…");
-    try {
-      await dispatch(
-        updateUserStatus({ userid: user.id, status: newStatus }),
-      ).unwrap();
-      toast.success(
-        `User ${newStatus ? "activated" : "deactivated"} successfully`,
-        { id: toastId },
-      );
-    } catch (err) {
-      toast.error(err || "Failed to update status", { id: toastId });
-    }
-  };
-
   const handleDrawerClose = () => {
     setDrawer({ open: false, type: "", data: null });
   };
 
+  const handleUpdateClose = () => {
+  handleDrawerClose();
+  dispatch(getAllUsers({ ...filters, search: debouncedSearch }));
+};
+
   return (
-    <div className="w-full bg-white rounded-2xl shadow-sm border border-gray-100">
+    <div className="w-full bg-white shadow-sm border border-gray-100">
       <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100">
         <div className="flex items-center gap-2.5">
           <h2 className="text-base font-semibold text-gray-800 tracking-tight">
@@ -260,7 +227,7 @@ function UserTable() {
           </span>
         </div>
         <button
-          className="px-3.5 py-2 text-xs font-medium bg-indigo-600 text-white rounded-lg hover:bg-indigo-700
+          className="px-3.5 py-2 text-xs font-medium bg-indigo-600 text-white hover:bg-indigo-700
             transition-colors flex items-center gap-1.5 active:scale-95"
           onClick={() => setDrawer({ type: "create", open: true, data: null })}
         >
@@ -306,7 +273,7 @@ function UserTable() {
             onChange={handleSearch}
             type="text"
             placeholder="Search name, email…"
-            className="w-full pl-8 pr-3 py-2 text-xs border border-gray-200 rounded-lg bg-gray-50 text-gray-700
+            className="w-full pl-8 pr-3 py-2 text-xs border border-gray-200 bg-gray-50 text-gray-700
               placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-100 focus:border-indigo-300"
           />
           {loading && filters.search && (
@@ -318,7 +285,7 @@ function UserTable() {
         <select
           value={filters.module}
           onChange={(e) => handleFilterChange("module", e.target.value)}
-          className="border border-gray-200 rounded-lg bg-gray-50 px-3 py-2 text-xs text-gray-600
+          className="border border-gray-200 bg-gray-50 px-3 py-2 text-xs text-gray-600
             focus:outline-none focus:ring-2 focus:ring-indigo-100"
         >
           <option value="all">All modules</option>
@@ -331,7 +298,7 @@ function UserTable() {
         <select
           value={filters.plan}
           onChange={(e) => handleFilterChange("plan", e.target.value)}
-          className="border border-gray-200 rounded-lg bg-gray-50 px-3 py-2 text-xs text-gray-600
+          className="border border-gray-200 bg-gray-50 px-3 py-2 text-xs text-gray-600
             focus:outline-none focus:ring-2 focus:ring-indigo-100"
         >
           <option value="all">All plans</option>
@@ -458,7 +425,7 @@ function UserTable() {
                         u.modules.map((m, i) => (
                           <span
                             key={i}
-                            className="inline-flex items-center px-2 py-0.5 rounded-md text-[11px]
+                            className="inline-flex items-center px-2 py-0.5 text-[11px]
                               font-medium bg-blue-50 text-blue-500"
                           >
                             {m}
@@ -470,13 +437,9 @@ function UserTable() {
                     </div>
                   </td>
 
-                  <td className="px-6 py-3.5">
-                    <StatusToggle
-                      user={u}
-                      updatingUserId={updatingUserId}
-                      onClick={handleStatusClick}
-                    />
-                  </td>
+                 <td className="px-6 py-3.5">
+  <StatusBadge status={u.status} />
+</td>
 
                   <td className="px-6 py-3.5">
                     {formatDate(u.expiry_date) ? (
@@ -521,11 +484,16 @@ function UserTable() {
                         },
                         {
                           icon: (
-                            <EnvelopeIcon className="w-4 h-4 text-amber-400 group-hover/btn:text-amber-600" />
+                            <Lock className="w-4 h-4 text-amber-400 group-hover/btn:text-amber-600" />
                           ),
-                          label: "Mail",
+                          label: "Password",
                           hoverBg: "hover:bg-amber-50",
-                          onClick: () => {},
+                          onClick: () =>
+                            setDrawer({
+                              type: "password",
+                              open: true,
+                              data: u.id,
+                            }),
                         },
                         {
                           icon: (
@@ -540,13 +508,13 @@ function UserTable() {
                         <button
                           key={label}
                           onClick={onClick}
-                          className={`relative p-1.5 rounded-lg ${hoverBg} transition-colors group/btn`}
+                          className={`relative p-1.5 ${hoverBg} transition-colors group/btn`}
                           title={label}
                         >
                           {icon}
                           <span
                             className="absolute bottom-full left-1/2 -translate-x-1/2 mb-1.5 bg-gray-800 text-white
-                              text-[10px] px-1.5 py-0.5 rounded opacity-0 group-hover/btn:opacity-100 transition
+                              text-[10px] px-1.5 py-0.5 opacity-0 group-hover/btn:opacity-100 transition
                               whitespace-nowrap pointer-events-none z-50"
                           >
                             {label}
@@ -571,11 +539,11 @@ function UserTable() {
             <>
               Showing{" "}
               <span className="font-medium text-gray-600">
-                {(page - 1) * 10 + 1}
+                {(page - 1) * pageSize + 1}
               </span>{" "}
               to{" "}
               <span className="font-medium text-gray-600">
-                {Math.min(page * 10, total)}
+                {Math.min(page * pageSize, total)}
               </span>{" "}
               of <span className="font-semibold text-gray-700">{total}</span>{" "}
               users
@@ -597,9 +565,17 @@ function UserTable() {
         title={`${drawer.type === "create" ? "Add" : drawer.type} user`}
       >
         {drawer.type === "create" && <AddUser onClose={handleDrawerClose} />}
-        {drawer.type === "view" && <ViewUser data={drawer.data} />}
+        {drawer.type === "view" && (
+          <ViewUser data={drawer.data} onClose={handleDrawerClose} />
+        )}
         {drawer.type === "renew" && (
           <RenewModal data={drawer.data} onClose={handleDrawerClose} />
+        )}
+        {drawer.type === "password" && (
+          <ResetPassword userId={drawer.data} onClose={handleDrawerClose} />
+        )}
+        {drawer.type === "update" && (
+          <UpdateUser data={drawer.data} onClose={handleUpdateClose} />
         )}
       </Drawer>
     </div>

@@ -2,7 +2,7 @@ function StatsBox({ title, value, icon: Icon, color, onClick }) {
   return (
     <div
       onClick={onClick}
-      className={`group relative bg-white border border-gray-100 rounded-2xl p-5 overflow-hidden transition-all hover:shadow-sm hover:border-gray-200 ${onClick ? "cursor-pointer" : ""}`}
+      className={`group relative bg-white border border-gray-100 p-5 overflow-hidden transition-all hover:shadow-sm hover:border-gray-200 ${onClick ? "cursor-pointer" : ""}`}
     >
       <div
         className={`absolute -right-4 -top-4 w-20 h-20 rounded-full opacity-5 ${color}`}
@@ -18,7 +18,7 @@ function StatsBox({ title, value, icon: Icon, color, onClick }) {
           </p>
         </div>
         <div
-          className={`w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 ${color}`}
+          className={`w-10 h-10 flex items-center justify-center flex-shrink-0 ${color}`}
         >
           <Icon className="w-5 h-5 text-white" />
         </div>

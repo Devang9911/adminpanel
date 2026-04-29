@@ -21,6 +21,8 @@ import WorkspaceList from "./components/workspace/WorkspaceList";
 import Modules from "./pages/modules/Modules";
 import ProtectedRoute from "./routes/ProtectedRoute";
 import { getCurrentUser } from "./store/authSlice";
+import Staff from "./pages/staff/Staff";
+import Sheets from "./pages/sheets/Sheets";
 
 function App() {
   const dispatch = useDispatch();
@@ -28,7 +30,6 @@ function App() {
     const token = localStorage.getItem("token");
     if (token) {
       dispatch(getCurrentUser());
-      
     }
   }, []);
   return (
@@ -59,6 +60,7 @@ function App() {
             <Route index element={<UserTable />} />
             <Route path="list" element={<UserTable />} />
           </Route>
+          <Route path="staff" element={<Staff />} />
 
           <Route path="workspaces" element={<Workspace />}>
             <Route index element={<WorkspaceList />} />
@@ -66,6 +68,7 @@ function App() {
             <Route path="details/:id" element={<WorkspaceDetails />} />
           </Route>
           <Route path="auditlogs" element={<AuditLogs />} />
+          <Route path="sheetslog" element={<Sheets />} />
           <Route path="modules" element={<Modules />}>
             <Route index element={<ModulesList />} />
             <Route path="moduleslist" element={<ModulesList />} />

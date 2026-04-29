@@ -51,7 +51,7 @@ function PlanList() {
     setFilters((prev) => ({ ...prev, [key]: value }));
 
   return (
-    <div className="w-full bg-white rounded-2xl border border-gray-100 shadow-sm">
+    <div className="w-full bg-white border border-gray-100 shadow-sm">
       <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100">
         <div className="flex items-center gap-2.5">
           <h2 className="text-base font-semibold text-gray-800 tracking-tight">
@@ -65,7 +65,7 @@ function PlanList() {
         </div>
         <button
           onClick={() => setDrawer({ open: true, type: "add", data: null })}
-          className="flex items-center gap-1.5 px-3.5 py-2 text-xs font-medium bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors"
+          className="flex items-center gap-1.5 px-3.5 py-2 text-xs font-medium bg-indigo-600 text-white hover:bg-indigo-700 transition-colors"
         >
           <PlusIcon className="w-3.5 h-3.5" /> Add plan
         </button>
@@ -109,13 +109,13 @@ function PlanList() {
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Search by plan…"
-            className="w-full pl-8 pr-3 py-2 text-xs border border-gray-200 rounded-lg bg-gray-50 text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-100 focus:border-indigo-300"
+            className="w-full pl-8 pr-3 py-2 text-xs border border-gray-200 bg-gray-50 text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-100 focus:border-indigo-300"
           />
         </div>
         <select
           value={filters.module}
           onChange={(e) => handleFilterChange("module", e.target.value)}
-          className="border border-gray-200 rounded-lg bg-gray-50 px-3 py-2 text-xs text-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-100"
+          className="border border-gray-200 bg-gray-50 px-3 py-2 text-xs text-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-100"
         >
           <option value="all">All modules</option>
           {products.map((p) => (
@@ -127,7 +127,7 @@ function PlanList() {
         <select
           value={filters.category}
           onChange={(e) => handleFilterChange("category", e.target.value)}
-          className="border border-gray-200 rounded-lg bg-gray-50 px-3 py-2 text-xs text-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-100"
+          className="border border-gray-200 bg-gray-50 px-3 py-2 text-xs text-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-100"
         >
           <option value="all">All categories</option>
           {categories.map((c) => (
@@ -222,7 +222,7 @@ function PlanList() {
                     <div className="flex justify-center items-center gap-2">
                       <button
                         onClick={() => console.log("Delete feature:", p.id)}
-                        className="relative p-1.5 rounded-lg hover:bg-red-50 transition-colors group/btn"
+                        className="relative p-1.5 hover:bg-red-50 transition-colors group/btn"
                       >
                         <TrashIcon className="w-4 h-4 text-red-400 group-hover/btn:text-red-600" />
                         <span className="absolute bottom-full left-1/2 -translate-x-1/2 mb-1.5 bg-gray-800 text-white text-[10px] px-1.5 py-0.5 rounded opacity-0 group-hover/btn:opacity-100 transition whitespace-nowrap pointer-events-none z-50">
@@ -231,7 +231,7 @@ function PlanList() {
                       </button>
                       <button
                         onClick={() => navigate(`details/${p.id}`)}
-                        className="relative p-1.5 rounded-lg hover:bg-gray-100 transition-colors group/btn"
+                        className="relative p-1.5 hover:bg-gray-100 transition-colors group/btn"
                       >
                         <EyeIcon className="w-4 h-4 text-gray-400 group-hover/btn:text-gray-600" />
                         <span className="absolute bottom-full left-1/2 -translate-x-1/2 mb-1.5 bg-gray-800 text-white text-[10px] px-1.5 py-0.5 rounded opacity-0 group-hover/btn:opacity-100 transition whitespace-nowrap pointer-events-none z-50">
