@@ -5,7 +5,6 @@ const BASE_URL = import.meta.env.VITE_BASE_URL;
 const fetchAPI = async (url, options = {}, rejectWithValue) => {
   try {
     const token = localStorage.getItem("token");
-
     const res = await fetch(`${BASE_URL}${url}`, {
       headers: {
         "Content-Type": "application/json",
@@ -14,13 +13,8 @@ const fetchAPI = async (url, options = {}, rejectWithValue) => {
       },
       ...options,
     });
-
     const data = await res.json();
-
-    if (!res.ok) {
-      throw new Error(data.message || "Something went wrong");
-    }
-
+    if (!res.ok) throw new Error(data.message || "Something went wrong");
     return data;
   } catch (err) {
     return rejectWithValue(err.message);
@@ -36,7 +30,6 @@ const buildQuery = (filters = {}) => {
     module = "",
     plan = "",
   } = filters;
-
   return new URLSearchParams({
     search,
     status: status === "all" ? "" : status,
@@ -60,10 +53,7 @@ export const createUser = createAsyncThunk(
   async (user, { rejectWithValue }) => {
     return fetchAPI(
       `/api/admin/create-regular-user`,
-      {
-        method: "POST",
-        body: JSON.stringify(user),
-      },
+      { method: "POST", body: JSON.stringify(user) },
       rejectWithValue,
     );
   },
@@ -81,12 +71,7 @@ export const resetUserPassword = createAsyncThunk(
   async ({ userId, password }, { rejectWithValue }) => {
     return fetchAPI(
       `/api/admin/users/${userId}/reset-password`,
-      {
-        method: "POST",
-        body: JSON.stringify({
-          newPassword: password,
-        }),
-      },
+      { method: "POST", body: JSON.stringify({ newPassword: password }) },
       rejectWithValue,
     );
   },
@@ -97,10 +82,7 @@ export const updateUser = createAsyncThunk(
   async ({ userId, ...data }, { rejectWithValue }) => {
     return fetchAPI(
       `/api/admin/update-regular-user/${userId}`,
-      {
-        method: "PUT",
-        body: JSON.stringify(data),
-      },
+      { method: "PUT", body: JSON.stringify(data) },
       rejectWithValue,
     );
   },
@@ -110,14 +92,7 @@ const initialState = {
   users: [],
   loading: false,
   error: null,
-
-  pagination: {
-    page: 1,
-    pageSize: 10,
-    total: 0,
-    totalPages: 1,
-  },
-
+  pagination: { page: 1, pageSize: 10, total: 0, totalPages: 1 },
   selectedUser: null,
   selectedUserLoading: false,
 };
@@ -126,7 +101,6 @@ const userSlice = createSlice({
   name: "users",
   initialState,
   reducers: {},
-
   extraReducers: (builder) => {
     builder
       .addCase(getAllUsers.pending, (state) => {
@@ -135,9 +109,7 @@ const userSlice = createSlice({
       })
       .addCase(getAllUsers.fulfilled, (state, action) => {
         state.loading = false;
-
         const { data, page, pageSize, total, totalPages } = action.payload;
-
         state.users = data;
         state.pagination = { page, pageSize, total, totalPages };
       })
@@ -146,9 +118,7 @@ const userSlice = createSlice({
         state.error = action.payload;
       })
 
-      .addCase(createUser.fulfilled, (state, action) => {
-        state.users.unshift(action.payload);
-      })
+      .addCase(createUser.fulfilled, (state) => {})
 
       .addCase(getUserDetailById.pending, (state) => {
         state.selectedUserLoading = true;
@@ -163,13 +133,13 @@ const userSlice = createSlice({
 
       .addCase(updateUser.pending, (state) => {
         state.loading = true;
+        state.error = null;
       })
-      .addCase(updateUser.fulfilled, (state, action) => {
-        const updated = action.payload;
-        const index = state.users.findIndex((u) => u.id === updated.id);
-        if (index !== -1) state.users[index] = updated;
+      .addCase(updateUser.fulfilled, (state) => {
+        state.loading = false;
       })
       .addCase(updateUser.rejected, (state, action) => {
+        state.loading = false;
         state.error = action.payload;
       });
   },

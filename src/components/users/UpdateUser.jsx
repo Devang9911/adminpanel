@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { useDispatch } from "react-redux";
-import { updateUser, getAllUsers } from "../../store/userSlice";
+import { getUserDetailById, updateUser } from "../../store/userSlice";
 
 function Spinner({ className = "w-3.5 h-3.5" }) {
   return (
@@ -29,9 +29,66 @@ function Spinner({ className = "w-3.5 h-3.5" }) {
   );
 }
 
+function ErrorMsg({ message }) {
+  return (
+    <p className="mt-1 text-[11px] text-red-500 flex items-center gap-1">
+      <svg
+        className="w-3 h-3 flex-shrink-0"
+        fill="currentColor"
+        viewBox="0 0 20 20"
+      >
+        <path
+          fillRule="evenodd"
+          d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
+          clipRule="evenodd"
+        />
+      </svg>
+      {message}
+    </p>
+  );
+}
+
+const ROLE_OPTIONS = ["admin", "support", "manager", "agent"];
+
+const fields = [
+  {
+    name: "userName",
+    label: "Username",
+    type: "text",
+    placeholder: "Enter username",
+    validation: { required: "Username is required" },
+  },
+  {
+    name: "userEmail",
+    label: "Email",
+    type: "email",
+    placeholder: "Enter email",
+    validation: {
+      required: "Email is required",
+      pattern: { value: /^\S+@\S+$/i, message: "Invalid email address" },
+    },
+  },
+  {
+    name: "userPhoneNumber",
+    label: "Phone number",
+    type: "tel",
+    placeholder: "Enter phone number",
+    validation: { required: "Phone number is required" },
+  },
+  {
+    name: "websocketId",
+    label: "WebSocket ID",
+    type: "text",
+    placeholder: "Enter websocket ID",
+    validation: { required: "WebSocket ID is required" },
+  },
+];
+
 export default function UpdateUser({ data: user, onClose }) {
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
+  const [fetching, setFetching] = useState(true);
+  const [showWsPassword, setShowWsPassword] = useState(false);
 
   const {
     register,
@@ -40,16 +97,42 @@ export default function UpdateUser({ data: user, onClose }) {
     formState: { errors },
   } = useForm();
 
+  const inputClass = (name) =>
+    `w-full border px-3 py-2.5 text-xs text-gray-700 placeholder-gray-400
+     focus:outline-none focus:ring-2 focus:ring-indigo-100 focus:border-indigo-300 transition
+     disabled:opacity-50 disabled:cursor-not-allowed disabled:bg-gray-100
+     ${errors[name] ? "border-red-300 bg-red-50 focus:ring-red-100 focus:border-red-300" : "border-gray-200 bg-gray-50"}`;
+
   useEffect(() => {
-    if (user) {
-      reset({
-        fullName: user.name || "",
-        email: user.email || "",
-        phoneNumber: user.phone || "",
-        isActive: user.isActive ?? user.status === "active",
-      });
-    }
-  }, [user, reset]);
+    if (!user?.id) return;
+    setFetching(true);
+    dispatch(getUserDetailById(user.id))
+      .unwrap()
+      .then((res) => {
+        const p = res?.profile || {};
+        reset({
+          userName: p.user_name || "",
+          userEmail: p.user_email || "",
+          userPhoneNumber: p.user_phone_number || "",
+          role: p.role || "support",
+          isActive: p.is_active ?? user.status === "active",
+          websocketId: p.websocket_id || "",
+          websocketPassword: p.websocket_password || "",
+        });
+      })
+      .catch(() => {
+        reset({
+          userName: user.name || "",
+          userEmail: user.email || "",
+          userPhoneNumber: user.phone || "",
+          role: "support",
+          isActive: user.status === "active",
+          websocketId: "",
+          websocketPassword: "",
+        });
+      })
+      .finally(() => setFetching(false));
+  }, [user?.id]);
 
   const onSubmit = async (formData) => {
     try {
@@ -57,10 +140,13 @@ export default function UpdateUser({ data: user, onClose }) {
       await dispatch(
         updateUser({
           userId: user.id,
-          fullName: formData.fullName,
-          email: formData.email,
-          phoneNumber: formData.phoneNumber,
+          userName: formData.userName,
+          userEmail: formData.userEmail,
+          userPhoneNumber: formData.userPhoneNumber,
+          role: formData.role,
           isActive: formData.isActive,
+          websocketId: formData.websocketId,
+          websocketPassword: formData.websocketPassword,
         }),
       ).unwrap();
       toast.success("User updated successfully");
@@ -72,32 +158,18 @@ export default function UpdateUser({ data: user, onClose }) {
     }
   };
 
-  const fields = [
-    {
-      name: "fullName",
-      label: "Full name",
-      type: "text",
-      placeholder: "Enter full name",
-      validation: { required: "Full name is required" },
-    },
-    {
-      name: "email",
-      label: "Email",
-      type: "email",
-      placeholder: "Enter email",
-      validation: {
-        required: "Email is required",
-        pattern: { value: /^\S+@\S+$/i, message: "Invalid email address" },
-      },
-    },
-    {
-      name: "phoneNumber",
-      label: "Phone number",
-      type: "tel",
-      placeholder: "Enter phone number",
-      validation: { required: "Phone number is required" },
-    },
-  ];
+  if (fetching) {
+    return (
+      <div className="animate-pulse flex flex-col gap-4">
+        {[...Array(6)].map((_, i) => (
+          <div key={i}>
+            <div className="h-2.5 w-20 bg-gray-200 rounded mb-2" />
+            <div className="h-9 bg-gray-100 rounded w-full" />
+          </div>
+        ))}
+      </div>
+    );
+  }
 
   return (
     <form
@@ -115,31 +187,89 @@ export default function UpdateUser({ data: user, onClose }) {
             {...register(name, validation)}
             placeholder={placeholder}
             disabled={loading}
-            className={`w-full border px-3 py-2.5 text-xs text-gray-700 placeholder-gray-400
-              focus:outline-none focus:ring-2 focus:ring-indigo-100 focus:border-indigo-300 transition
-              disabled:opacity-50 disabled:cursor-not-allowed disabled:bg-gray-100
-              ${errors[name] ? "border-red-300 bg-red-50 focus:ring-red-100 focus:border-red-300" : "border-gray-200 bg-gray-50"}`}
+            className={inputClass(name)}
           />
-          {errors[name] && (
-            <p className="mt-1 text-[11px] text-red-500 flex items-center gap-1">
-              <svg
-                className="w-3 h-3 flex-shrink-0"
-                fill="currentColor"
-                viewBox="0 0 20 20"
-              >
-                <path
-                  fillRule="evenodd"
-                  d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
-                  clipRule="evenodd"
-                />
-              </svg>
-              {errors[name].message}
-            </p>
-          )}
+          {errors[name] && <ErrorMsg message={errors[name].message} />}
         </div>
       ))}
 
-      {/* isActive toggle */}
+      <div>
+        <label className="text-xs font-semibold text-gray-600 mb-1.5 block">
+          WebSocket Password
+        </label>
+        <div className="relative">
+          <input
+            type={showWsPassword ? "text" : "password"}
+            {...register("websocketPassword", {
+              required: "WebSocket password is required",
+            })}
+            placeholder="Enter websocket password"
+            disabled={loading}
+            className={`${inputClass("websocketPassword")} pr-9`}
+          />
+          <button
+            type="button"
+            onClick={() => setShowWsPassword((v) => !v)}
+            disabled={loading}
+            className="absolute right-2.5 top-1/2 -translate-y-1/2
+              text-gray-400 hover:text-gray-600 transition-colors disabled:opacity-40"
+            title={showWsPassword ? "Hide password" : "Show password"}
+          >
+            {showWsPassword ? (
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="w-3.5 h-3.5"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94" />
+                <path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19" />
+                <line x1="1" y1="1" x2="23" y2="23" />
+              </svg>
+            ) : (
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="w-3.5 h-3.5"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+                <circle cx="12" cy="12" r="3" />
+              </svg>
+            )}
+          </button>
+        </div>
+        {errors.websocketPassword && (
+          <ErrorMsg message={errors.websocketPassword.message} />
+        )}
+      </div>
+
+      <div>
+        <label className="text-xs font-semibold text-gray-600 mb-1.5 block">
+          Role
+        </label>
+        <select
+          {...register("role", { required: "Role is required" })}
+          disabled={loading}
+          className={inputClass("role")}
+        >
+          {ROLE_OPTIONS.map((r) => (
+            <option key={r} value={r}>
+              {r.charAt(0).toUpperCase() + r.slice(1)}
+            </option>
+          ))}
+        </select>
+        {errors.role && <ErrorMsg message={errors.role.message} />}
+      </div>
+
       <div className="flex items-center justify-between px-3 py-2.5 bg-gray-50 border border-gray-200">
         <span className="text-xs font-semibold text-gray-600">
           Active status
@@ -182,8 +312,8 @@ export default function UpdateUser({ data: user, onClose }) {
         <button
           type="submit"
           disabled={loading}
-          className="px-4 py-2 text-xs font-medium bg-indigo-600 text-white
-            hover:bg-indigo-700 transition-colors disabled:opacity-70 disabled:cursor-not-allowed
+          className="px-4 py-2 text-xs font-medium bg-indigo-600 text-white hover:bg-indigo-700
+            transition-colors disabled:opacity-70 disabled:cursor-not-allowed
             flex items-center gap-1.5 min-w-[100px] justify-center"
         >
           {loading ? (

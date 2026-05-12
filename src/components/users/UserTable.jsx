@@ -211,9 +211,9 @@ function UserTable() {
   };
 
   const handleUpdateClose = () => {
-  handleDrawerClose();
-  dispatch(getAllUsers({ ...filters, search: debouncedSearch }));
-};
+    handleDrawerClose();
+    dispatch(getAllUsers({ ...filters, search: debouncedSearch }));
+  };
 
   return (
     <div className="w-full bg-white shadow-sm border border-gray-100">
@@ -437,9 +437,9 @@ function UserTable() {
                     </div>
                   </td>
 
-                 <td className="px-6 py-3.5">
-  <StatusBadge status={u.status} />
-</td>
+                  <td className="px-6 py-3.5">
+                    <StatusBadge status={u.status} />
+                  </td>
 
                   <td className="px-6 py-3.5">
                     {formatDate(u.expiry_date) ? (

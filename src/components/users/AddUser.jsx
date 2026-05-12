@@ -42,17 +42,15 @@ export default function AddUser({ onClose }) {
   const onSubmit = async (data) => {
     try {
       setLoading(true);
-
-      const payload = {
-        fullName: data.fullName,
-        email: data.email,
-        password: data.password,
-        phoneNumber: data.phoneNumber,
-      };
-
-      await dispatch(createUser(payload)).unwrap();
-
-      dispatch(
+      await dispatch(
+        createUser({
+          fullName: data.fullName,
+          email: data.email,
+          password: data.password,
+          phoneNumber: data.phoneNumber,
+        }),
+      ).unwrap();
+      await dispatch(
         getAllUsers({
           search: "",
           status: "",
@@ -62,7 +60,6 @@ export default function AddUser({ onClose }) {
           plan: "",
         }),
       );
-
       toast.success("User created successfully");
       reset();
       onClose();
@@ -164,23 +161,18 @@ export default function AddUser({ onClose }) {
           type="button"
           onClick={onClose}
           disabled={loading}
-          className="px-4 py-2 text-xs font-medium text-gray-500 bg-white border border-gray-200
-            hover:bg-gray-50 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+          className="px-4 py-2 text-xs font-medium text-gray-500 bg-white border border-gray-200 hover:bg-gray-50 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
         >
           Cancel
         </button>
-
         <button
           type="submit"
           disabled={loading}
-          className="px-4 py-2 text-xs font-medium bg-indigo-600 text-white
-            hover:bg-indigo-700 transition-colors disabled:opacity-70 disabled:cursor-not-allowed
-            flex items-center gap-1.5 min-w-[100px] justify-center"
+          className="px-4 py-2 text-xs font-medium bg-indigo-600 text-white hover:bg-indigo-700 transition-colors disabled:opacity-70 disabled:cursor-not-allowed flex items-center gap-1.5 min-w-[100px] justify-center"
         >
           {loading ? (
             <>
-              <Spinner className="w-3 h-3 text-white" />
-              Creating…
+              <Spinner className="w-3 h-3 text-white" /> Creating…
             </>
           ) : (
             "Create user"
