@@ -81,8 +81,8 @@ export default function ChangelogContent({ entries, whatsNewIds = new Set(), onE
             {isOpen && (
               <div className="px-6 pb-5 bg-gray-50/50 border-t border-gray-100">
                 <ul className="pt-4 space-y-3">
-                  {entry.changes.map((c) => (
-                    <li key={c.id} className="flex items-start gap-3">
+                  {entry.changes.map((c , i) => (
+                    <li key={i} className="flex items-start gap-3">
                       <ChangeBadge type={c.type} />
                       <span className="text-xs text-gray-600 leading-relaxed">{c.text}</span>
                     </li>

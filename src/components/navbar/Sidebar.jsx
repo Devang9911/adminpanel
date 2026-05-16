@@ -1,46 +1,41 @@
 import { Bars3Icon } from "@heroicons/react/24/outline";
-import {
-  Boxes,
-  Briefcase,
-  ClipboardList,
-  CreditCard,
-  Folder,
-  LayoutDashboard,
-  Users,
-  Zap,
-} from "lucide-react";
 import { useState } from "react";
 import { NavLink } from "react-router-dom";
+import { Icon } from "../common/Icon";
 
 const sidebarData = [
   {
     title: "Main",
     items: [
-      { name: "Dashboard", path: "/", icon: LayoutDashboard },
-      { name: "Users", path: "/users", icon: Users },
-      { name: "Staff", path: "/staff", icon: Users },
+      { name: "Dashboard", path: "/", icon: "dashboard" },
+      { name: "Users", path: "/users", icon: "person" },
+      { name: "Staff", path: "/staff", icon: "groups" },
     ],
   },
   {
     title: "Modules",
     items: [
-      { name: "Modules", path: "/modules/moduleslist", icon: Boxes },
-      { name: "Category", path: "/modules/categories", icon: Folder },
-      { name: "Features", path: "/modules/features", icon: Zap },
-      { name: "Plans", path: "/modules/plans", icon: CreditCard },
+      { name: "Modules", path: "/modules/moduleslist", icon: "view_module" },
+      { name: "Category", path: "/modules/categories", icon: "category" },
+      {
+        name: "Features",
+        path: "/modules/features",
+        icon: "featured_play_list",
+      },
+      { name: "Plans", path: "/modules/plans", icon: "workspace_premium" },
     ],
   },
   {
     title: "Workspace",
-    items: [{ name: "Workspaces", path: "/workspaces", icon: Briefcase }],
+    items: [{ name: "Workspaces", path: "/workspaces", icon: "workspaces" }],
   },
   {
     title: "System",
-    items: [{ name: "Audit logs", path: "/auditlogs", icon: ClipboardList }],
+    items: [{ name: "Audit logs", path: "/auditlogs", icon: "history" }],
   },
   {
     title: "Change Logs",
-    items: [{ name: "Sheets Log", path: "/sheetslog", icon: ClipboardList }],
+    items: [{ name: "Sheets Log", path: "/sheetslog", icon: "new_releases" }],
   },
 ];
 
@@ -60,12 +55,12 @@ export default function Sidebar() {
         collapsed ? "w-[58px]" : "w-[220px]"
       } h-screen bg-white border-r border-gray-100 flex flex-col transition-all duration-300 flex-shrink-0`}
     >
-      <div className="flex items-center justify-center px-4 h-20 border-b border-gray-100 flex-shrink-0">
+      <div className="flex items-center justify-center px-4 h-14 border-b border-gray-100 flex-shrink-0">
         {!collapsed && (
           <img
             src="/tdLogo.png"
             alt="TrueData"
-            className="h-14 w-auto object-contain cursor-pointer"
+            className="h-10 w-auto object-contain cursor-pointer"
             onClick={() => setCollapsed(!collapsed)}
           />
         )}
@@ -96,7 +91,7 @@ export default function Sidebar() {
                 className={linkClass}
                 title={collapsed ? item.name : ""}
               >
-                <item.icon size={15} className="flex-shrink-0" />
+                <Icon icon={item.icon} />
                 {!collapsed && <span>{item.name}</span>}
               </NavLink>
             ))}

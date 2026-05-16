@@ -34,27 +34,27 @@ function Dashboard() {
         <StatsBox
           value={summary?.totalUsers || 0}
           title="Total Users"
-          icon={UsersIcon}
+          icon={"person"}
           color="bg-indigo-500"
           onClick={() => navigate("/users")}
         />
         <StatsBox
           value={summary?.totalWorkspaces || 0}
           title="Workspaces"
-          icon={FolderIcon}
+          icon={"workspaces"}
           color="bg-amber-500"
           onClick={() => navigate("/workspaces")}
         />
         <StatsBox
           value={summary?.activeSubscriptions || 0}
           title="Active subscriptions"
-          icon={CheckBadgeIcon}
+          icon={"subscriptions"}
           color="bg-emerald-500"
         />
         <StatsBox
           value={`₹ ${summary?.totalRevenue || 0}`}
           title="Total Revenue"
-          icon={CurrencyRupeeIcon}
+          icon={"monitoring"}
           color="bg-pink-500"
         />
       </div>

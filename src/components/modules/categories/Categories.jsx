@@ -1,9 +1,9 @@
-import { PencilIcon, TrashIcon } from "@heroicons/react/24/solid";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
 import { deleteCategory, getCategories } from "../../../store/categorySlice";
 import Drawer from "../../common/Drawer";
+import { Icon } from "../../common/Icon";
 import Loader from "../../common/Loader";
 import AddCategory from "./AddCategory";
 
@@ -116,7 +116,7 @@ function Categories() {
                         }
                         className="relative p-1.5 hover:bg-blue-50 transition-colors group/btn"
                       >
-                        <PencilIcon className="w-4 h-4 text-blue-400 group-hover/btn:text-blue-600" />
+                        <Icon icon={"edit"} className={{color : "blue"}}/>
                         <span className="absolute bottom-full left-1/2 -translate-x-1/2 mb-1.5 bg-gray-800 text-white text-[10px] px-1.5 py-0.5 rounded opacity-0 group-hover/btn:opacity-100 transition whitespace-nowrap pointer-events-none z-50">
                           Edit
                         </span>
@@ -125,7 +125,7 @@ function Categories() {
                         onClick={() => handleDelete(cat.id)}
                         className="relative p-1.5 hover:bg-red-50 transition-colors group/btn"
                       >
-                        <TrashIcon className="w-4 h-4 text-red-400 group-hover/btn:text-red-600" />
+                        <Icon icon={"delete"} className={{color : "red"}}/>
                         <span className="absolute bottom-full left-1/2 -translate-x-1/2 mb-1.5 bg-gray-800 text-white text-[10px] px-1.5 py-0.5 rounded opacity-0 group-hover/btn:opacity-100 transition whitespace-nowrap pointer-events-none z-50">
                           Delete
                         </span>

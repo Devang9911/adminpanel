@@ -1,15 +1,11 @@
-import {
-  ArrowPathIcon,
-  EyeIcon,
-  PencilSquareIcon,
-} from "@heroicons/react/24/solid";
-import { ChevronDownIcon, ChevronUpIcon, Lock } from "lucide-react";
+import { ChevronDownIcon, ChevronUpIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllPlans } from "../../store/planSlice";
 import { getProducts } from "../../store/productSlice";
 import { getAllUsers } from "../../store/userSlice";
 import Drawer from "../common/Drawer";
+import { Icon } from "../common/Icon";
 import Pagination from "../common/Pagination";
 import ViewUser from "../users/ViewUser";
 import AddUser from "./AddUser";
@@ -466,7 +462,7 @@ function UserTable() {
                       {[
                         {
                           icon: (
-                            <EyeIcon className="w-4 h-4 text-gray-400 group-hover/btn:text-gray-600" />
+                            <Icon icon={"visibility"} className={{color : "grey"}}/>
                           ),
                           label: "View",
                           hoverBg: "hover:bg-gray-100",
@@ -475,7 +471,7 @@ function UserTable() {
                         },
                         {
                           icon: (
-                            <PencilSquareIcon className="w-4 h-4 text-blue-400 group-hover/btn:text-blue-600" />
+                           <Icon icon={"edit"} className={{color : "blue"}}/>
                           ),
                           label: "Edit",
                           hoverBg: "hover:bg-blue-50",
@@ -484,7 +480,7 @@ function UserTable() {
                         },
                         {
                           icon: (
-                            <Lock className="w-4 h-4 text-amber-400 group-hover/btn:text-amber-600" />
+                            <Icon icon={"lock"} className={{color : "orange"}}/>
                           ),
                           label: "Password",
                           hoverBg: "hover:bg-amber-50",
@@ -497,7 +493,7 @@ function UserTable() {
                         },
                         {
                           icon: (
-                            <ArrowPathIcon className="w-4 h-4 text-emerald-400 group-hover/btn:text-emerald-600" />
+                            <Icon icon={"autorenew"} className={{color : "green"}}/>
                           ),
                           label: "Renew",
                           hoverBg: "hover:bg-emerald-50",

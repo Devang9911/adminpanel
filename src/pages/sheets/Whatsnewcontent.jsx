@@ -25,7 +25,7 @@ export default function WhatsNewContent({ features, onEdit, onDelete }) {
           className="px-6 py-5 hover:bg-gray-50/60 transition-colors group"
         >
           <div className="flex items-start gap-4">
-            <div className="w-10 h-10 bg-indigo-50 border border-indigo-100 rounded-xl flex items-center justify-center flex-shrink-0 mt-0.5">
+            <div className="w-10 h-10 bg-indigo-50 border border-indigo-100 flex items-center justify-center flex-shrink-0 mt-0.5">
               <Zap size={18} className="text-indigo-500" />
             </div>
 

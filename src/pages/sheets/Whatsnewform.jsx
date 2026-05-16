@@ -2,7 +2,13 @@ import { useState } from "react";
 import { X, Save, Zap } from "lucide-react";
 import { uid, inputCls, selectCls, labelCls } from "./constants";
 
-export default function WhatsNewForm({ initial, changelogEntries = [], onSave, onCancel, mode = "add" }) {
+export default function WhatsNewForm({
+  initial,
+  changelogEntries = [],
+  onSave,
+  onCancel,
+  mode = "add",
+}) {
   const [form, setForm] = useState(initial);
   const set = (key, val) => setForm((f) => ({ ...f, [key]: val }));
 
@@ -22,13 +28,19 @@ export default function WhatsNewForm({ initial, changelogEntries = [], onSave, o
   };
 
   const updateHl = (id, val) =>
-    set("highlights", form.highlights.map((h) => (h.id === id ? { ...h, text: val } : h)));
+    set(
+      "highlights",
+      form.highlights.map((h) => (h.id === id ? { ...h, text: val } : h)),
+    );
 
   const addHl = () =>
     set("highlights", [...form.highlights, { id: uid(), text: "" }]);
 
   const removeHl = (id) =>
-    set("highlights", form.highlights.filter((h) => h.id !== id));
+    set(
+      "highlights",
+      form.highlights.filter((h) => h.id !== id),
+    );
 
   const handleSave = () => {
     if (!form.title.trim() || !form.description.trim()) {
@@ -40,9 +52,10 @@ export default function WhatsNewForm({ initial, changelogEntries = [], onSave, o
       return;
     }
 
-    const linkedEntry = changelogEntries.find((e) => e.id === form.changelog_id);
+    const linkedEntry = changelogEntries.find(
+      (e) => e.id === form.changelog_id,
+    );
 
-    // Clean flat payload ready for DB — no nested UI state
     const payload = {
       changelog_id: form.changelog_id || null,
       version: form._version || linkedEntry?.version || "",
@@ -58,7 +71,6 @@ export default function WhatsNewForm({ initial, changelogEntries = [], onSave, o
 
   return (
     <div className="space-y-6">
-      {/* Changelog link (add only) */}
       {mode === "add" && (
         <div>
           <label className={labelCls}>Link to changelog entry</label>
@@ -70,7 +82,7 @@ export default function WhatsNewForm({ initial, changelogEntries = [], onSave, o
             <option value="">Select a release…</option>
             {changelogEntries.map((e) => (
               <option key={e.id} value={e.id}>
-                {e.version} — {e.title}
+                {e.version} - {e.title}
               </option>
             ))}
           </select>
@@ -80,18 +92,16 @@ export default function WhatsNewForm({ initial, changelogEntries = [], onSave, o
         </div>
       )}
 
-      {/* Title */}
       <div>
         <label className={labelCls}>Feature title</label>
         <input
           className={inputCls}
-          placeholder="e.g. Bar Streaming — Live OHLC Data"
+          placeholder="e.g. Bar Streaming - Live OHLC Data"
           value={form.title}
           onChange={(e) => set("title", e.target.value)}
         />
       </div>
 
-      {/* Description */}
       <div>
         <label className={labelCls}>Short description</label>
         <textarea
@@ -102,7 +112,6 @@ export default function WhatsNewForm({ initial, changelogEntries = [], onSave, o
         />
       </div>
 
-      {/* Highlights */}
       <div>
         <label className={labelCls}>Highlights</label>
         <div className="space-y-2.5 mb-3">
@@ -117,7 +126,7 @@ export default function WhatsNewForm({ initial, changelogEntries = [], onSave, o
               <button
                 onClick={() => removeHl(h.id)}
                 disabled={form.highlights.length === 1}
-                className="flex-shrink-0 w-8 h-8 flex items-center justify-center rounded-lg
+                className="flex-shrink-0 w-8 h-8 flex items-center justify-center
                   border border-gray-200 text-gray-400 hover:bg-red-50 hover:text-red-500
                   hover:border-red-200 transition disabled:opacity-30 disabled:cursor-not-allowed"
               >
@@ -129,17 +138,16 @@ export default function WhatsNewForm({ initial, changelogEntries = [], onSave, o
         <button
           onClick={addHl}
           className="w-full text-sm text-indigo-600 border border-dashed border-indigo-200
-            rounded-lg py-2.5 hover:bg-indigo-50 transition font-medium"
+           py-2.5 hover:bg-indigo-50 transition font-medium"
         >
           + Add highlight
         </button>
       </div>
 
-      {/* Actions */}
       <div className="flex gap-3 pt-1">
         <button
           onClick={onCancel}
-          className="px-4 py-2.5 text-sm border border-gray-200 rounded-lg text-gray-500
+          className="px-4 py-2.5 text-sm border border-gray-200 text-gray-500
             hover:bg-gray-50 transition font-medium"
         >
           Cancel
@@ -147,7 +155,7 @@ export default function WhatsNewForm({ initial, changelogEntries = [], onSave, o
         <button
           onClick={handleSave}
           className="flex-1 flex items-center justify-center gap-2 py-2.5 text-sm font-medium
-            bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition active:scale-95"
+            bg-indigo-600 text-white hover:bg-indigo-700 transition active:scale-95"
         >
           <Save size={14} />
           {mode === "add" ? "Publish to What's New" : "Save changes"}

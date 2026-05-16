@@ -1,11 +1,9 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getAllStaff } from "../../store/staffSlice";
-import { PencilSquareIcon } from "@heroicons/react/24/solid";
-import { EyeIcon } from "lucide-react";
 import Drawer from "../../components/common/Drawer";
-import AddUser from "../../components/users/AddUser";
+import { Icon } from "../../components/common/Icon";
 import StaffForm from "../../components/common/staff/AddStaff";
+import { getAllStaff } from "../../store/staffSlice";
 
 const colors = [
   "bg-violet-500",
@@ -226,7 +224,7 @@ function Staff() {
                           className="p-1.5  hover:bg-gray-100"
                           onClick={() => console.log(s.id)}
                         >
-                          <EyeIcon className="w-4 h-4 text-gray-400" />
+                           <Icon icon={"visibility"} className={{color : "grey"}}/>
                         </button>
 
                         <button
@@ -235,7 +233,7 @@ function Staff() {
                             setDrawer({ type: "edit", open: true, data: s })
                           }
                         >
-                          <PencilSquareIcon className="w-4 h-4 text-blue-400" />
+                          <Icon icon={"edit"} className={{color : "blue"}}/>
                         </button>
                       </div>
                     </td>

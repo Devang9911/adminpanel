@@ -1,12 +1,12 @@
 import {
-  ArrowRightEndOnRectangleIcon,
-  BellIcon
+  ArrowRightEndOnRectangleIcon
 } from "@heroicons/react/24/outline";
 import toast from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { logout } from "../../store/authSlice";
 import { Dropdown } from "../common/Dropdown";
+import { Icon } from "../common/Icon";
 
 function Header() {
   const navigate = useNavigate();
@@ -25,7 +25,7 @@ function Header() {
         <Dropdown
           trigger={
             <div className="relative cursor-pointer p-2 rounded-lg hover:bg-gray-50 transition-colors">
-              <BellIcon className="w-5 h-5 text-gray-400" />
+              <Icon icon={"notifications_active"}/>
               <span className="absolute top-1.5 right-1.5 w-1.5 h-1.5 bg-red-400 rounded-full" />
             </div>
           }
@@ -60,7 +60,7 @@ function Header() {
             onClick={onLogout}
             className="w-full flex items-center gap-2 px-4 py-2.5 text-xs font-medium text-red-500 hover:bg-red-50 transition-colors"
           >
-            <ArrowRightEndOnRectangleIcon className="w-3.5 h-3.5" />
+            <Icon icon={"logout"} className={{color : "grey"}}/>
             Sign out
           </button>
         </Dropdown>

@@ -1,4 +1,6 @@
-function StatsBox({ title, value, icon: Icon, color, onClick }) {
+import { Icon } from "./Icon";
+
+function StatsBox({ title, value, icon, color, onClick }) {
   return (
     <div
       onClick={onClick}
@@ -20,7 +22,8 @@ function StatsBox({ title, value, icon: Icon, color, onClick }) {
         <div
           className={`w-10 h-10 flex items-center justify-center flex-shrink-0 ${color}`}
         >
-          <Icon className="w-5 h-5 text-white" />
+          <Icon icon={icon} className={{color : "white"}}/>
+          {/* <Icon className="w-5 h-5 text-white" /> */}
         </div>
       </div>
 

@@ -52,14 +52,14 @@ const ROLE_OPTIONS = ["admin", "support", "manager", "agent"];
 
 const fields = [
   {
-    name: "userName",
+    name: "FullName",
     label: "Username",
     type: "text",
     placeholder: "Enter username",
     validation: { required: "Username is required" },
   },
   {
-    name: "userEmail",
+    name: "Email",
     label: "Email",
     type: "email",
     placeholder: "Enter email",
@@ -69,7 +69,7 @@ const fields = [
     },
   },
   {
-    name: "userPhoneNumber",
+    name: "PhoneNumber",
     label: "Phone number",
     type: "tel",
     placeholder: "Enter phone number",
@@ -111,9 +111,9 @@ export default function UpdateUser({ data: user, onClose }) {
       .then((res) => {
         const p = res?.profile || {};
         reset({
-          userName: p.user_name || "",
-          userEmail: p.user_email || "",
-          userPhoneNumber: p.user_phone_number || "",
+          FullName: p.user_name || "",
+          Email: p.user_email || "",
+          PhoneNumber: p.user_phone_number || "",
           role: p.role || "support",
           isActive: p.is_active ?? user.status === "active",
           websocketId: p.websocket_id || "",
@@ -122,9 +122,9 @@ export default function UpdateUser({ data: user, onClose }) {
       })
       .catch(() => {
         reset({
-          userName: user.name || "",
-          userEmail: user.email || "",
-          userPhoneNumber: user.phone || "",
+          FullName: user.name || "",
+          Email: user.email || "",
+          PhoneNumber: user.phone || "",
           role: "support",
           isActive: user.status === "active",
           websocketId: "",
@@ -140,9 +140,9 @@ export default function UpdateUser({ data: user, onClose }) {
       await dispatch(
         updateUser({
           userId: user.id,
-          userName: formData.userName,
-          userEmail: formData.userEmail,
-          userPhoneNumber: formData.userPhoneNumber,
+          FullName: formData.FullName,
+          Email: formData.Email,
+          PhoneNumber: formData.PhoneNumber,
           role: formData.role,
           isActive: formData.isActive,
           websocketId: formData.websocketId,

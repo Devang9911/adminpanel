@@ -9,6 +9,7 @@ import workspaceReducer from "./workspaceSlice";
 import dashboardReducer from "./dashboardSlice";
 import staffReducer from "./staffSlice";
 import auditLogsReducer from "./auditLogSlice";
+import versionReducer from "./Versionslice";
 
 export const store = configureStore({
   reducer: {
@@ -22,5 +23,6 @@ export const store = configureStore({
     dashboard: dashboardReducer,
     staff: staffReducer,
     auditLogs: auditLogsReducer,
+    version: versionReducer,
   },
 });

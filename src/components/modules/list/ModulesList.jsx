@@ -1,10 +1,9 @@
-import { PencilIcon } from "@heroicons/react/24/solid";
-import { Trash } from "lucide-react";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
 import { deleteModule, getProducts } from "../../../store/productSlice";
 import Drawer from "../../common/Drawer";
+import { Icon } from "../../common/Icon";
 import AddModules from "./AddModules";
 
 function ProductList() {
@@ -111,7 +110,7 @@ function ProductList() {
                       }
                       className="relative p-1.5 hover:bg-blue-50 transition-colors group/btn"
                     >
-                      <PencilIcon className="w-3.5 h-3.5 text-blue-400 group-hover/btn:text-blue-600" />
+                      <Icon icon={"edit"} className={{color : "blue"}}/>
                       <span className="absolute bottom-full left-1/2 -translate-x-1/2 mb-1.5 bg-gray-800 text-white text-[10px] px-1.5 py-0.5  opacity-0 group-hover/btn:opacity-100 transition whitespace-nowrap pointer-events-none z-50">
                         Edit
                       </span>
@@ -120,7 +119,7 @@ function ProductList() {
                       onClick={() => handleDelete(p.id)}
                       className="relative p-1.5  hover:bg-red-50 transition-colors group/btn"
                     >
-                      <Trash className="w-3.5 h-3.5 text-red-400 group-hover/btn:text-red-600" />
+                      <Icon icon={"delete"} className={{color : "red"}}/>
                       <span className="absolute bottom-full left-1/2 -translate-x-1/2 mb-1.5 bg-gray-800 text-white text-[10px] px-1.5 py-0.5  opacity-0 group-hover/btn:opacity-100 transition whitespace-nowrap pointer-events-none z-50">
                         Delete
                       </span>
